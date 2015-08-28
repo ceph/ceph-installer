@@ -1,0 +1,13 @@
+Source: mariner-installer
+Maintainer: Travis Rhoden <trhoden@redhat.com>
+Section: misc
+Priority: optional
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+
+Package: mariner-installer
+Architecture: all
+Depends: ${misc:Depends}
+Description: Foreman-installer plugin that allows you to install Foreman + Mariner
+ This is a foreman-installer plugin that allows you to install and configure Foreman
+ along with the Ceph installer plugin Mariner
