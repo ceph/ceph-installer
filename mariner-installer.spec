@@ -7,7 +7,7 @@
 
 Name:       mariner-installer
 Version:    0.1.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Foreman-installer plugin that allows you to install Foreman + Mariner
 License:    GPLv3+
 URL:        https://github.com/ceph/mariner-installer
