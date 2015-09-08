@@ -1,3 +1,9 @@
+mariner-installer (0.1.0-2) unstable; urgency=low
+
+  * Packaging updates
+
+ -- Travis Rhoden <trhoden@redhat.com>  Tue, 08 Sep 2015 11:02:13 -0700
+
 mariner-installer (0.1.0-1) unstable; urgency=low
 
   * Initial release.
