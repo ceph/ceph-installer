@@ -7,7 +7,9 @@ Standards-Version: 3.9.5
 
 Package: mariner-installer
 Architecture: all
-Depends: ${misc:Depends}
+Depends: foreman-installer (>= 1.7.5),
+         takora,
+         ${misc:Depends}
 Description: Foreman-installer plugin that allows you to install Foreman + Mariner
  This is a foreman-installer plugin that allows you to install and configure Foreman
  along with the Ceph installer plugin Mariner
