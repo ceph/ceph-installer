@@ -42,7 +42,6 @@ install -d -m0755 %{buildroot}%{_sysconfdir}/foreman/
 cp -p config/* %{buildroot}%{_sysconfdir}/foreman
 
 %files
-%defattr(-,root,root,-)
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
 %doc README.md docs
