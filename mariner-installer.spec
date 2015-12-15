@@ -45,7 +45,7 @@ cp -p config/* %{buildroot}%{_sysconfdir}/foreman
 %defattr(-,root,root,-)
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
-%doc README.md
+%doc README.md docs
 %config %attr(600, root, root) %{_sysconfdir}/foreman/%{name}.yaml
 %config(noreplace) %attr(600, root, root) %{_sysconfdir}/foreman/%{name}.answers.yaml
 %{_sbindir}/mariner-installer
