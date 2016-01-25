@@ -5,7 +5,7 @@ An HTTP API to provision and control the deployment process of Ceph clusters.
 
 Restful HTTP API
 ----------------
-The service allows to interact with different clusters via a RestFul API that
+The service allows you to install and configure ceph via a RestFul API that
 accepts and returns JSON responses along with meaningful error codes and
 messages.
 
@@ -20,75 +20,54 @@ It follows these concepts:
 * ``POST`` requests will create resources or trigger a specific behavior, like
   installing operations on a given host.
 
-* ``PUT`` requests will be processed as updates to a given resources.
-
-* ``DELETE`` will cause destruction of a resource.
-
 
 Endpoints
 =========
-The parent endpoint for any cluster interaction is ``/cluster/``
+The parent endpoint for any API interaction is ``/api/``
 
-``cluster``
-===========
+``api``
+=======
 
-``/cluster/``
--------------
+``/api/``
+---------
 GET
-POST
 
-``/cluster/{id}/``
-------------------
+``tasks``
+=========
+
+A task is created when any of the following endpoints are used and
+can be used to track the progress of the operation, like installing or
+configuring a monitor.
+
+``/api/tasks/``
+---------------
 GET
-DELETE
-PUT
+
+``/api/tasks/{ task-id }/``
+---------------------------
+GET
 
 ``mon``
 =======
 
-``/cluster/{cluster-id}/mon/``
-------------------------------
-GET
+``/api/mon/install/``
+---------------------
 POST
 
-``/cluster/{cluster-id}/mon/{mon-id}/``
----------------------------------------
-GET
-DELETE
-PUT
-
-``/cluster/{cluster-id}/mon/{mon-id}/install/``
------------------------------------------------
-GET
-POST
-
-``/cluster/{cluster-id}/mon/{mon-id}/configure/``
--------------------------------------------------
-GET
+``/api/mon/configure/``
+-----------------------
 POST
 
 ``osd``
 =======
 
-``/cluster/{cluster-id}/osd/``
-------------------------------
-GET
-DELETE
-PUT
 
-``/cluster/{cluster-id}/osd/{osd-id}/``
----------------------------------------
-GET
+``/api/osd/install/``
+---------------------
 POST
 
-``/cluster/{cluster-id}/osd/{osd-id}/install/``
------------------------------------------------
-GET
-POST
-
-``/cluster/{cluster-id}/osd/{osd-id}/configure/``
--------------------------------------------------
-GET
+``/api/osd/configure/``
+-----------------------
 POST
 
 XXX This might not be a good idea to implement since journal operations are
@@ -96,72 +75,35 @@ usually a subset of OSD commands.
 ``journal``
 ===========
 
-``/cluster/{cluster-id}/journal/``
-----------------------------------
-GET
-DELETE
-PUT
 
-``/cluster/{cluster-id}/journal/{journal-id}/``
------------------------------------------------
-GET
+``/api/journal/install/``
+-------------------------
 POST
 
-``/cluster/{cluster-id}/journal/{journal-id}/install/``
--------------------------------------------------------
-GET
-POST
-
-``/cluster/{cluster-id}/journal/{journal-id}/configure/``
----------------------------------------------------------
-GET
+``/api/journal/configure/``
+---------------------------
 POST
 
 
 ``rgw``
 =======
 
-``/cluster/{cluster-id}/rgw/``
-------------------------------
-GET
-DELETE
-PUT
 
-``/cluster/{cluster-id}/rgw/{rgw-id}/``
----------------------------------------
-GET
+``/api/rgw/install/``
+---------------------
 POST
 
-``/cluster/{cluster-id}/rgw/{rgw-id}/install/``
------------------------------------------------
-GET
-POST
-
-``/cluster/{cluster-id}/rgw/{rgw-id}/configure/``
--------------------------------------------------
-GET
+``/api/rgw/configure/``
+-----------------------
 POST
 
 ``calamari``
 ============
 
-``/cluster/{cluster-id}/calamari/``
------------------------------------
-GET
-DELETE
-PUT
-
-``/cluster/{cluster-id}/calamari/{calamari-id}/``
--------------------------------------------------
-GET
+``/api/calamari/install/``
+--------------------------
 POST
 
-``/cluster/{cluster-id}/calamari/{calamari-id}/install/``
----------------------------------------------------------
-GET
-POST
-
-``/cluster/{cluster-id}/calamari/{calamari-id}/configure/``
------------------------------------------------------------
-GET
+``/api/calamari/configure/``
+----------------------------
 POST
