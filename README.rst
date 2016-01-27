@@ -99,12 +99,31 @@ Body: ``{"msg": "Sample Error message"}``
 
 ``/api/mon/install/``
 ---------------------
-POST
-Body: ``{}``
+* ``POST``: Start the installation process for monitor(s)
+Body ::
+
+    {
+        'adjust-repos': True,
+        'gpg-url': '',
+        'hosts': ['mon1.example.com', 'mon2.example.com', 'mon3.example.com'],
+        'release': '',
+        'repo-only': False,
+        'repo-url': ''
+    }
+
 
 ``/api/mon/configure/``
 -----------------------
-POST
+* ``POST``: Configure monitor(s)
+Body ::
+
+    {
+        'hosts': [
+            {'address': '192.168.1.1', 'hostname': 'mon1.example.com'},
+            {'address': '192.168.1.2', 'hostname': 'mon2.example.com'}
+        ]
+    }
+
 
 ``osd``
 =======
