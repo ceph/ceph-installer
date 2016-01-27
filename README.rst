@@ -23,14 +23,22 @@ It follows these concepts:
 
 Endpoints
 =========
-The parent endpoint for any API interaction is ``/api/``
+The parent endpoint for any API interaction is ``/api/``.
 
 ``api``
 =======
 
 ``/api/``
 ---------
-GET
+* ``GET``: Will return the current status of the service.
+
+Responses:
+^^^^^^^^^^
+200: All components of the system are operational
+Body: ``{}``
+
+500: System Error
+Body: ``{"msg": "Sample Error message"}``
 
 ``tasks``
 =========
@@ -41,11 +49,50 @@ configuring a monitor.
 
 ``/api/tasks/``
 ---------------
-GET
+* ``GET``: Returns a list of all available tasks.
+Responses:
+^^^^^^^^^^
+200: Available tasks
+Body ::
+
+    [
+        {'command': 'command arguments flags sample',
+          'ended': '2016-01-27T15:03:23.438172',
+          'endpoint': '/api/rgw/configure',
+          'id': '2207bde6-4346-4a83-984a-40a5c00056c1',
+          'started': '2016-01-27T15:03:22.638173',
+          'stderr': 'command stderr',
+          'stdout': 'command stdout'
+        }
+    ]
+
+
+500: System Error
+Body: ``{"msg": "Sample Error message"}``
 
 ``/api/tasks/{ task-id }/``
 ---------------------------
-GET
+* ``GET``: Distinct task metadata
+Responses:
+^^^^^^^^^^
+200: All components of the system are operational
+Body ::
+
+    {'command': 'command arguments flags sample',
+      'ended': '2016-01-27T15:03:23.438172',
+      'endpoint': '/api/rgw/configure',
+      'id': '2207bde6-4346-4a83-984a-40a5c00056c1',
+      'started': '2016-01-27T15:03:22.638173',
+      'stderr': 'command stderr',
+      'stdout': 'command stdout'
+    }
+
+
+404: Task is not available
+Body: ``{"msg": "2207bde6-4346-4a83-984a-40a5c00056c1 is not available"}``
+
+500: System Error
+Body: ``{"msg": "Sample Error message"}``
 
 ``mon``
 =======
@@ -53,6 +100,7 @@ GET
 ``/api/mon/install/``
 ---------------------
 POST
+Body: ``{}``
 
 ``/api/mon/configure/``
 -----------------------
