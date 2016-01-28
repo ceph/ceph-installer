@@ -117,12 +117,10 @@ Body ::
 * ``POST``: Configure monitor(s)
 Body ::
 
-    {
-        'hosts': [
-            {'address': '192.168.1.1', 'hostname': 'mon1.example.com'},
-            {'address': '192.168.1.2', 'hostname': 'mon2.example.com'}
-        ]
-    }
+    [
+        {'address': '192.168.1.1', 'hostname': 'mon1.example.com'},
+        {'address': '192.168.1.2', 'hostname': 'mon2.example.com'}
+    ]
 
 
 ``osd``
@@ -131,25 +129,40 @@ Body ::
 
 ``/api/osd/install/``
 ---------------------
-POST
+* ``POST``: Start the installation process for monitor(s)
+Body ::
+
+    {
+        'adjust-repos': True,
+        'gpg-url': '',
+        'hosts': ['osd1.example.com', 'osd2.example.com'],
+        'release': '',
+        'repo-only': False,
+        'repo-url': ''
+    }
+
 
 ``/api/osd/configure/``
 -----------------------
-POST
+* ``POST``: Configure OSD(s)
+Body ::
 
-XXX This might not be a good idea to implement since journal operations are
-usually a subset of OSD commands.
-``journal``
-===========
+    [
+        {
+            'device': '/dev/sdb',
+            'hostname': 'osd1.example.com',
+            'journal_collocate': True
+        },
+        {
+            'device': '/dev/sdc',
+            'hostname': 'osd2.example.com',
+            'journal': '/dev/sdd'
+        }
+    ]
 
 
-``/api/journal/install/``
--------------------------
-POST
-
-``/api/journal/configure/``
----------------------------
-POST
+``journal_collocate`` will use the same device as the OSD for the journal. This
+is not ideal and might incur in a performance penalty.
 
 
 ``rgw``
