@@ -149,12 +149,12 @@ Body ::
 
     [
         {
-            'device': '/dev/sdb',
+            'devices': ['/dev/sdb'],
             'hostname': 'osd1.example.com',
             'journal_collocate': True
         },
         {
-            'device': '/dev/sdc',
+            'devices': ['/dev/sdc', '/dev/sdb'],
             'hostname': 'osd2.example.com',
             'journal': '/dev/sdd'
         }
