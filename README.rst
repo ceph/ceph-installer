@@ -171,19 +171,56 @@ is not ideal and might incur in a performance penalty.
 
 ``/api/rgw/install/``
 ---------------------
-POST
+* ``POST``: Start the installation process for monitor(s)
+Body ::
+
+    {
+        'adjust-repos': True,
+        'gpg-url': '',
+        'hosts': ['rgw1.example.com', 'rgw2.example.com'],
+        'release': '',
+        'repo-only': False,
+        'repo-url': ''
+    }
+
 
 ``/api/rgw/configure/``
 -----------------------
-POST
+* ``POST``: Configure OSD(s)
+``name`` is optional, will default to ``rgw.$short-hostname``, using the
+examples below, that would be ``rgw.node1`` and ``rgw.node2``. It is allowed to
+specify a ``name`` to alter this default behavior.
+
+Body ::
+
+    [
+        {
+            'name': 'main',
+            'hostname': 'rgw1.example.com',
+        },
+        {
+            'hostname': 'rgw2.example.com',
+        }
+    ]
+
 
 ``calamari``
 ============
 
 ``/api/calamari/install/``
 --------------------------
-POST
+* ``POST``: Start the installation process for calamari
+Body ::
+
+    {
+        'adjust-repos': True,
+        'gpg-url': '',
+        'host': 'calamari.example.com'
+        'release': '',
+        'repo-only': False,
+        'repo-url': ''
+    }
 
 ``/api/calamari/configure/``
 ----------------------------
-POST
+# TODO
