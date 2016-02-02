@@ -62,7 +62,8 @@ Body ::
           'id': '2207bde6-4346-4a83-984a-40a5c00056c1',
           'started': '2016-01-27T15:03:22.638173',
           'stderr': 'command stderr',
-          'stdout': 'command stdout'
+          'stdout': 'command stdout',
+          'succeeded': True,
         }
     ]
 
