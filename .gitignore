@@ -6,7 +6,6 @@ log
 
 # Config files
 alembic.ini
-config.py
 
 # C extensions
 *.so
@@ -31,3 +30,6 @@ pip-log.txt
 
 # celery
 celerybeat-schedule
+
+# test db
+marinertest.db
