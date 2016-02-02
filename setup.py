@@ -16,6 +16,7 @@ setup(
         'pecan',
         'celery',
         'sqlalchemy',
+        'gunicorn',
     ],
     zip_safe=False,
     include_package_data=True,

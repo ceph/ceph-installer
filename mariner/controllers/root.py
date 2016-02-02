@@ -4,6 +4,12 @@ from mariner.controllers import tasks, mon, osd, rgw, calamari
 
 class ApiController(object):
 
+    @expose('json')
+    def index(self):
+        # TODO: allow some autodiscovery here so that clients can see what is
+        # available
+        return dict()
+
     tasks = tasks.TasksController()
     mon = mon.MONController()
     osd = osd.OSDController()
