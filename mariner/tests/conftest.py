@@ -13,7 +13,7 @@ from mariner import models as _db
 import pytest
 
 DBNAME = 'marinertest.db'
-BIND = 'sqlite:///.'
+BIND = 'sqlite:////tmp'
 
 
 def config_file():
@@ -46,8 +46,6 @@ def connection(app, request):
     print "=" * 80
     print "CREATING TEMPORARY DATABASE FOR TESTS"
     print "=" * 80
-    subprocess.call(['rm', DBNAME])
-    subprocess.call(['touch', DBNAME])
 
     # Bind and create the database tables
     _db.clear()

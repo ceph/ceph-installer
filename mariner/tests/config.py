@@ -44,7 +44,7 @@ logging = {
 
 sqlalchemy = {
     # XXX Determine the right location for the database
-    'url': 'sqlite:///./marinertest.db',
+    'url': 'sqlite:////tmp/marinertest.db',
     'echo':          True,
     'echo_pool':     True,
     'pool_recycle':  3600,
