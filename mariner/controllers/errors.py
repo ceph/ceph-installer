@@ -1,7 +1,7 @@
 from pecan import expose, response, request
 
 
-class ErrorsController(object):
+class ErrorController(object):
 
     @expose('json')
     def schema(self, **kw):
