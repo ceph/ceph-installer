@@ -38,7 +38,7 @@ Responses:
 Body: ``{}``
 
 500: System Error
-Body: ``{"msg": "Sample Error message"}``
+Body: ``{"message": "Sample Error message"}``
 
 ``tasks``
 =========
@@ -69,7 +69,7 @@ Body ::
 
 
 500: System Error
-Body: ``{"msg": "Sample Error message"}``
+Body: ``{"message": "Sample Error message"}``
 
 ``/api/tasks/{ task-id }/``
 ---------------------------
@@ -90,10 +90,10 @@ Body ::
 
 
 404: Task is not available
-Body: ``{"msg": "2207bde6-4346-4a83-984a-40a5c00056c1 is not available"}``
+Body: ``{"message": "2207bde6-4346-4a83-984a-40a5c00056c1 is not available"}``
 
 500: System Error
-Body: ``{"msg": "Sample Error message"}``
+Body: ``{"message": "Sample Error message"}``
 
 ``mon``
 =======
