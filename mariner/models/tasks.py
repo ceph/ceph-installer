@@ -16,6 +16,8 @@ class Task(Base):
     ended = Column(DateTime)
     succeeded = Column(Boolean(), default=False)
 
+    # TODO: we need to add defaults for started. This needs a __init__ method
+
     def __repr__(self):
         try:
             return '<Task %r>' % self.name
