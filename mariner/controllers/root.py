@@ -1,5 +1,5 @@
 from pecan import expose
-from mariner.controllers import tasks, mon, osd, rgw, calamari
+from mariner.controllers import tasks, mon, osd, rgw, calamari, errors
 
 
 class ApiController(object):
@@ -24,3 +24,4 @@ class RootController(object):
         return dict()
 
     api = ApiController()
+    errors = errors.ErrorController()
