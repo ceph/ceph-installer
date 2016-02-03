@@ -1,8 +1,9 @@
 import os
 import pecan
+import tempfile
 
 
-def generate_inventory_file(group_name, hosts, task_uuid):
+def generate_inventory_file(group_name, hosts, task_uuid, tmp_dir=None):
     """
     Generates a host file to use with an ansible-playbook call.
 
@@ -15,8 +16,9 @@ def generate_inventory_file(group_name, hosts, task_uuid):
         hosts = [hosts]
     result.extend(hosts)
     result_str = "\n".join(result)
-    inventory_root = pecan.conf.inventory_root_path
-    inventory_path = os.path.join(inventory_root, "hosts_{0}".format(task_uuid))
-    with open(inventory_path, "w") as f:
-        f.write(result_str)
-    return inventory_path
+    # if not None the NamedTemporaryFile will be created in the given directory
+    tempfile.tempdir = tmp_dir
+    inventory_file = tempfile.NamedTemporaryFile(prefix="{0}_".format(task_uuid), delete=False)
+    inventory_file.write(result_str)
+    inventory_file.close()
+    return inventory_file.name
