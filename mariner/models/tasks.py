@@ -29,7 +29,7 @@ class Task(Base):
             command = self.command,
             stderr = self.stderr,
             stdout = self.stdout,
-            started = selfstarted,
+            started = self.started,
             ended = self.ended,
             succeeded = self.succeeded,
         )
