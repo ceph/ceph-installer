@@ -50,3 +50,6 @@ sqlalchemy = {
     'pool_recycle':  3600,
     'encoding':      'utf-8'
 }
+
+# where generated ansible inventory files are stored
+inventory_root_path = "/tmp"
