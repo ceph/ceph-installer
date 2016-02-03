@@ -16,9 +16,7 @@ class TasksController(object):
 
     @expose('json')
     def index(self):
-        # TODO: allow some autodiscovery here so that clients can see what is
-        # available
-        return dict()
+        return Task.query.all()
 
     @expose('json')
     def install(self):
