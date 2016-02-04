@@ -1,6 +1,9 @@
 import os
 import pecan
 import tempfile
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def generate_inventory_file(group_name, hosts, task_uuid, tmp_dir=None):
@@ -68,3 +71,29 @@ def which(executable):
         executable_path = os.path.join(location, executable)
         if os.path.exists(executable_path):
             return executable_path
+
+
+def get_playbook_path():
+    """
+    Try to determine where does the ansible playbook lives. It does this by
+    looking into an environment variable first which takes precedence (for
+    now).
+    """
+    try:
+        playbook_path = os.environ['MARINER_PLAYBOOK']
+    except KeyError:
+        # TODO: Fallback nicely into looking maybe in some directory that is
+        # included with the mariner application or a well know path defined by
+        # the packaging of said playbooks
+        logger.warning('"MARINER_PLAYBOOK" environment variable is not defined')
+        playbook_path = '/tmp/ceph-ansible/'
+
+    if os.path.isfile(playbook_path):
+        # we have what should be a YAML
+        return playbook_path
+    else:
+        # assume the site.yml file living in this directory
+        return os.path.join(playbook_path, 'site.yml')
+
+    # TODO: error here in a way that a controller can handle it and report back
+
