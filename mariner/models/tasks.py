@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String,  Boolean, DateTime
+from sqlalchemy import Column, Integer, String,  Boolean, DateTime, Text
 from sqlalchemy.orm.exc import DetachedInstanceError
 from mariner.models import Base
 
@@ -10,8 +10,10 @@ class Task(Base):
     identifier = Column(String(256), unique=True, nullable=False, index=True)
     endpoint = Column(String(256), index=True)
     command = Column(String(256))
-    stderr = Column(String(256))
-    stdout = Column(String(256))
+    stderr_file = Column(String(256))
+    stdout_file = Column(String(256))
+    stderr = Column(Text)
+    stdout = Column(Text)
     started = Column(DateTime)
     ended = Column(DateTime)
     succeeded = Column(Boolean(), default=False)
