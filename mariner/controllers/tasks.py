@@ -1,3 +1,4 @@
+import os
 from pecan import expose
 from datetime import datetime
 
@@ -34,6 +35,7 @@ class TaskController(object):
         self.task.stdout = self.read_log(self.task.stdout_file)
         self.task.stderr = self.read_log(self.task.stderr_file)
         return {}
+
 
 class TasksController(object):
 
