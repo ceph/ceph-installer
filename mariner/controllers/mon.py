@@ -1,7 +1,11 @@
-from pecan import expose, request
 import logging
+
+from pecan import expose, request
+from pecan.ext.notario import validate
+
 from mariner.controllers import error
 from mariner.tasks import install
+from mariner import schemas
 
 
 logger = logging.getLogger(__name__)
@@ -19,8 +23,8 @@ class MONController(object):
     def install(self):
         error('/errors/not_allowed/')
 
-    # we need validation here
     @install.when(method='POST', template='json')
+    @validate(schemas.mon_install_schema, handler="/errors/schema")
     def install_post(self):
         hosts = request.json.get('hosts')
         tags = 'package-install'
