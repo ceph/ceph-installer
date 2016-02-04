@@ -10,19 +10,18 @@ class Task(Base):
     identifier = Column(String(256), unique=True, nullable=False, index=True)
     endpoint = Column(String(256), index=True)
     command = Column(String(256))
-    stderr_file = Column(String(256))
-    stdout_file = Column(String(256))
     stderr = Column(Text)
     stdout = Column(Text)
     started = Column(DateTime)
     ended = Column(DateTime)
     succeeded = Column(Boolean(), default=False)
+    # TODO: add exit_code
 
     # TODO: we need to add defaults for started. This needs a __init__ method
 
     def __repr__(self):
         try:
-            return '<Task %r>' % self.name
+            return '<Task %r>' % self.identifier
         except DetachedInstanceError:
             return '<Task detached>'
 
