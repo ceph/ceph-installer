@@ -1,4 +1,12 @@
-from pecan import expose
+import os
+from pecan import expose, request
+import logging
+from uuid import uuid4
+from mariner.controllers import error
+from mariner import process, models, util
+
+
+logger = logging.getLogger(__name__)
 
 
 class MONController(object):
@@ -9,10 +17,40 @@ class MONController(object):
         # available
         return dict()
 
-    @expose('json')
+    @expose(generic=True, template='json')
     def install(self):
+        error('/errors/not_allowed/')
+
+    # we need validation here
+    @install.when(method='POST', template='json')
+    def install_post(self):
+        identifier = str(uuid4())
+        # VALIDATIONNNNNN!!!! We can't do this without hosts
+        hosts = request.json.get('hosts')
+        hosts_file = util.generate_inventory_file('mons', hosts, identifier)
+        tags = 'package-install'
+        stdout = process.temp_file(identifier, 'stdout')
+        stderr = process.temp_file(identifier, 'stderr')
+        command = process.make_ansible_command(stderr, stdout, hosts_file, identifier, tags=tags)
+        task = models.Task(
+            identifier=identifier,
+            endpoint=request.path,
+            command=command,
+            stdout_file=stdout,
+            stderr_file=stderr,
+        )
+        # we need an explicit commit here because the command may finish before
+        # we conclude this request
+        models.commit()
+        logger.debug('running command: %s', command)
+        os.system(command)
         return {}
 
-    @expose('json')
+    @expose(generic=True, template='json')
     def configure(self):
+        error('/errors/not_allowed/')
+
+    # we need validation here
+    @configure.when(method='POST', template='json')
+    def configure_post(self):
         return {}

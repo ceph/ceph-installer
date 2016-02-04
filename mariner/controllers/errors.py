@@ -18,15 +18,6 @@ class ErrorController(object):
         return dict(message=msg)
 
     @expose('json')
-    def not_allowed(self, **kw):
-        msg = kw.get(
-            'message',
-            'method not allowed'
-        )
-        response.status = 405
-        return dict(message=msg)
-
-    @expose('json')
     def forbidden(self, **kw):
         msg = kw.get(
             'message',
@@ -42,6 +33,15 @@ class ErrorController(object):
             'resource was not found'
         )
         response.status = 404
+        return dict(message=msg)
+
+    @expose('json')
+    def not_allowed(self, **kw):
+        msg = kw.get(
+            'message',
+            'method %s not allowed for "%s"' % (request.method, request.path)
+        )
+        response.status = 405
         return dict(message=msg)
 
     @expose('json')
@@ -61,4 +61,3 @@ class ErrorController(object):
         )
         response.status = 500
         return dict(message=msg)
-
