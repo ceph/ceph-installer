@@ -1,8 +1,12 @@
 import os
 from pecan import expose, request
+import logging
 from uuid import uuid4
 from mariner.controllers import error
 from mariner import process, models, util
+
+
+logger = logging.getLogger(__name__)
 
 
 class MONController(object):
@@ -20,19 +24,20 @@ class MONController(object):
     # we need validation here
     @install.when(method='POST', template='json')
     def install_post(self):
-        identifier = uuid4()
+        identifier = str(uuid4())
         # VALIDATIONNNNNN!!!! We can't do this without hosts
         hosts = request.json.get('hosts')
         hosts_file = util.generate_inventory_file('mons', hosts, identifier)
-        tag = 'package-install'
+        tags = 'package-install'
         stdout = process.temp_file(identifier, 'stdout')
         stderr = process.temp_file(identifier, 'stderr')
-        command = process.make_ansible_command(stderr, stdout, hosts_file, identifier, tag=tag)
+        command = process.make_ansible_command(stderr, stdout, hosts_file, identifier, tags=tags)
         task = models.Task(
             identifier=identifier,
             endpoint=request.path,
             command=command
         )
+        logger.debug('running command: %s', command)
         os.system(command)
         return {}
 
