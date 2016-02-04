@@ -35,8 +35,13 @@ class MONController(object):
         task = models.Task(
             identifier=identifier,
             endpoint=request.path,
-            command=command
+            command=command,
+            stdout_file=stdout,
+            stderr_file=stderr,
         )
+        # we need an explicit commit here because the command may finish before
+        # we conclude this request
+        models.commit()
         logger.debug('running command: %s', command)
         os.system(command)
         return {}
