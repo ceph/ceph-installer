@@ -17,6 +17,7 @@ setup(
         'celery',
         'sqlalchemy',
         'gunicorn',
+        'pecan-notario',
     ],
     zip_safe=False,
     include_package_data=True,
