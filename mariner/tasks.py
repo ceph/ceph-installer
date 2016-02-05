@@ -1,4 +1,6 @@
 import logging
+
+from datetime import datetime
 from celery import shared_task
 from mariner import util, models, process
 
@@ -21,10 +23,12 @@ def install(component, hosts, tags, identifier):
     command = process.make_ansible_command(hosts_file, identifier, tags=tags)
     task = models.Task.query.filter_by(identifier=identifier).first()
     task.command = ' '.join(command)
+    task.started = datetime.now()
     # force a commit here so we can reference this command later if it fails
     models.commit()
     out, err, exit_code = process.run(command)
     task.succeeded = not exit_code
     task.stdout = out
     task.stderr = err
+    task.ended = datetime.now()
     models.commit()
