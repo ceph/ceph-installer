@@ -21,7 +21,7 @@ class MONController(object):
 
     @expose(generic=True, template='json')
     def install(self):
-        error('/errors/not_allowed/')
+        error(405)
 
     @install.when(method='POST', template='json')
     @validate(schemas.mon_install_schema, handler="/errors/schema")
@@ -36,7 +36,7 @@ class MONController(object):
 
     @expose(generic=True, template='json')
     def configure(self):
-        error('/errors/not_allowed/')
+        error(405)
 
     # we need validation here
     @configure.when(method='POST', template='json')
