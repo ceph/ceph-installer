@@ -2,10 +2,12 @@ import logging
 
 from pecan import expose, request
 from pecan.ext.notario import validate
+from uuid import uuid4
 
 from mariner.controllers import error
 from mariner.tasks import install
 from mariner import schemas
+from mariner import models
 
 
 logger = logging.getLogger(__name__)
@@ -28,11 +30,19 @@ class MONController(object):
     def install_post(self):
         hosts = request.json.get('hosts')
         tags = 'package-install'
+        identifier = str(uuid4())
+        task = models.Task(
+            identifier=identifier,
+            endpoint=request.path,
+        )
+        # we need an explicit commit here because the command may finish before
+        # we conclude this request
+        models.commit()
         install.apply_async(
-            ('mon', hosts, tags, request.path),
+            ('mon', hosts, tags, identifier),
         )
 
-        return {}
+        return task
 
     @expose(generic=True, template='json')
     def configure(self):
