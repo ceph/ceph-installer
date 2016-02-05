@@ -11,7 +11,7 @@ class TaskController(object):
     def __init__(self, task_id):
         self.task = Task.query.filter_by(identifier=task_id).first()
         if not self.task:
-            error('/errors/not_found/', '%s is not avilable' % task_id)
+            error(404, '%s is not avilable' % task_id)
 
     def read_log(self, path):
         if not path:
