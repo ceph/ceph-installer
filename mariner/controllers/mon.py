@@ -29,7 +29,6 @@ class MONController(object):
     @validate(schemas.mon_install_schema, handler="/errors/schema")
     def install_post(self):
         hosts = request.json.get('hosts')
-        tags = 'package-install'
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
@@ -39,7 +38,7 @@ class MONController(object):
         # we conclude this request
         models.commit()
         install.apply_async(
-            ('mon', hosts, tags, identifier),
+            ('mon', hosts, identifier),
         )
 
         return task
