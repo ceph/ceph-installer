@@ -1,7 +1,6 @@
 ---
 
 - hosts: all
-  user: vagrant
   roles:
     - common
     - celery
