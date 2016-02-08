@@ -29,18 +29,15 @@ def temp_file(identifier, std):
 
 def run(arguments, **kwargs):
     """
-    A small helper to run a system command using ``subprocess.Popen``. Opinionated becuase
-    it will always want to
-    Safely execute a ``subprocess.Popen`` call making sure that the
-    executable exists and raising a helpful error message
-    if it does not.
+    A small helper to run a system command using ``subprocess.Popen``.
+    Opinionated becuase it will always want to Safely execute
+    a ``subprocess.Popen`` call making sure that the executable exists and
+    raising a helpful error message if it does not.
 
-    .. note:: This should be the prefered way of calling ``subprocess.Popen``
-    since it provides the caller with the safety net of making sure that
-    executables *will* be found and will error nicely otherwise.
+    This returns the output of the command and the return code of the process
+    in a tuple::
 
-    This returns the output of the command and the return code of the
-    process in a tuple: (output, returncode).
+        (stdout, stderr, returncode)
     """
     logger.info('Running command: %s' % ' '.join(arguments))
     process = subprocess.Popen(
