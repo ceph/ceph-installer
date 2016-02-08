@@ -40,3 +40,20 @@ class TestCeleryHasWorkers(object):
             lambda: FakeState(stats=lambda: None))
         with pytest.raises(hooks.SystemCheckError):
             hooks.celery_has_workers()
+
+
+class TestRabbitMQIsRunning(object):
+
+    def test_is_running(self, monkeypatch):
+        def errors(): raise IOError
+        monkeypatch.setattr(
+            hooks, 'celery_has_workers',
+            errors)
+        with pytest.raises(hooks.SystemCheckError):
+            assert hooks.rabbitmq_is_running()
+
+    def test_is_not_running(self, monkeypatch):
+        monkeypatch.setattr(
+            hooks, 'celery_has_workers',
+            lambda: None)
+        assert hooks.rabbitmq_is_running() is None
