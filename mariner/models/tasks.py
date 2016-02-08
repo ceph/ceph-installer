@@ -33,4 +33,5 @@ class Task(Base):
             started = self.started,
             ended = self.ended,
             succeeded = self.succeeded,
+            exit_code = self.exit_code,
         )
