@@ -25,7 +25,7 @@ class OSDController(object):
         error(405)
 
     @install.when(method='POST', template='json')
-    @validate(schemas.mon_install_schema, handler="/errors/schema")
+    @validate(schemas.install_schema, handler="/errors/schema")
     def install_post(self):
         hosts = request.json.get('hosts')
         identifier = str(uuid4())
