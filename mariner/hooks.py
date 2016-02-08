@@ -19,18 +19,31 @@ class SystemCheckError(Exception):
 
 
 def ansible_exists():
+    """
+    Perform a simple check to see if ``ansibl-playbook`` executable is present
+    in the system where the service is running.
+    """
     ansible_path = which('ansible-playbook')
     if not ansible_path:
         raise SystemCheckError('Could not find ansible in system paths')
 
 
 def celery_has_workers():
+    """
+    The ``stats()`` call will return different stats/metadata information about
+    celery worker(s).  An empty/None result will mean that there aren't any
+    celery workers in use.
+    """
     stats = inspect().stats()
     if not stats:
         raise SystemCheckError('No running Celery worker were found')
 
 
 def rabbitmq_is_running():
+    """
+    If checking for worker stats, an ``IOError`` may be raised depending on the
+    problem for the RabbitMQ connection.
+    """
     try:
         celery_has_workers()
     except IOError as e:
@@ -42,6 +55,10 @@ def rabbitmq_is_running():
 
 
 def database_connection():
+    """
+    A very simple connection that should succeed if there is a good/correct
+    database connection.
+    """
     try:
         models.Task.get(1)
     except OperationalError:
