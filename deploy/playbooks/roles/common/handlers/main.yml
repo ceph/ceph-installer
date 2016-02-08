@@ -1,0 +1,25 @@
+---
+
+- name: restart app
+  command: "{{ app_home }}/bin/circusctl restart {{ app_name }}"
+
+- name: restart celery
+  command: "{{ app_home }}/bin/circusctl restart celery"
+
+- name: restart celery beat
+  command: "{{ app_home }}/bin/circusctl restart celerybeat"
+
+- name: reload circusd
+  sudo: yes
+  action: service name=circus state=reloaded
+
+- name: reload circus config
+  command: "{{ app_home }}/bin/circusctl reloadconfig"
+
+- name: start circus
+  sudo: yes
+  action: service name=circus state=started
+
+- name: restart circus
+  sudo: yes
+  action: service name=circus state=restarted

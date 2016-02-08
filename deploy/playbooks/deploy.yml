@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  roles:
+    - common
+    - celery
+  vars:
+     app_name: "mariner"
+     branch: "master"

@@ -1,0 +1,19 @@
+---
+
+system_packages:
+  - python-dev
+  - git
+  - python-virtualenv
+  - g++
+  - gcc
+  - libpq-dev
+  - vim
+  # needed for the ansible apt_repository module
+  - python-apt
+#  - libsemanage-python
+
+ssl_requirements: []
+
+circus_system_packages:
+  - libzmq-dev
+  - libevent-dev
