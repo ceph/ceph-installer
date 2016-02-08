@@ -1,5 +1,6 @@
 import pytest
 from mariner import hooks
+from sqlalchemy.exc import OperationalError
 
 
 class FakeState(object):
@@ -57,3 +58,20 @@ class TestRabbitMQIsRunning(object):
             hooks, 'celery_has_workers',
             lambda: None)
         assert hooks.rabbitmq_is_running() is None
+
+
+class TestDBConnection(object):
+
+    def test_is_connected(self, monkeypatch):
+        monkeypatch.setattr(
+            hooks.models, 'Task',
+            FakeState(get=lambda x: None))
+        assert hooks.database_connection() is None
+
+    def test_is_not_running(self, monkeypatch):
+        def errors(x): raise OperationalError(None, None, None, None)
+        monkeypatch.setattr(
+            hooks.models, 'Task',
+            FakeState(get=errors))
+        with pytest.raises(hooks.SystemCheckError):
+            hooks.database_connection() is None
