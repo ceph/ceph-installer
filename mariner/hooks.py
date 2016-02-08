@@ -61,8 +61,9 @@ def database_connection():
     """
     try:
         models.Task.get(1)
-    except OperationalError:
-        raise SystemCheckError("Could not connect or retrieve information from the database")
+    except OperationalError as exc:
+        raise SystemCheckError(
+            "Could not connect or retrieve information from the database: %s" % exc.message)
 
 
 class SystemCheckHook(PecanHook):
