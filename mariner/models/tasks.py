@@ -15,9 +15,7 @@ class Task(Base):
     started = Column(DateTime)
     ended = Column(DateTime)
     succeeded = Column(Boolean(), default=False)
-    # TODO: add exit_code
-
-    # TODO: we need to add defaults for started. This needs a __init__ method
+    exit_code = Column(Integer)
 
     def __repr__(self):
         try:
@@ -35,4 +33,5 @@ class Task(Base):
             started = self.started,
             ended = self.ended,
             succeeded = self.succeeded,
+            exit_code = self.exit_code,
         )

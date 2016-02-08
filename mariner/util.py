@@ -58,6 +58,11 @@ def api_endpoint(endpoint=None, *args):
 
 
 def which(executable):
+    """
+    Locate in known system $PATH locations where an executable might exist.
+    This will mean that non-system $PATH locations (like virtualenv paths) will
+    be fully ignored.
+    """
     locations = (
         '/usr/local/bin',
         '/bin',
@@ -96,4 +101,3 @@ def get_playbook_path():
         return os.path.join(playbook_path, 'site.yml')
 
     # TODO: error here in a way that a controller can handle it and report back
-
