@@ -1,3 +1,5 @@
+from mariner import hooks
+
 # Server Specific Configurations
 server = {
     'port': '8080',
@@ -9,6 +11,7 @@ app = {
     'root': 'mariner.controllers.root.RootController',
     'modules': ['mariner'],
     'debug': False,
+    'hooks': [hooks.SystemCheckHook()]
 }
 
 logging = {
