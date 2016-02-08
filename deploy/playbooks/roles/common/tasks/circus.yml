@@ -1,0 +1,51 @@
+---
+
+- name: install circus in virtualenv
+  pip: name={{ item }} state=present virtualenv={{ app_home }}
+  with_items:
+    - circus
+    - circus-web
+    - chaussette
+
+- name: ensure /etc/circus exists
+  file:
+    path: /etc/circus
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    recurse: yes
+  sudo: true
+
+- name: ensure /var/log/circus exists
+  file:
+    path: /var/log/circus
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    recurse: yes
+  sudo: true
+
+- name: ensure {{ app_home }}/log exists
+  file: path="{{ app_home }}/log" state=directory
+
+- name: install circus.conf init file
+  template:
+    src: circus.conf
+    dest: /etc/init/circus.conf
+  sudo: true
+  register: circus_service
+
+- name: enable circus
+  sudo: true
+  service:
+    name: circus
+    enabled: yes
+
+- name: install circus conf for {{ app_name }}
+  template: src=circus.ini.j2 dest=/etc/circus/circus.ini
+  sudo: true
+  notify: reload circus config
+
+- name: ensure circus is running
+  sudo: true
+  service:
+    name: circus
+    state: started

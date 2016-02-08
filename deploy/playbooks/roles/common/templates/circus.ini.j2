@@ -1,0 +1,36 @@
+# the logging directories must be owned by the user that starts
+# the circusd daemon, which is set in /etc/init/circus.conf
+# we use a non-root user so that the celery workers start up correctly
+
+[watcher:{{ app_name }}]
+cmd = {{ app_home }}/bin/gunicorn_pecan -w 10 -t 300 config/config.py
+working_dir={{ app_home }}/src/{{ app_name }}
+
+stdout_stream.class = FileStream
+stdout_stream.filename=/var/log/circus/{{ app_name }}-stdout.log
+
+stderr_stream.class = FileStream
+stderr_stream.filename=/var/log/circus/{{ app_name }}-stderr.log
+
+[watcher:celery]
+cmd = {{ app_home }}/bin/celery -A async worker --loglevel=info
+working_dir={{ app_home }}/src/{{ app_name }}/{{ app_name }}
+
+stdout_stream.class = FileStream
+stdout_stream.filename=/var/log/circus/celery-stdout.log
+
+stderr_stream.class = FileStream
+stderr_stream.filename=/var/log/circus/celery-stderr.log
+
+[watcher:celerybeat]
+cmd = {{ app_home }}/bin/celery -A async beat --loglevel=info
+working_dir={{ app_home }}/src/{{ app_name }}/{{ app_name }}
+
+stdout_stream.class = FileStream
+stdout_stream.filename=/var/log/circus/celerybeat-stdout.log
+
+stderr_stream.class = FileStream
+stderr_stream.filename=/var/log/circus/celerybeat-stderr.log
+
+[env:celery,celerybeat]
+PECAN_CONFIG = {{ app_home }}/src/{{ app_name }}/config/config.py

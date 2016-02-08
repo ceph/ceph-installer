@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  user: vagrant
+  roles:
+    - common
+    - celery
+  vars:
+     app_name: "mariner"
+     use_ssl: false 
+     wsgi_file: wsgi.py
+     wsgi_callable: application
+     branch: "master"
+     development_server: false

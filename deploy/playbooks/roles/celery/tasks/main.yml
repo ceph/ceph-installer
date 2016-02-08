@@ -1,0 +1,36 @@
+---
+- name: add the rabbitmq official repo
+  sudo: yes
+  apt_repository:
+    repo: "deb http://www.rabbitmq.com/debian/ testing main"
+    state: present
+
+- name: add the rabbitmq public key
+  sudo: yes
+  apt_key:
+    url: "https://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
+    state: present
+
+- name: update the apt cache
+  sudo: yes
+  apt:
+    update_cache: true
+
+- name: install rabbitmq-server
+  sudo: yes
+  apt:
+    name: rabbitmq-server
+    state: present
+
+- name: ensure rabbitmq is running and enabled
+  sudo: yes
+  service:
+    name: rabbitmq-server
+    state: started
+    enabled: yes
+
+- name: ensure circus is running
+  sudo: yes
+  service:
+    name: circus
+    state: started 
