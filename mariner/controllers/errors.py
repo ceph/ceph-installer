@@ -1,4 +1,9 @@
+import logging
 from pecan import expose, response, request
+
+
+logger = logging.getLogger(__name__)
+schema_logger = logging.getLogger("%s.schema" % __name__)
 
 
 class ErrorController(object):
@@ -6,7 +11,14 @@ class ErrorController(object):
     @expose('json')
     def schema(self, **kw):
         response.status = 400
-        return dict(message=str(request.validation_error))
+        schema_logger.error(request.validation_error)
+        path = request.validation_error._format_path()
+        message = '%s%sfailed validation, %s' % (
+            path,
+            '' if path.endswith(' ') else ' ',
+            request.validation_error.reason
+        )
+        return dict(message=message)
 
     @expose('json')
     def invalid(self, **kw):
