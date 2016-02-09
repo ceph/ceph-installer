@@ -127,6 +127,8 @@ def get_endpoint(request_url, *args):
     if args:
         for part in args:
             url = os.path.join(url, part)
+    if not url.endswith('/'):
+        return "%s/" % url
     return url
 
 
