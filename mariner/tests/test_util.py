@@ -29,3 +29,14 @@ class TestGenerateInventoryFile(object):
     def test_tmp_dir(session, tmpdir):
         result = util.generate_inventory_file("mons", "google.com", "uuid", tmp_dir=str(tmpdir))
         assert str(tmpdir) in result
+
+
+class TestGetEndpoint(object):
+
+    def test_no_args(self):
+        result = util.get_endpoint('http://example.org/some/endpoint')
+        assert result == 'http://example.org/'
+
+    def test_one_arg(self):
+        result = util.get_endpoint('http://example.org/some/endpoint', 'setup')
+        assert result == 'http://example.org/setup/'
