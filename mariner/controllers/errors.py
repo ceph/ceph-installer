@@ -13,7 +13,7 @@ class ErrorController(object):
         response.status = 400
         error_message = request.validation_error.reason or str(request.validation_error)
         schema_logger.error(error_message)
-        return dict(message=str(request.reason))
+        return dict(message=error_message)
 
     @expose('json')
     def invalid(self, **kw):
