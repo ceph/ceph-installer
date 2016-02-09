@@ -136,7 +136,7 @@ def make_setup_script(url):
     correct url used to request this service. The scrip will use this URL to
     properly create the right location for the serving of the public ssh key.
     """
-    ssh_key_address = get_endpoint(url, 'api', 'setup', 'key')
+    ssh_key_address = get_endpoint(url, 'setup', 'key')
     bash = """#!/bin/bash -x -e
 echo "--> creating new user: ansible"
 adduser ansible
