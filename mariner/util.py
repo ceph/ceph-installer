@@ -141,9 +141,6 @@ def make_setup_script(url):
 echo "--> creating new user: ansible"
 adduser ansible
 
-echo "--> fetching public ssh key"
-curl -s -L -o ansible.pub
-
 echo "--> adding provisioning key to the ansible authorized_keys"
 curl -s -L -o ansible.pub {ssh_key_address}
 cat ansible.pub >> /home/ansible/.ssh/authorized_keys
