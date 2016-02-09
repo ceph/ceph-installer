@@ -21,7 +21,7 @@ class SetupController(object):
         """
         # look for the ssh key of the current user
         private_key_path = os.path.expanduser('~/.ssh/id_rsa')
-        public_key_path = os.path.expanduser('~/.ssh/id_rsa')
+        public_key_path = os.path.expanduser('~/.ssh/id_rsa.pub')
 
         # if there isn't one create it
         if not os.path.exists(public_key_path):
