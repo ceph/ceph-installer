@@ -1,5 +1,6 @@
 import os
 
+import pytest
 from mariner import util
 
 
@@ -51,3 +52,13 @@ class TestMkdir(object):
         path = os.path.join(str(tmpdir), 'mydir')
         util.mkdir(path)
         assert os.path.isdir(path) is True
+
+    def test_mkdir_ignores_existing_dir(self, tmpdir):
+        path = str(tmpdir)
+        util.mkdir(path)
+        assert os.path.isdir(path) is True
+
+    def test_mkdir_does_not_ignore_existing_dir(self, tmpdir):
+        path = str(tmpdir)
+        with pytest.raises(OSError):
+            util.mkdir(path, exist_ok=False)
