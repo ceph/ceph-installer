@@ -1,3 +1,5 @@
+from mariner.controllers import mon
+
 
 class TestMonController(object):
 
@@ -21,3 +23,11 @@ class TestMonController(object):
         result = session.app.post_json("/api/mon/install/", params=data,
                                        expect_errors=True)
         assert result.status_int == 400
+
+    def test_install_hosts(self, session, monkeypatch):
+        monkeypatch.setattr(mon.install, 'apply_async', lambda x: None)
+        data = dict(hosts=["node1"])
+        result = session.app.post_json("/api/mon/install/", params=data,
+                                       expect_errors=True)
+        assert result.json['endpoint'] == '/api/mon/install/'
+        assert result.json['identifier'] is not None
