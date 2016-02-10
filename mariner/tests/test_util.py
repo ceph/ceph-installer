@@ -62,3 +62,22 @@ class TestMkdir(object):
         path = str(tmpdir)
         with pytest.raises(OSError):
             util.mkdir(path, exist_ok=False)
+
+
+class TestGetInstallExtraVars(object):
+
+    def test_no_extra_vars(self):
+        data = dict()
+        result = util.get_install_extra_vars(data)
+        assert not result
+
+    def test_redhat_storage_is_true(self):
+        data = dict(redhat_storage=True)
+        result = util.get_install_extra_vars(data)
+        assert "ceph_stable_rh_storage" in result
+        assert "ceph_stable_rh_storage_cdn_install" in result
+
+    def test_redhat_storage_is_false(self):
+        data = dict(redhat_storage=False)
+        result = util.get_install_extra_vars(data)
+        assert not result
