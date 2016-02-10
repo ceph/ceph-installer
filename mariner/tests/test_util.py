@@ -40,3 +40,7 @@ class TestGetEndpoint(object):
     def test_one_arg(self):
         result = util.get_endpoint('http://example.org/some/endpoint', 'setup')
         assert result == 'http://example.org/setup/'
+
+    def test_no_trailing_slash(self):
+        result = util.get_endpoint('http://example.org', 'setup')
+        assert result == 'http://example.org/setup/'
