@@ -1,6 +1,4 @@
-import os
 from pecan import expose
-from datetime import datetime
 
 from mariner.models import Task
 from mariner.controllers import error
@@ -13,13 +11,9 @@ class TaskController(object):
         if not self.task:
             error(404, '%s is not avilable' % task_id)
 
-    def read_log(self, path):
-        if not path:
-            return ''
-        if not os.path.exists(path) or not os.path.isfile(path):
-            return ''
-        with open(path, 'r') as log_file:
-            return log_file.read()
+    @expose('json')
+    def index(self):
+        return self.task
 
 
 class TasksController(object):
