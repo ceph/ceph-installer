@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task
-def install(component, hosts, identifier, tags="package-install"):
+def install(component, hosts, identifier, tags="package-install", extra_vars=None):
     """
     ``component``: What component is it going to get installed: mon, rgw, osd, calamari
     ``hosts``: A list of hosts to install, these host must be resolvable
@@ -18,9 +18,11 @@ def install(component, hosts, identifier, tags="package-install"):
     ``identifier``: The UUID identifer for the task object so this function can capture process
                     metadata and persist it to the database
     """
+    if not extra_vars:
+        extra_vars = dict()
     component_title = "%s%s" % (component, '' if component.endswith('s') else 's')
     hosts_file = util.generate_inventory_file(component_title, hosts, identifier)
-    command = process.make_ansible_command(hosts_file, identifier, tags=tags)
+    command = process.make_ansible_command(hosts_file, identifier, tags=tags, extra_vars=extra_vars)
     task = models.Task.query.filter_by(identifier=identifier).first()
     task.command = ' '.join(command)
     task.started = datetime.now()
