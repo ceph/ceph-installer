@@ -21,6 +21,15 @@ It follows these concepts:
   installing operations on a given host.
 
 
+Ceph Versions
+=============
+
+The default for the ``/api/*/install`` endpoints is to install the latest upstream
+stable version of ceph. If you'd like to install the latest Red Hat Ceph Storage ensure
+that the node being provisioned is correctly entitled and that the ``redhat_storage`` option
+is set to ``True`` in the json body you send to the install endpoint.
+
+
 Endpoints
 =========
 The parent endpoint for any API interaction is ``/api/``. The service provides
