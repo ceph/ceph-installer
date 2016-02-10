@@ -140,12 +140,14 @@ def make_setup_script(url):
     """
     ssh_key_address = get_endpoint(url, 'setup', 'key')
     bash = """#!/bin/bash -x -e
-echo "--> creating new user: ansible"
-adduser ansible
+echo "--> creating new user with disabled password: ansible"
+adduser --disabled-password --gecos "" ansible
 
 echo "--> adding provisioning key to the ansible authorized_keys"
 curl -s -L -o ansible.pub {ssh_key_address}
+mkdir -p /home/ansible/.ssh
 cat ansible.pub >> /home/ansible/.ssh/authorized_keys
+chown -R ansible:ansible /home/ansible/.ssh
 
 echo -e "--> backing up /etc/sudoers to /etc/sudoers.bak"
 cp /etc/sudoers /etc/sudoers.bak
@@ -154,7 +156,7 @@ echo "--> ensuring /etc/sudoers will not require a tty"
 sed -i "s/Defaults    requiretty/#Defaults    requiretty/" /etc/sudoers
 
 echo "--> ensuring that ansible user will be able to sudo"
-echo "ansible ALL=(ALL) ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
+echo "ansible ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
 """
     script = StringIO()
     script.write(
