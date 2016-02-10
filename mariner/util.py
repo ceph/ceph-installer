@@ -140,6 +140,11 @@ def make_setup_script(url):
     """
     ssh_key_address = get_endpoint(url, 'setup', 'key')
     bash = """#!/bin/bash -x -e
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user or execute this script with sudo" 2>&1
+  exit 1
+fi
+
 echo "--> creating new user with disabled password: ansible"
 adduser --disabled-password --gecos "" ansible
 
