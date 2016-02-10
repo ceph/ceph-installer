@@ -171,3 +171,18 @@ echo "ansible ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/ansible > /dev/
     )
     script.seek(0)
     return script
+
+
+def get_install_extra_vars(json):
+    """
+    Given a request.json dictionary from an install endpoint, this
+    method will generate and return a dict to be used as extra_vars
+    for mariner.tasks.install.
+    """
+    extra_vars = dict()
+    redhat_storage = json.get("redhat_storage", False)
+    if redhat_storage:
+        extra_vars["ceph_stable_rh_storage"] = True
+        extra_vars["ceph_stable_rh_storage_cdn_install"] = True
+
+    return extra_vars
