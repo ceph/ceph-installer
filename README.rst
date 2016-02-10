@@ -23,7 +23,36 @@ It follows these concepts:
 
 Endpoints
 =========
-The parent endpoint for any API interaction is ``/api/``.
+The parent endpoint for any API interaction is ``/api/``. The service provides
+a setup script as well that can be used to ensure a remote node can comply with
+certain requirements like: a deployment user, ssh keys, and sudo permissions.
+
+``setup``
+=========
+
+``/setup/``
+-----------
+* ``GET``: Generates a BASH script to be downloaded as ``setup.sh``. This
+  script should be executed with super user privileges on the remote node as it
+  will perform the following actions:
+
+  * create an ``ansible`` user
+  * ensure that the ``ansible`` user can use sudo without a password prompt
+  * remove the ``requiretty`` from ``/etc/sudoers`` if set, so that SSH
+    connections allow non-interactive sessions from using ``sudo``
+  * retrieve the SSH key that will be used for provisioning (see
+    :ref:`provisioning_key`)
+  * append the provisioning key onto ``$HOME/ansible/.ssh/authorized_keys``
+
+.. _provisioning_key:
+
+``/setup/key/``
+---------------
+This endpoint will serve the public SSH key *from the user that is running the
+service* assuming the location of: ``$HOME/.ssh/id_rsa.pub``. If this file does
+not exist the service will proceed to create one *while processing the
+request*.
+
 
 ``api``
 =======
