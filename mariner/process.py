@@ -1,22 +1,28 @@
 import subprocess
 import tempfile
 import logging
+import json
+
 from mariner.util import which, get_playbook_path
 
 logger = logging.getLogger(__name__)
 
 
-def make_ansible_command(hosts_file, identifier, extra_vars='{}', tags=''):
+def make_ansible_command(hosts_file, identifier, extra_vars=None, tags=''):
     """
     This utility will compose the command needed to run ansible, capture its
     stdout and stderr to a file
     """
     playbook = get_playbook_path()
     ansible_path = which('ansible-playbook')
+    if not extra_vars:
+        extra_vars = dict()
+
+    extra_vars = json.dumps(extra_vars)
 
     return [
         ansible_path, '-i', hosts_file,
-        '--extra-vars="%s"' % extra_vars, '--tags', tags, playbook
+        "--extra-vars", extra_vars, '--tags', tags, playbook
     ]
 
 

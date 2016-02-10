@@ -8,6 +8,7 @@ from mariner.controllers import error
 from mariner.tasks import install
 from mariner import schemas
 from mariner import models
+from mariner import util
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class OSDController(object):
     @validate(schemas.install_schema, handler="/errors/schema")
     def install_post(self):
         hosts = request.json.get('hosts')
+        extra_vars = util.get_install_extra_vars(request.json)
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
@@ -36,8 +38,10 @@ class OSDController(object):
         # we need an explicit commit here because the command may finish before
         # we conclude this request
         models.commit()
+        kwargs = dict(extra_vars=extra_vars)
         install.apply_async(
-            ('osd', hosts, identifier),
+            args=('osd', hosts, identifier),
+            kwargs=kwargs,
         )
 
         return task

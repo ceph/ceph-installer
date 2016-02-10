@@ -7,10 +7,6 @@ def list_of_hosts(value):
 
 
 install_schema = (
-    (optional("adjust-repos"), types.boolean),
-    (optional("gpg-url"), types.string),
     ("hosts", list_of_hosts),
-    (optional("release"), types.string),
-    (optional("repo-only"), types.boolean),
-    (optional("repo-url"), types.string),
+    (optional("redhat_storage"), types.boolean),
 )

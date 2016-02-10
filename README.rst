@@ -133,12 +133,8 @@ Body: ``{"message": "Sample Error message"}``
 Body ::
 
     {
-        'adjust-repos': True,
-        'gpg-url': '',
         'hosts': ['mon1.example.com', 'mon2.example.com', 'mon3.example.com'],
-        'release': '',
-        'repo-only': False,
-        'repo-url': ''
+        'redhat_storage': False
     }
 
 
@@ -163,12 +159,8 @@ Body ::
 Body ::
 
     {
-        'adjust-repos': True,
-        'gpg-url': '',
         'hosts': ['osd1.example.com', 'osd2.example.com'],
-        'release': '',
-        'repo-only': False,
-        'repo-url': ''
+        'redhat_storage': False
     }
 
 
@@ -205,12 +197,8 @@ is not ideal and might incur in a performance penalty.
 Body ::
 
     {
-        'adjust-repos': True,
-        'gpg-url': '',
         'hosts': ['rgw1.example.com', 'rgw2.example.com'],
-        'release': '',
-        'repo-only': False,
-        'repo-url': ''
+        'redhat_storage': False
     }
 
 
@@ -243,12 +231,8 @@ Body ::
 Body ::
 
     {
-        'adjust-repos': True,
-        'gpg-url': '',
-        'host': 'calamari.example.com'
-        'release': '',
-        'repo-only': False,
-        'repo-url': ''
+        'host': ['calamari.example.com'],
+        'redhat_storage': False
     }
 
 ``/api/calamari/configure/``
