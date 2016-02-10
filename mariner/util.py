@@ -2,6 +2,8 @@ import os
 import pecan
 import tempfile
 import logging
+from StringIO import StringIO
+
 
 logger = logging.getLogger(__name__)
 
@@ -101,3 +103,71 @@ def get_playbook_path():
         return os.path.join(playbook_path, 'site.yml')
 
     # TODO: error here in a way that a controller can handle it and report back
+
+
+def get_endpoint(request_url, *args):
+    """
+    Given a request URL, attempt to determine the full address to the `/setup/`
+    endpoint so that we can re-use this when crafting the script.
+
+    This service might not be reached at the same address as the configuration
+    states so we try to match the request to ensure a subsequent request that
+    can capture stdout/stderr will be correct.
+
+    The ``request_url`` argument is required, and used to infer the base url
+    this service was accessed from. All args would then be used to append to
+    the main url::
+
+        >>> get_endpoint('http://localhost:8080/some/endpoint', 'api', 'setup')
+        'http://localhost:8080/api/setup/'
+
+    ``request_url``: A string representing the full URL like ``http://api.example.com/api/``.
+    """
+    url = '/'.join(request_url.split('/')[:3])
+    if args:
+        for part in args:
+            url = os.path.join(url, part)
+    if not url.endswith('/'):
+        return "%s/" % url
+    return url
+
+
+def make_setup_script(url):
+    """
+    Create a setup script. Done dynamically due to the need of identifying the
+    correct url used to request this service. The scrip will use this URL to
+    properly create the right location for the serving of the public ssh key.
+    """
+    ssh_key_address = get_endpoint(url, 'setup', 'key')
+    bash = """#!/bin/bash -x -e
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user or execute this script with sudo" 2>&1
+  exit 1
+fi
+
+echo "--> creating new user with disabled password: ansible"
+adduser --disabled-password --gecos "" ansible
+
+echo "--> adding provisioning key to the ansible authorized_keys"
+curl -s -L -o ansible.pub {ssh_key_address}
+mkdir -p /home/ansible/.ssh
+cat ansible.pub >> /home/ansible/.ssh/authorized_keys
+chown -R ansible:ansible /home/ansible/.ssh
+
+echo -e "--> backing up /etc/sudoers to /etc/sudoers.bak"
+cp /etc/sudoers /etc/sudoers.bak
+
+echo "--> ensuring /etc/sudoers will not require a tty"
+sed -i "s/Defaults    requiretty/#Defaults    requiretty/" /etc/sudoers
+
+echo "--> ensuring that ansible user will be able to sudo"
+echo "ansible ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
+"""
+    script = StringIO()
+    script.write(
+        bash.format(
+            ssh_key_address=ssh_key_address,
+        )
+    )
+    script.seek(0)
+    return script
