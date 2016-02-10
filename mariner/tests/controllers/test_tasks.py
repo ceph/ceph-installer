@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from mariner.models import Task
 
+
 class TestTasksController(object):
 
     def create_task(self, **kw):
@@ -14,7 +15,7 @@ class TestTasksController(object):
             stdout='',
             started=kw.get('started', datetime.utcnow()),
             ended=kw.get('ended', datetime.utcnow()),
-            succeeded = True
+            succeeded=True
             )
 
     def test_index_get_no_tasks(self, session):
@@ -76,3 +77,30 @@ class TestTasksController(object):
         session.commit()
         result = session.app.get("/api/tasks/")
         assert result.json[0]['succeeded'] is True
+
+
+class TestTaskController(object):
+
+    def create_task(self, **kw):
+        Task(
+            identifier=kw.get('identifier', str(uuid4())),
+            endpoint='/api/rgw/',
+            command='ansible-playbook -i "rgw.example.com," playbook.yml',
+            stderr='',
+            stdout='',
+            started=kw.get('started', datetime.utcnow()),
+            ended=kw.get('ended', datetime.utcnow()),
+            succeeded=True
+        )
+
+    def test_task_not_found(self, session):
+        result = session.app.get(
+            '/api/tasks/1234-asdf-1234-asdf/',
+            expect_errors=True)
+        assert result.status_int == 404
+
+    def test_task_exists_with_metadata(self, session):
+        identifier = '1234-asdf-1234-asdf'
+        self.create_task(identifier=identifier)
+        result = session.app.get('/api/tasks/1234-asdf-1234-asdf/')
+        assert result.json['identifier']
