@@ -22,7 +22,7 @@ def make_ansible_command(hosts_file, identifier, extra_vars=None, tags=''):
 
     return [
         ansible_path, '-i', hosts_file,
-        '--extra-vars="%s"' % extra_vars, '--tags', tags, playbook
+        "--extra-vars", extra_vars, '--tags', tags, playbook
     ]
 
 
