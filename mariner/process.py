@@ -49,6 +49,7 @@ def run(arguments, send_input=None, **kwargs):
         stderr=subprocess.PIPE,
         **kwargs)
     if send_input:
-        process.communicate(input=send_input)
-    out, err = process.communicate()
+        out, err = process.communicate(send_input)
+    else:
+        out, err = process.communicate()
     return out, err, process.returncode
