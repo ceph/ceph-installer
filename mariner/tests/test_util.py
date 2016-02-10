@@ -43,3 +43,11 @@ class TestGetEndpoint(object):
     def test_no_trailing_slash(self):
         result = util.get_endpoint('http://example.org', 'setup')
         assert result == 'http://example.org/setup/'
+
+
+class TestMkdir(object):
+
+    def test_mkdir_success(self, tmpdir):
+        path = os.path.join(str(tmpdir), 'mydir')
+        util.mkdir(path)
+        assert os.path.isdir(path) is True
