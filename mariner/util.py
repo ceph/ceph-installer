@@ -1,3 +1,4 @@
+import errno
 import os
 import pecan
 import tempfile
@@ -27,6 +28,22 @@ def generate_inventory_file(group_name, hosts, task_uuid, tmp_dir=None):
     inventory_file.write(result_str)
     inventory_file.close()
     return inventory_file.name
+
+
+def mkdir(path, exist_ok=True, mode=0755):
+    """
+    Create a directory if it already exists do not error. Anything else should
+    be treated as an error condition.
+    """
+    try:
+        os.makedirs(path, mode=mode)
+    except OSError as exc:  # Python >2.5
+        if not exist_ok:
+            raise
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
 
 
 def api_endpoint(endpoint=None, *args):
