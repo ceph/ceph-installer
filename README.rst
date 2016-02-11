@@ -1,5 +1,5 @@
-Mariner
-=======
+Ceph Installer
+==============
 An HTTP API to provision and control the deployment process of Ceph clusters.
 
 
