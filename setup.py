@@ -24,6 +24,6 @@ setup(
     packages=find_packages(exclude=['ez_setup']),
     entry_points="""
         [pecan.command]
-        populate=mariner_installer.commands.populate:PopulateCommand
+        populate=ceph_installer.commands.populate:PopulateCommand
         """
 )
