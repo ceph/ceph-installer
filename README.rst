@@ -21,6 +21,26 @@ It follows these concepts:
 * ``POST`` requests will create resources or trigger a specific behavior, like
   installing operations on a given host.
 
+Requirements and dependencies
+-----------------------------
+This service is intended to be installed by a system package manager (like yum
+or apt) and ideally all requirements and dependencies should be taken care of.
+This is the list of the current services and system dependencies needed:
+
+System requirements:
+
+* RabbitMQ
+* Ansible
+
+Application requirements:
+
+* pecan
+* celery
+* sqlalchemy
+* gunicorn
+* notario
+* pecan-notario
+
 
 Ceph Versions
 =============
