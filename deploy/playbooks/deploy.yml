@@ -5,5 +5,5 @@
     - common
     - celery
   vars:
-     app_name: "ceph_installer"
+     app_name: "ceph-installer"
      branch: "master"

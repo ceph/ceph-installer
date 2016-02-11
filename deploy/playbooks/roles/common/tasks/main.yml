@@ -33,6 +33,23 @@
   changed_when: False
   notify: restart app
 
+- name: populate the database for {{ app_name }}
+  command: "{{ app_home }}/bin/pecan populate {{ app_home }}/src/{{ app_name }}/config/config.py"
+
+- name: clone ceph-ansible to {{ app_home }}
+  git:
+    repo: "https://github.com/ceph/ceph-ansible.git"
+    dest: "{{ app_home }}/ceph-ansible"
+    force: yes
+    update: yes
+
+# this isn't ideal, but it's the easiest way to get the
+# latest version of ansible installed before we've packaged it
+- name: pip install ansible globally
+  sudo: yes
+  pip:
+    name: ansible
+
 - include: circus.yml
   tags:
     - circus
