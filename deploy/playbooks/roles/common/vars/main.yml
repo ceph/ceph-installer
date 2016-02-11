@@ -11,7 +11,6 @@ system_packages:
   # needed for the ansible apt_repository module
   - python-apt
 #  - libsemanage-python
-  - ansible
 
 ssl_requirements: []
 
