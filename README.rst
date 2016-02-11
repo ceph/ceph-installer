@@ -1,6 +1,7 @@
 Ceph Installer
 ==============
-An HTTP API to provision and control the deployment process of Ceph clusters.
+An HTTP API (previously known as the "mariner installer") to provision and
+control the deployment process of Ceph clusters.
 
 
 Restful HTTP API
