@@ -5,12 +5,12 @@
     %global scl_ruby /usr/bin/ruby
 %endif
 
-Name:       mariner-installer
+Name:       ceph-installer
 Version:    0.1.1
 Release:    1%{?dist}
-Summary:    Foreman-installer plugin that allows you to install Foreman + Mariner
+Summary:    HTTP API for a streamlined Ceph installer using Ansible
 License:    GPLv3+
-URL:        https://github.com/ceph/mariner-installer
+URL:        https://github.com/ceph/ceph-installer
 
 #Source0:    https://github.com/ceph/%{name}/archive/%{version}.tar.gz
 Source0:    %{name}-%{version}.tar.gz
@@ -21,8 +21,8 @@ Requires:   %{?scl_prefix}foreman-installer >= 1.7.0
 Requires:   takora
 
 %description
-This is a foreman-installer plugin that allows you to install and configure Foreman
-along with the Ceph installer plugin Mariner
+This is a Ceph installer service that allows you to provision a cluster with an HTTP API
+and a command line tool using Ansible playbooks.
 
 %prep
 %setup -q
@@ -30,7 +30,7 @@ along with the Ceph installer plugin Mariner
 %build
 #replace shebangs for SCL
 %if %{?scl:1}%{!?scl:0}
-  sed -ri '1sX(/usr/bin/ruby|/usr/bin/env ruby)X%{scl_ruby}X' bin/mariner-installer
+  sed -ri '1sX(/usr/bin/ruby|/usr/bin/env ruby)X%{scl_ruby}X' bin/ceph-installer
 %endif
 
 %install
@@ -47,6 +47,5 @@ cp -p config/* %{buildroot}%{_sysconfdir}/foreman
 %doc README.md docs
 %config %attr(600, root, root) %{_sysconfdir}/foreman/%{name}.yaml
 %config(noreplace) %attr(600, root, root) %{_sysconfdir}/foreman/%{name}.answers.yaml
-%{_sbindir}/mariner-installer
+%{_sbindir}/ceph-installer
 #%{_datadir}/foreman-installer/*
-
