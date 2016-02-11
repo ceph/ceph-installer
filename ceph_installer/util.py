@@ -171,9 +171,6 @@ mkdir -p /home/ansible/.ssh
 cat ansible.pub >> /home/ansible/.ssh/authorized_keys
 chown -R ansible:ansible /home/ansible/.ssh
 
-echo -e "--> backing up /etc/sudoers to /etc/sudoers.bak"
-cp /etc/sudoers /etc/sudoers.bak
-
 echo "--> ensuring /etc/sudoers will not require a tty"
 sed -i "s/Defaults    requiretty/#Defaults    requiretty/" /etc/sudoers
 
