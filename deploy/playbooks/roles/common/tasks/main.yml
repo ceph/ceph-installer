@@ -29,7 +29,7 @@
   pip: name=pip virtualenv={{ app_home }} extra_args='--upgrade'
 
 - name: "pip+git install {{ app_name }} into virtualenv."
-  pip: name='git+https://github.com/ceph/mariner-installer@{{ branch }}#egg=mariner' virtualenv={{ app_home }}
+  pip: name='git+https://github.com/ceph/ceph-installer@{{ branch }}#egg=ceph_installer' virtualenv={{ app_home }}
   changed_when: False
   notify: restart app
 
