@@ -104,12 +104,12 @@ def get_playbook_path():
     now).
     """
     try:
-        playbook_path = os.environ['MARINER_PLAYBOOK']
+        playbook_path = os.environ['CEPH_PLAYBOOK']
     except KeyError:
         # TODO: Fallback nicely into looking maybe in some directory that is
         # included with the ceph_installer application or a well know path defined by
         # the packaging of said playbooks
-        logger.warning('"MARINER_PLAYBOOK" environment variable is not defined')
+        logger.warning('"CEPH_PLAYBOOK" environment variable is not defined')
         playbook_path = '/tmp/ceph-ansible/'
 
     if os.path.isfile(playbook_path):
