@@ -33,6 +33,9 @@
   changed_when: False
   notify: restart app
 
+- name: populate the database for {{ app_name }}
+  command: "{{ app_home }}/bin/pecan populate {{ app_home }}/src/{{ app_name }}/config/config.py"
+
 - include: circus.yml
   tags:
     - circus
