@@ -34,3 +34,4 @@ stderr_stream.filename=/var/log/circus/celerybeat-stderr.log
 
 [env:celery,celerybeat]
 PECAN_CONFIG = {{ app_home }}/src/{{ app_name }}/config/config.py
+CEPH_PLAYBOOK = {{ app_home }}/ceph-ansible/site.yml.sample
