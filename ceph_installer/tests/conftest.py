@@ -9,10 +9,10 @@ from pecan import configuration
 from sqlalchemy import create_engine
 from sqlalchemy.pool import NullPool
 
-from mariner import models as _db
+from ceph_installer import models as _db
 import pytest
 
-DBNAME = 'marinertest.db'
+DBNAME = 'ceph_installertest.db'
 BIND = 'sqlite:////tmp'
 
 

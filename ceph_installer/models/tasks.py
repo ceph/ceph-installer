@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String,  Boolean, DateTime, Text
 from sqlalchemy.orm.exc import DetachedInstanceError
-from mariner.models import Base
+from ceph_installer.models import Base
 
 
 class Task(Base):

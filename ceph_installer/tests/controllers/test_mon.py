@@ -1,4 +1,4 @@
-from mariner.controllers import mon
+from ceph_installer.controllers import mon
 
 
 class TestMonController(object):

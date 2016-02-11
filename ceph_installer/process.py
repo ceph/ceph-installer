@@ -3,7 +3,7 @@ import tempfile
 import logging
 import json
 
-from mariner.util import which, get_playbook_path
+from ceph_installer.util import which, get_playbook_path
 
 logger = logging.getLogger(__name__)
 

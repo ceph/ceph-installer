@@ -1,5 +1,5 @@
 import pytest
-from mariner import hooks
+from ceph_installer import hooks
 from sqlalchemy.exc import OperationalError
 
 

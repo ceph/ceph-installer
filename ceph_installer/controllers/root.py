@@ -1,5 +1,5 @@
 from pecan import expose
-from mariner.controllers import tasks, mon, osd, rgw, calamari, errors, setup
+from ceph_installer.controllers import tasks, mon, osd, rgw, calamari, errors, setup
 
 
 class ApiController(object):

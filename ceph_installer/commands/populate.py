@@ -1,7 +1,7 @@
 from pecan.commands.base import BaseCommand
 from pecan import conf
 
-from mariner import models
+from ceph_installer import models
 
 
 def out(string):

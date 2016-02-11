@@ -1,7 +1,7 @@
 from pecan import expose
 
-from mariner.models import Task
-from mariner.controllers import error
+from ceph_installer.models import Task
+from ceph_installer.controllers import error
 
 
 class TaskController(object):

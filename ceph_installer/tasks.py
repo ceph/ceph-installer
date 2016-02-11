@@ -2,7 +2,7 @@ import logging
 
 from datetime import datetime
 from celery import shared_task
-from mariner import util, models, process
+from ceph_installer import util, models, process
 
 
 logger = logging.getLogger(__name__)

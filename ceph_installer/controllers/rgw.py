@@ -4,10 +4,10 @@ from pecan import expose, request
 from pecan.ext.notario import validate
 from uuid import uuid4
 
-from mariner.controllers import error
-from mariner.tasks import install
-from mariner import schemas
-from mariner import models
+from ceph_installer.controllers import error
+from ceph_installer.tasks import install
+from ceph_installer import schemas
+from ceph_installer import models
 
 logger = logging.getLogger(__name__)
 

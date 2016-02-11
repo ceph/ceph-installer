@@ -48,7 +48,7 @@ def mkdir(path, exist_ok=True, mode=0755):
 
 def api_endpoint(endpoint=None, *args):
     """
-    Puts together the API url for mariner, so that we can talk to it. Optionally, the endpoint
+    Puts together the API url for ceph_installer, so that we can talk to it. Optionally, the endpoint
     argument allows to return the correct url for specific needs. For example, to create a new task
     with a distinct identifier::
 
@@ -107,7 +107,7 @@ def get_playbook_path():
         playbook_path = os.environ['MARINER_PLAYBOOK']
     except KeyError:
         # TODO: Fallback nicely into looking maybe in some directory that is
-        # included with the mariner application or a well know path defined by
+        # included with the ceph_installer application or a well know path defined by
         # the packaging of said playbooks
         logger.warning('"MARINER_PLAYBOOK" environment variable is not defined')
         playbook_path = '/tmp/ceph-ansible/'
@@ -194,7 +194,7 @@ def get_install_extra_vars(json):
     """
     Given a request.json dictionary from an install endpoint, this
     method will generate and return a dict to be used as extra_vars
-    for mariner.tasks.install.
+    for ceph_installer.tasks.install.
     """
     extra_vars = dict()
     redhat_storage = json.get("redhat_storage", False)

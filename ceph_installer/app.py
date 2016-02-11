@@ -1,5 +1,5 @@
 from pecan import make_app
-from mariner import models
+from ceph_installer import models
 
 
 def setup_app(config):

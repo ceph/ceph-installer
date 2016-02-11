@@ -1,8 +1,8 @@
 from pecan import expose, request, response
 from webob.static import FileIter
-from mariner.util import make_setup_script, mkdir
-from mariner import process
-from mariner.controllers import error
+from ceph_installer.util import make_setup_script, mkdir
+from ceph_installer import process
+from ceph_installer.controllers import error
 import os
 from StringIO import StringIO
 import logging

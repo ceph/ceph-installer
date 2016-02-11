@@ -1,5 +1,5 @@
 import os
-from mariner.controllers import setup
+from ceph_installer.controllers import setup
 
 
 class TestSetupController(object):

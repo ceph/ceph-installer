@@ -6,15 +6,15 @@ server = {
 
 # Pecan Application Configurations
 app = {
-    'root': 'mariner.controllers.root.RootController',
-    'modules': ['mariner'],
+    'root': 'ceph_installer.controllers.root.RootController',
+    'modules': ['ceph_installer'],
     'debug': False,
 }
 
 logging = {
     'root': {'level': 'INFO', 'handlers': ['console']},
     'loggers': {
-        'mariner': {'level': 'DEBUG', 'handlers': ['console'], 'propagate': False},
+        'ceph_installer': {'level': 'DEBUG', 'handlers': ['console'], 'propagate': False},
         'pecan': {'level': 'INFO', 'handlers': ['console'], 'propagate': False},
         'py.warnings': {'handlers': ['console']},
         '__force_dict__': True
@@ -44,7 +44,7 @@ logging = {
 
 sqlalchemy = {
     # XXX Determine the right location for the database
-    'url': 'sqlite:////tmp/marinertest.db',
+    'url': 'sqlite:////tmp/ceph_installertest.db',
     'echo':          True,
     'echo_pool':     True,
     'pool_recycle':  3600,

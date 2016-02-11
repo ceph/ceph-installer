@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from mariner import util
+from ceph_installer import util
 
 
 class TestGenerateInventoryFile(object):

@@ -3,7 +3,7 @@ import pecan
 
 from celery import Celery
 from celery.signals import worker_init
-from mariner import models
+from ceph_installer import models
 
 
 @worker_init.connect
@@ -21,4 +21,4 @@ def bootstrap_pecan(signal, sender):
     models.init_model()
 
 
-app = Celery('mariner.async', broker='amqp://guest@localhost//', include=['mariner.tasks'])
+app = Celery('ceph_installer.async', broker='amqp://guest@localhost//', include=['ceph_installer.tasks'])

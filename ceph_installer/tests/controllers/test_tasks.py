@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import uuid4
 
-from mariner.models import Task
+from ceph_installer.models import Task
 
 
 class TestTasksController(object):
