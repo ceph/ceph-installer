@@ -1,15 +1,14 @@
-Source: mariner-installer
-Maintainer: Travis Rhoden <trhoden@redhat.com>
+Source: ceph-installer
+Maintainer: Ceph Maintainers <ceph-maintainers@lists.ceph.com>
 Section: misc
 Priority: optional
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.5
 
-Package: mariner-installer
+Package: ceph-installer
 Architecture: all
 Depends: foreman-installer (>= 1.7.5),
          takora,
          ${misc:Depends}
-Description: Foreman-installer plugin that allows you to install Foreman + Mariner
- This is a foreman-installer plugin that allows you to install and configure Foreman
- along with the Ceph installer plugin Mariner
+Description: This is a Ceph installer service that allows you to provision
+a cluster with an HTTP API and a command line tool using Ansible playbooks.
