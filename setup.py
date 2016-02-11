@@ -7,7 +7,7 @@ except ImportError:
     from setuptools import setup, find_packages
 
 setup(
-    name='mariner-installer',
+    name='ceph-installer',
     version='0.1',
     description='An HTTP API that provides Ceph installation/configuration endpoints',
     author='',
@@ -24,6 +24,6 @@ setup(
     packages=find_packages(exclude=['ez_setup']),
     entry_points="""
         [pecan.command]
-        populate=mariner.commands.populate:PopulateCommand
+        populate=mariner_installer.commands.populate:PopulateCommand
         """
 )
