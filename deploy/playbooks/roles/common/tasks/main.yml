@@ -30,7 +30,7 @@
 
 - name: "pip+git install {{ app_name }} into virtualenv."
   pip: name='git+https://github.com/ceph/ceph-installer@{{ branch }}#egg=ceph_installer' virtualenv={{ app_home }}
-  changed_when: False
+  changed_when: True
   notify: restart app
 
 - name: populate the database for {{ app_name }}
