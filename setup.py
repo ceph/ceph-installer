@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name='ceph-installer',
-    version='0.1',
+    version='0.2.0',
     description='An HTTP API that provides Ceph installation/configuration endpoints',
     author='',
     author_email='',
