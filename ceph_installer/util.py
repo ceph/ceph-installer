@@ -163,7 +163,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "--> creating new user with disabled password: ansible"
-adduser --disabled-password --gecos "" ansible
+useradd ansible
+passwd -d ansible
 
 echo "--> adding provisioning key to the ansible authorized_keys"
 curl -s -L -o ansible.pub {ssh_key_address}
