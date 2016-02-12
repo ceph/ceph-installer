@@ -13,7 +13,7 @@ setup(
     author='',
     author_email='',
     install_requires=[
-        'pecan',
+        'pecan>=1',
         'celery',
         'sqlalchemy',
         'gunicorn',
