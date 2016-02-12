@@ -172,14 +172,11 @@ mkdir -p /home/ansible/.ssh
 cat ansible.pub >> /home/ansible/.ssh/authorized_keys
 chown -R ansible:ansible /home/ansible/.ssh
 
-echo -e "--> backing up /etc/sudoers to /etc/sudoers.bak"
-cp /etc/sudoers /etc/sudoers.bak
-
-echo "--> ensuring /etc/sudoers will not require a tty"
-sed -i "s/Defaults    requiretty/#Defaults    requiretty/" /etc/sudoers
-
 echo "--> ensuring that ansible user will be able to sudo"
 echo "ansible ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
+
+echo "--> ensuring ansible user does not require a tty"
+echo 'Defaults:ansible !requiretty' | sudo tee /etc/sudoers.d/ansible > /dev/null
 """
     script = StringIO()
     script.write(
