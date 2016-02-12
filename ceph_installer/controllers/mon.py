@@ -5,7 +5,7 @@ from pecan.ext.notario import validate
 from uuid import uuid4
 
 from ceph_installer.controllers import error
-from ceph_installer.tasks import install
+from ceph_installer.tasks import call_ansible
 from ceph_installer import schemas
 from ceph_installer import models
 from ceph_installer import util
@@ -39,8 +39,8 @@ class MONController(object):
         # we need an explicit commit here because the command may finish before
         # we conclude this request
         models.commit()
-        kwargs = dict(extra_vars=extra_vars)
-        install.apply_async(
+        kwargs = dict(extra_vars=extra_vars, tags="package-install")
+        call_ansible.apply_async(
             args=('mon', hosts, identifier),
             kwargs=kwargs,
         )

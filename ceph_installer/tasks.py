@@ -9,12 +9,16 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task
-def install(component, hosts, identifier, tags="package-install", extra_vars=None):
+def call_ansible(component, hosts, identifier, tags="", skip_tags="", extra_vars=None):
     """
-    ``component``: What component is it going to get installed: mon, rgw, osd, calamari
-    ``hosts``: A list of hosts to install, these host must be resolvable
+    This task builds an ansible-playbook command and runs it.
+
+    ``component``: What component we're going to work with: mon, rgw, osd, calamari
+    ``hosts``: A list of hosts to run ansible against, these host must be resolvable
     ``tags``: The tags as a comma-delimeted string that represents all the tags
               this ansible call should follow. For example "package-install, other-tag"
+    ``skip_tags``: The tags as a comma-delimeted string that represents all the tags
+                   this ansible call should skip. For example "package-install, other-tag"
     ``identifier``: The UUID identifer for the task object so this function can capture process
                     metadata and persist it to the database
     """
