@@ -144,7 +144,7 @@ Task metadata for the previous request is then available at::
 4.- Configure monitor:
 
 request::
-    curl -d '{"host": "mon1.host", "monitor_interface": "eth0", "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/osd/install/
+    curl -d '{"host": "mon1.host", "monitor_interface": "eth0", "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/mon/configure/
 
 response::
 
@@ -177,7 +177,7 @@ request::
 response::
 
     {
-        "endpoint": "/api/mon/configure/",
+        "endpoint": "/api/osd/configure/",
         "succeeded": false,
         "stdout": null,
         "started": null,
@@ -201,7 +201,7 @@ request::
 response::
 
     {
-        "endpoint": "/api/mon/configure/",
+        "endpoint": "/api/osd/configure/",
         "succeeded": false,
         "stdout": null,
         "started": null,
