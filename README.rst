@@ -30,6 +30,16 @@ The ceph-installer API does not implement *any* logic to determine the path to
 cluster creation. It instead provides a granular set of endpoints to allow the
 caller for the flexibility it needs.
 
+Install operations
+------------------
+The install requests to the API *are allowed to pass a list of multiple hosts*.
+
+This process is not sequential: all hosts are operated against at
+once and if a single host fails to install the entire task will report as
+a failure. This is expected Ansible behavior and this API adheres to that.
+
+Callers should expect failures to halt as soon as a failure (or error) is met.
+
 Requirements and dependencies
 -----------------------------
 This service is intended to be installed by a system package manager (like yum
