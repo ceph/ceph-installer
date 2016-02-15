@@ -73,6 +73,10 @@ with one device each ("osd1.host" and "osd2.host"). It also assumes the
 installer ("installer.host") will be running on the same network and will be
 reachable over HTTP from and to the other nodes.
 
+Using callbacks is entirely optional and omitted from the examples below.
+Callbacks are an easier way to deal with asynchronous reports for requests and
+it is implemented with the ``"callback"`` key in most JSON POST requests.
+
 1.- Bootstrap on each remote host (mon.host, osd1.host, and osd2.host)::
 
     wget http://installer.host/setup/ | sudo bash
