@@ -21,6 +21,15 @@ It follows these concepts:
 * ``POST`` requests will create resources or trigger a specific behavior, like
   installing operations on a given host.
 
+Configure operations
+--------------------
+The configuration step for any node type (rgw, mon, osd, etc...) is *required* to
+be per node. It is up to the caller to handle domain logic.
+
+The ceph-installer API does not implement *any* logic to determine the path to
+cluster creation. It instead provides a granular set of endpoints to allow the
+caller for the flexibility it needs.
+
 Requirements and dependencies
 -----------------------------
 This service is intended to be installed by a system package manager (like yum
