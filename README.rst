@@ -140,8 +140,7 @@ Task metadata for the previous request is then available at::
 4.- Configure monitor:
 
 request::
-    curl -d '{"host": "mon1.host", "monitor_interface": "eth0"}' -X POST
-    http://installer.hosts/api/osd/install/
+    curl -d '{"host": "mon1.host", "monitor_interface": "eth0", "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/osd/install/
 
 response::
 
@@ -169,9 +168,7 @@ collocate the journal in the same device as the OSD. This is *not ideal* and
 describe.
 
 request::
-    curl -d '{"host": "osd1.host", "devices": ["/dev/sdb/"],
-    "journal_collocate": true}' -X POST
-    http://installer.hosts/api/osd/configure/
+    curl -d '{"host": "osd1.host", "devices": ["/dev/sdb/"], "journal_collocate": true, "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/osd/configure/
 
 response::
 
