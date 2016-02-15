@@ -225,7 +225,8 @@ Body ::
 
     {
         'hosts': ['mon1.example.com', 'mon2.example.com', 'mon3.example.com'],
-        'redhat_storage': False
+        'redhat_storage': False,
+        'callback': 'http://example.com/task-callback/'
     }
 
 
@@ -239,6 +240,7 @@ Body ::
         'monitor_interface': 'eth0',
         'fsid': '',
         'monitor_secret': '',
+        'callback': 'http://example.com/task-callback/'
     }
 
 The fields ``fsid`` and ``monitor_secret`` are not required. If not provided, they will
@@ -256,7 +258,8 @@ Body ::
 
     {
         'hosts': ['osd1.example.com', 'osd2.example.com'],
-        'redhat_storage': False
+        'redhat_storage': False,
+        'callback': 'http://example.com/task-callback/'
     }
 
 
@@ -268,7 +271,8 @@ Body ::
     {
         'devices': ['/dev/sdb'],
         'hostname': 'osd1.example.com',
-        'journal_collocate': True
+        'journal_collocate': True,
+        'callback': 'http://example.com/task-callback/'
     }
 
 
@@ -287,7 +291,8 @@ Body ::
 
     {
         'hosts': ['rgw1.example.com', 'rgw2.example.com'],
-        'redhat_storage': False
+        'redhat_storage': False,
+        'callback': 'http://example.com/task-callback/'
     }
 
 
@@ -303,6 +308,7 @@ Body ::
     {
         'name': 'main',
         'hostname': 'rgw1.example.com',
+        'callback': 'http://example.com/task-callback/'
     }
 
 
@@ -316,7 +322,8 @@ Body ::
 
     {
         'host': ['calamari.example.com'],
-        'redhat_storage': False
+        'redhat_storage': False,
+        'callback': 'http://example.com/task-callback/'
     }
 
 ``/api/calamari/configure/``
