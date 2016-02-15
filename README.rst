@@ -66,13 +66,13 @@ certain requirements like: a deployment user, ssh keys, and sudo permissions.
   script should be executed with super user privileges on the remote node as it
   will perform the following actions:
 
-  * create an ``ansible`` user
-  * ensure that the ``ansible`` user can use sudo without a password prompt
+  * create an ``ceph-installer`` user
+  * ensure that the ``ceph-installer`` user can use sudo without a password prompt
   * remove the ``requiretty`` from ``/etc/sudoers`` if set, so that SSH
     connections allow non-interactive sessions from using ``sudo``
   * retrieve the SSH key that will be used for provisioning (see
     :ref:`provisioning_key`)
-  * append the provisioning key onto ``$HOME/ansible/.ssh/authorized_keys``
+  * append the provisioning key onto ``$HOME/ceph-installer/.ssh/authorized_keys``
 
 .. _provisioning_key:
 
