@@ -246,18 +246,11 @@ Body ::
 * ``POST``: Configure OSD(s)
 Body ::
 
-    [
-        {
-            'devices': ['/dev/sdb'],
-            'hostname': 'osd1.example.com',
-            'journal_collocate': True
-        },
-        {
-            'devices': ['/dev/sdc', '/dev/sdb'],
-            'hostname': 'osd2.example.com',
-            'journal': '/dev/sdd'
-        }
-    ]
+    {
+        'devices': ['/dev/sdb'],
+        'hostname': 'osd1.example.com',
+        'journal_collocate': True
+    }
 
 
 ``journal_collocate`` will use the same device as the OSD for the journal. This
@@ -288,15 +281,10 @@ specify a ``name`` to alter this default behavior.
 
 Body ::
 
-    [
-        {
-            'name': 'main',
-            'hostname': 'rgw1.example.com',
-        },
-        {
-            'hostname': 'rgw2.example.com',
-        }
-    ]
+    {
+        'name': 'main',
+        'hostname': 'rgw1.example.com',
+    }
 
 
 ``calamari``
