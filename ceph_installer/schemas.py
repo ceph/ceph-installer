@@ -10,3 +10,10 @@ install_schema = (
     ("hosts", list_of_hosts),
     (optional("redhat_storage"), types.boolean),
 )
+
+mon_configure_schema = (
+    ("host", types.string),
+    (optional("fsid"), types.string),
+    ("monitor_interface", types.string),
+    (optional("monitor_secret"), types.string),
+)

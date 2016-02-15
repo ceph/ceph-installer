@@ -2,13 +2,14 @@ import subprocess
 import tempfile
 import logging
 import json
+import os
 
 from ceph_installer.util import which, get_playbook_path
 
 logger = logging.getLogger(__name__)
 
 
-def make_ansible_command(hosts_file, identifier, extra_vars=None, tags=''):
+def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_tags=''):
     """
     This utility will compose the command needed to run ansible, capture its
     stdout and stderr to a file
@@ -20,10 +21,17 @@ def make_ansible_command(hosts_file, identifier, extra_vars=None, tags=''):
 
     extra_vars = json.dumps(extra_vars)
 
-    return [
-        ansible_path, '-i', hosts_file,
-        "--extra-vars", extra_vars, '--tags', tags, playbook
+    cmd = [
+        ansible_path, playbook, '-i', hosts_file, "--extra-vars", extra_vars,
     ]
+
+    if tags:
+        cmd.extend(['--tags', tags])
+
+    if skip_tags:
+        cmd.extend(['--skip-tags', skip_tags])
+
+    return cmd
 
 
 def temp_file(identifier, std):

@@ -199,5 +199,8 @@ def get_install_extra_vars(json):
     if redhat_storage:
         extra_vars["ceph_stable_rh_storage"] = True
         extra_vars["ceph_stable_rh_storage_cdn_install"] = True
+    else:
+        # use the latest upstream stable version
+        extra_vars["ceph_stable"] = True
 
     return extra_vars
