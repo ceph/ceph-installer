@@ -36,7 +36,7 @@ def celery_has_workers():
     """
     stats = inspect().stats()
     if not stats:
-        raise SystemCheckError('No running Celery worker were found')
+        raise SystemCheckError('No running Celery worker was found')
 
 
 def rabbitmq_is_running():
@@ -47,7 +47,7 @@ def rabbitmq_is_running():
     try:
         celery_has_workers()
     except IOError as e:
-        msg = "Error connecting to rabbitmq: " + str(e)
+        msg = "Error connecting to RabbitMQ: " + str(e)
         if len(e.args):
             if errorcode.get(e.args[0]) == 'ECONNREFUSED':
                 msg = "RabbitMQ is not running or not reachable"
