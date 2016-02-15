@@ -111,9 +111,42 @@ Other possible responses for known system failures may include:
 ``tasks``
 =========
 
-A task is created when any of the following endpoints are used and
-can be used to track the progress of the operation, like installing or
-configuring a monitor.
+A task is created when an action on a remote node is triggered (for example to
+install packages on a monitor node).  They can be used to track the progress of
+the operation, like installing or configuring a remote node.
+
+Tasks contain metadata for these calls. This metadata includes items like: start
+time, end time, success, stderr, stdout
+
+It provides two ways to consume the status of a given task:
+
+* polling
+* callback
+
+Callback System
+---------------
+Each API endpoint will allow an optional "callback" key with a URL value. That
+URL will be triggered when a task has finished (this includes error, success,
+or failure states).
+
+The request for the callback URL will be an HTTP POST with the full JSON
+metadata of the task.
+
+
+Polling
+-------
+As soon as a call is performed and conditions are met for provisioning on
+a remote node a "task" is created. This means the information is not atomic, it
+is available as soon as the call proceeds to a remote node interaction and
+information gets updated as the task completes.
+
+When a task is not done it will have a ``null`` value for the ``ended`` key, will
+default to ``"succeeded": "false"`` and it will have a ``completed`` key that will
+be ``true`` when the task has finished.  These tasks have an unique identifier.
+The endpoints *will always return a 200 when they are available*.
+
+Polling is not subject to handle state with HTTP status codes (e.g. 304)
+
 
 ``/api/tasks/``
 ---------------
