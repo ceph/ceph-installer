@@ -99,6 +99,15 @@ Body: ``{}``
 500: System Error
 Body: ``{"message": "Sample Error message"}``
 
+Other possible responses for known system failures may include:
+
+* ``{"message": "Could not find ansible in system paths"}``
+* ``{"message": "No running Celery worker was found"}``
+* ``{"message": "Error connecting to RabbitMQ"}``
+* ``{"message": "RabbitMQ is not running or not reachable"}``
+* ``{"message": "Could not connect or retrieve information from tha database"}``
+
+
 ``tasks``
 =========
 
