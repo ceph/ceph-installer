@@ -174,7 +174,7 @@ Body ::
 Body ::
 
     {
-        'hosts': ['mon1.example.com', 'mon2.example.com', 'mon3.example.com'],
+        'host': 'mon1.example.com',
         'monitor_interface': 'eth0',
         'fsid': '',
         'monitor_secret': '',

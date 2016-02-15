@@ -12,7 +12,7 @@ install_schema = (
 )
 
 mon_configure_schema = (
-    ("hosts", list_of_hosts),
+    ("host", types.string),
     (optional("fsid"), types.string),
     ("monitor_interface", types.string),
     (optional("monitor_secret"), types.string),
