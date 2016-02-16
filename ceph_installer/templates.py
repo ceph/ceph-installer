@@ -13,7 +13,7 @@ echo "--> adding provisioning key to the ansible authorized_keys"
 curl -s -L -o ansible.pub {ssh_key_address}
 mkdir -p /home/ansible/.ssh
 cat ansible.pub >> /home/ansible/.ssh/authorized_keys
-chown -R ansible:ansible /home/ansible/.ssh
+chown -R ceph-installer:ceph-installer /home/ansible/.ssh
 
 echo "--> ensuring that ansible user will be able to sudo"
 echo "ansible ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
