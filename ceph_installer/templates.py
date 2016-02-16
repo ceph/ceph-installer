@@ -5,21 +5,23 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-echo "--> creating new user with disabled password: ansible"
+echo "--> creating new user with disabled password: ceph-installer"
 useradd -m ceph-installer
 passwd -d ceph-installer
 
-echo "--> adding provisioning key to the ansible authorized_keys"
+echo "--> adding provisioning key to the ceph-installer user authorized_keys"
 curl -s -L -o ansible.pub {ssh_key_address}
-mkdir -p /home/ansible/.ssh
-cat ansible.pub >> /home/ansible/.ssh/authorized_keys
-chown -R ceph-installer:ceph-installer /home/ansible/.ssh
+mkdir -p /home/ceph-installer/.ssh
+cat ansible.pub >> /home/ceph-installer/.ssh/authorized_keys
+chown -R ceph-installer:ceph-installer /home/ceph-installer/.ssh
 
-echo "--> ensuring that ansible user will be able to sudo"
-echo "ansible ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
+echo "--> ensuring that ceph-installer user will be able to sudo"
+# write to it wiping everything
+echo "ceph-installer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ceph-installer
 
-echo "--> ensuring ansible user does not require a tty"
-echo 'Defaults:ansible !requiretty' | sudo tee /etc/sudoers.d/ansible > /dev/null
+echo "--> ensuring ceph-installer user does not require a tty"
+# and now just append
+echo 'Defaults:ceph-installer !requiretty' >> /etc/sudoers.d/ceph-installer
 """
 
 # Note that the agent_script can't run by itself, it needs to be concatenated
