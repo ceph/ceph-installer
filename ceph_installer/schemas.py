@@ -12,8 +12,8 @@ install_schema = (
 )
 
 mon_configure_schema = (
-    ("host", types.string),
     ("fsid", types.string),
+    ("host", types.string),
     ("monitor_interface", types.string),
     (optional("monitor_secret"), types.string),
     (optional("redhat_storage"), types.boolean),
