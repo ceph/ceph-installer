@@ -1,5 +1,7 @@
 from pecan import expose
-from ceph_installer.controllers import tasks, mon, osd, rgw, calamari, errors, setup
+from ceph_installer.controllers import (
+    tasks, mon, osd, rgw, calamari, errors, setup, agent
+)
 
 
 class ApiController(object):
@@ -10,6 +12,7 @@ class ApiController(object):
         # available
         return dict()
 
+    agent = agent.AgentController()
     tasks = tasks.TasksController()
     mon = mon.MONController()
     osd = osd.OSDController()

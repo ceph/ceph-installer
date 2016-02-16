@@ -22,7 +22,7 @@ def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_
     extra_vars = json.dumps(extra_vars)
 
     cmd = [
-        ansible_path, playbook, '-i', hosts_file, "--extra-vars", extra_vars,
+        ansible_path, '-u', 'ceph-installer', playbook, '-i', hosts_file, "--extra-vars", extra_vars,
     ]
 
     if tags:
