@@ -26,5 +26,5 @@ echo 'Defaults:ansible !requiretty' | sudo tee /etc/sudoers.d/ansible > /dev/nul
 # along the regular setup script
 agent_script = """
 echo "--> installing and configuring agent"
-curl -d '{"hosts": ["{target_host}"]}' -X POST {agent_endpoint}
+curl -d '{{"hosts": ["{target_host}"]}}' -X POST {agent_endpoint}
 """
