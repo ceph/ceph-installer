@@ -1,6 +1,6 @@
 from pecan import expose, request, response
 from webob.static import FileIter
-from ceph_installer.util import make_setup_script, mkdir
+from ceph_installer.util import make_setup_script, make_agent_script, mkdir
 from ceph_installer import process
 from ceph_installer.controllers import error
 import os
@@ -20,7 +20,7 @@ class SetupController(object):
 
     @expose(content_type='application/octet-stream')
     def agent(self):
-        script = make_setup_script(request.url)
+        script = make_agent_script(request.url, request.client_addr)
         response.headers['Content-Disposition'] = 'attachment; filename=agent-setup.sh'
         response.app_iter = FileIter(script)
 
