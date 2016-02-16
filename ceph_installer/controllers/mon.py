@@ -60,8 +60,7 @@ class MONController(object):
         # if we're working with upstream ceph or red hat ceph storage
         extra_vars = util.get_install_extra_vars(request.json)
         extra_vars['monitor_interface'] = request.json.get('monitor_interface')
-        if request.json.get('fsid'):
-            extra_vars['fsid'] = request.json.get('fsid')
+        extra_vars['fsid'] = request.json.get('fsid')
         if request.json.get('monitor_secret'):
             extra_vars['monitor_secret'] = request.json.get('monitor_secret')
         identifier = str(uuid4())
