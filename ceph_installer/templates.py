@@ -11,9 +11,12 @@ passwd -d ceph-installer
 
 echo "--> adding provisioning key to the ceph-installer user authorized_keys"
 curl -s -L -o ansible.pub {ssh_key_address}
-mkdir -p /home/ceph-installer/.ssh
+mkdir -m 700 -p /home/ceph-installer/.ssh
 cat ansible.pub >> /home/ceph-installer/.ssh/authorized_keys
+
+echo "--> ensuring correct permissions on .ssh/authorized_keys"
 chown -R ceph-installer:ceph-installer /home/ceph-installer/.ssh
+chmod 600 /home/ceph-installer/.ssh/authorized_keys
 
 echo "--> ensuring that ceph-installer user will be able to sudo"
 # write to it wiping everything
