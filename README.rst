@@ -172,13 +172,13 @@ Task metadata for the previous request is then available at::
 
 
 4.- Configure OSDs:
-Note that we are using ``journal_collocate`` flag to indicate we are going to
+Note that we are using ``journal_collocation`` flag to indicate we are going to
 collocate the journal in the same device as the OSD. This is *not ideal* and
 *not recommended for production use*, but it makes example setups easier to
 describe.
 
 request::
-    curl -d '{"host": "osd1.host", "devices": ["/dev/sdb/"], "journal_collocate": true, "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/osd/configure/
+    curl -d '{"host": "osd1.host", "devices": ["/dev/sdb/"], "journal_collocation": true, "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/osd/configure/
 
 response::
 
@@ -201,7 +201,7 @@ Task metadata for the previous request is then available at::
 
 request::
     curl -d '{"host": "osd2.host", "devices": ["/dev/sdc/"],
-    "journal_collocate": true}' -X POST
+    "journal_collocation": true}' -X POST
     http://installer.hosts/api/osd/configure/
 
 response::
@@ -436,8 +436,14 @@ Body ::
 
     {
         'devices': ['/dev/sdb'],
-        'hostname': 'osd1.example.com',
-        'journal_collocate': True,
+        'fsid': 'deedcb4c-a67a-4997-93a6-92149ad2622a',
+        'host': 'osd1.example.com',
+        # TODO: support other osd scenarios
+        # you either do journal_collocation, raw_multi_journal or osd_directory
+        'journal_collocation': True,
+        'journal_size': 0,
+        'public_network': '0.0.0.0/0',
+        'cluster_network': '0.0.0.0/0',
         'callback': 'http://example.com/task-callback/'
     }
 
