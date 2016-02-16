@@ -159,12 +159,12 @@ def make_agent_script(url, target_host):
     """
     template = templates.setup_script + templates.agent_script
     ssh_key_address = get_endpoint(url, 'setup', 'key')
-    agent_endpoint = get_endpoint(url, 'agent')
+    agent_endpoint = get_endpoint(url, 'api', 'agent')
     script = StringIO()
     script.write(
         template.format(
             ssh_key_address=ssh_key_address,
-            target_host=client_address,
+            target_host=target_host,
             agent_endpoint=agent_endpoint,
         )
     )
