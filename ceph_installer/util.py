@@ -64,7 +64,8 @@ def api_endpoint(endpoint=None, *args):
         'mon': '%s/mon/' % base,
         'rgw': '%s/rgw/' % base,
         'calamari': '%s/calamari/' % base,
-        'osd': '%s/tasks/' % base,
+        'osd': '%s/osd/' % base,
+        'agent': '%s/agent/' % base,
     }
     url = base
     if endpoint:
