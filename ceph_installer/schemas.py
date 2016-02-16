@@ -16,4 +16,5 @@ mon_configure_schema = (
     ("fsid", types.string),
     ("monitor_interface", types.string),
     (optional("monitor_secret"), types.string),
+    (optional("redhat_storage"), types.boolean),
 )
