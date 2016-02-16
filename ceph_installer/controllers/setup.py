@@ -19,6 +19,12 @@ class SetupController(object):
         response.app_iter = FileIter(script)
 
     @expose(content_type='application/octet-stream')
+    def agent(self):
+        script = make_setup_script(request.url)
+        response.headers['Content-Disposition'] = 'attachment; filename=agent-setup.sh'
+        response.app_iter = FileIter(script)
+
+    @expose(content_type='application/octet-stream')
     def key(self):
         """
         Serves the public SSH key for the user that own the current service
