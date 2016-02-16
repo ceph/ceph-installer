@@ -4,6 +4,7 @@ import pecan
 import tempfile
 import logging
 from StringIO import StringIO
+from ceph_installer import templates
 
 
 logger = logging.getLogger(__name__)
@@ -150,6 +151,27 @@ def get_endpoint(request_url, *args):
     return url
 
 
+def make_agent_script(url, target_host):
+    """
+    Create the agent setup script. This is very similar to the
+    ``make_setup_script`` with the difference being a trigger to install and
+    configure the agent after the provisioning user has been created.
+    """
+    template = templates.setup_script + templates.agent_script
+    ssh_key_address = get_endpoint(url, 'setup', 'key')
+    agent_endpoint = get_endpoint(url, 'agent')
+    script = StringIO()
+    script.write(
+        template.format(
+            ssh_key_address=ssh_key_address,
+            target_host=client_address,
+            agent_endpoint=agent_endpoint,
+        )
+    )
+    script.seek(0)
+    return script
+
+
 def make_setup_script(url):
     """
     Create a setup script. Done dynamically due to the need of identifying the
@@ -157,31 +179,9 @@ def make_setup_script(url):
     properly create the right location for the serving of the public ssh key.
     """
     ssh_key_address = get_endpoint(url, 'setup', 'key')
-    bash = """#!/bin/bash -x -e
-if [[ $EUID -ne 0 ]]; then
-  echo "You must be a root user or execute this script with sudo" 2>&1
-  exit 1
-fi
-
-echo "--> creating new user with disabled password: ansible"
-useradd -m ceph-installer
-passwd -d ceph-installer
-
-echo "--> adding provisioning key to the ansible authorized_keys"
-curl -s -L -o ansible.pub {ssh_key_address}
-mkdir -p /home/ansible/.ssh
-cat ansible.pub >> /home/ansible/.ssh/authorized_keys
-chown -R ansible:ansible /home/ansible/.ssh
-
-echo "--> ensuring that ansible user will be able to sudo"
-echo "ansible ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
-
-echo "--> ensuring ansible user does not require a tty"
-echo 'Defaults:ansible !requiretty' | sudo tee /etc/sudoers.d/ansible > /dev/null
-"""
     script = StringIO()
     script.write(
-        bash.format(
+        templates.setup_script.format(
             ssh_key_address=ssh_key_address,
         )
     )
