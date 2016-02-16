@@ -51,16 +51,15 @@ class MONController(object):
     def configure(self):
         error(405)
 
-    # we need validation here
     @configure.when(method='POST', template='json')
     @validate(schemas.mon_configure_schema, handler="/errors/schema")
     def configure_post(self):
-        hosts = [request.json.get('host')]
+        hosts = [request.json['host']]
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
         extra_vars = util.get_install_extra_vars(request.json)
-        extra_vars['monitor_interface'] = request.json.get('monitor_interface')
-        extra_vars['fsid'] = request.json.get('fsid')
+        extra_vars['monitor_interface'] = request.json['monitor_interface']
+        extra_vars['fsid'] = request.json['fsid']
         if request.json.get('monitor_secret'):
             extra_vars['monitor_secret'] = request.json.get('monitor_secret')
         identifier = str(uuid4())
