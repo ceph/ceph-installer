@@ -1,5 +1,5 @@
-import pkg_resources
 import sys
+import logging
 
 from tambo import Transport
 import ceph_installer
@@ -39,7 +39,6 @@ Global Options:
 
     @catches(KeyboardInterrupt)
     def main(self, argv):
-        import logging
         # Set console logging first with some defaults, to prevent having exceptions
         # before hitting logging configuration. The defaults can/will get overridden
         # later.
@@ -62,7 +61,6 @@ Global Options:
                            options=options, check_help=False,
                            check_version=False)
         parser.parse_args()
-        #delgado.config['verbosity'] = parser.get('--log', 'info')
         parser.catch_help = self.help(parser.subhelp())
         parser.catch_version = ceph_installer.__version__
         parser.mapper = self.mapper
