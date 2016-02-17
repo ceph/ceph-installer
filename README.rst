@@ -252,7 +252,7 @@ certain requirements like: a deployment user, ssh keys, and sudo permissions.
 
   * create an ``ceph-installer`` user
   * ensure that the ``ceph-installer`` user can use sudo without a password prompt
-  * remove the ``requiretty`` from ``/etc/sudoers`` if set, so that SSH
+  * remove the ``requiretty`` from ``/etc/sudoers.d/ceph-installer``, so that SSH
     connections allow non-interactive sessions from using ``sudo``
   * retrieve the SSH key that will be used for provisioning (see
     :ref:`provisioning_key`)
