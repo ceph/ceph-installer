@@ -1,8 +1,6 @@
 import os
 from pecan.testing import load_test_app
 
-import subprocess
-
 from copy import deepcopy
 from pecan import conf
 from pecan import configuration
