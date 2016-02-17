@@ -81,6 +81,12 @@ it is implemented with the ``"callback"`` key in most JSON POST requests.
 
     wget http://installer.host/setup/ | sudo bash
 
+**Security**: the above example retrieves executable code over an
+unencrypted protocol and then executes it as root.  You should only
+use this approach if you 100% trust your network and your DNS
+server.
+
+
 2.- Install monitor:
 
 request::
