@@ -2,7 +2,6 @@ import subprocess
 import tempfile
 import logging
 import json
-import os
 
 from ceph_installer.util import which, get_playbook_path
 
