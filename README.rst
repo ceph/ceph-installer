@@ -444,6 +444,7 @@ Body ::
         'journal_size': 0,
         'public_network': '0.0.0.0/0',
         'cluster_network': '0.0.0.0/0',
+        'redhat_storage': False,
         'callback': 'http://example.com/task-callback/'
     }
 
