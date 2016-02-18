@@ -54,6 +54,7 @@ class OSDController(object):
     @validate(schemas.osd_configure_schema, handler="/errors/schema")
     def configure_post(self):
         hosts = [request.json['host']]
+        monitor_hosts = request.json["monitor_hosts"]
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
         extra_vars = util.get_install_extra_vars(request.json)
@@ -75,7 +76,7 @@ class OSDController(object):
             playbook="osd-configure.yml",
         )
         call_ansible.apply_async(
-            args=([('osds', hosts)], identifier),
+            args=([('osds', hosts), ('mons', monitor_hosts)], identifier),
             kwargs=kwargs,
         )
 

@@ -445,6 +445,7 @@ Body ::
         'public_network': '0.0.0.0/0',
         'cluster_network': '0.0.0.0/0',
         'redhat_storage': False,
+        'monitor_hosts': ['mon1.host', 'mon2.host'],
         'callback': 'http://example.com/task-callback/'
     }
 
