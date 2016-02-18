@@ -40,12 +40,44 @@ class OSDController(object):
         models.commit()
         kwargs = dict(extra_vars=extra_vars, tags="package-install")
         call_ansible.apply_async(
-            args=('osd', hosts, identifier),
+            args=([('osds', hosts)], identifier),
             kwargs=kwargs,
         )
 
         return task
 
-    @expose('json')
+    @expose(generic=True, template='json')
     def configure(self):
-        return {}
+        error(405)
+
+    @configure.when(method='POST', template='json')
+    @validate(schemas.osd_configure_schema, handler="/errors/schema")
+    def configure_post(self):
+        hosts = [request.json['host']]
+        monitor_hosts = request.json["monitor_hosts"]
+        # even with configuring we need to tell ceph-ansible
+        # if we're working with upstream ceph or red hat ceph storage
+        extra_vars = util.get_install_extra_vars(request.json)
+        extra_vars.update(request.json)
+        del extra_vars['host']
+        if 'redhat_storage' in request.json:
+            del extra_vars['redhat_storage']
+        identifier = str(uuid4())
+        task = models.Task(
+            identifier=identifier,
+            endpoint=request.path,
+        )
+        # we need an explicit commit here because the command may finish before
+        # we conclude this request
+        models.commit()
+        kwargs = dict(
+            extra_vars=extra_vars,
+            skip_tags="package-install",
+            playbook="osd-configure.yml",
+        )
+        call_ansible.apply_async(
+            args=([('osds', hosts), ('mons', monitor_hosts)], identifier),
+            kwargs=kwargs,
+        )
+
+        return task

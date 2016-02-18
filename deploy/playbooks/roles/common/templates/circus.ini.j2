@@ -22,16 +22,6 @@ stdout_stream.filename=/var/log/circus/celery-stdout.log
 stderr_stream.class = FileStream
 stderr_stream.filename=/var/log/circus/celery-stderr.log
 
-[watcher:celerybeat]
-cmd = {{ app_home }}/bin/celery -A async beat --loglevel=info
-working_dir={{ app_home }}/src/{{ app_name }}/ceph_installer
-
-stdout_stream.class = FileStream
-stdout_stream.filename=/var/log/circus/celerybeat-stdout.log
-
-stderr_stream.class = FileStream
-stderr_stream.filename=/var/log/circus/celerybeat-stderr.log
-
-[env:celery,celerybeat]
+[env:celery,{{ app_name }}]
 PECAN_CONFIG = {{ app_home }}/src/{{ app_name }}/config/config.py
-CEPH_PLAYBOOK = {{ app_home }}/ceph-ansible/site.yml.sample
+CEPH_ANSIBLE_PATH = {{ app_home }}/ceph-ansible

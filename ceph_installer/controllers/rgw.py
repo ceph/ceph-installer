@@ -38,7 +38,7 @@ class RGWController(object):
         models.commit()
         kwargs = dict(tags="package-install")
         call_ansible.apply_async(
-            args=('rgw', hosts, identifier),
+            args=([('rgws', hosts)], identifier),
             kwargs=kwargs,
         )
 

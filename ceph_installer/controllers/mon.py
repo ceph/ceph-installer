@@ -41,7 +41,7 @@ class MONController(object):
         models.commit()
         kwargs = dict(extra_vars=extra_vars, tags="package-install")
         call_ansible.apply_async(
-            args=('mon', hosts, identifier),
+            args=([('mons', hosts)], identifier),
             kwargs=kwargs,
         )
 
@@ -72,7 +72,7 @@ class MONController(object):
         models.commit()
         kwargs = dict(extra_vars=extra_vars, skip_tags="package-install")
         call_ansible.apply_async(
-            args=('mon', hosts, identifier),
+            args=([('mons', hosts)], identifier),
             kwargs=kwargs,
         )
 

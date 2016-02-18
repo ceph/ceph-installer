@@ -35,7 +35,7 @@ class AgentController(object):
         models.commit()
         kwargs = dict(extra_vars=extra_vars)
         call_ansible.apply_async(
-            args=('agent', hosts, identifier),
+            args=([('agents', hosts)], identifier),
             kwargs=kwargs,
         )
 
