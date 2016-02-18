@@ -31,7 +31,9 @@
 - name: "pip+git install {{ app_name }} into virtualenv."
   pip: name='git+https://github.com/ceph/ceph-installer@{{ branch }}#egg=ceph_installer' virtualenv={{ app_home }}
   changed_when: True
-  notify: restart app
+  notify:
+    - restart app
+    - restart celery
 
 - name: populate the database for {{ app_name }}
   command: "{{ app_home }}/bin/pecan populate {{ app_home }}/src/{{ app_name }}/config/config.py"
