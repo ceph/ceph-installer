@@ -7,27 +7,39 @@ from ceph_installer import util
 class TestGenerateInventoryFile(object):
 
     def test_single_host(self, tmpdir):
-        result = util.generate_inventory_file("mons", "google.com", "uuid", tmp_dir=str(tmpdir))
+        result = util.generate_inventory_file([("mons", "google.com")], "uuid", tmp_dir=str(tmpdir))
         with open(result, 'r') as f:
             data = [line.strip() for line in f.readlines()]
             assert "[mons]" in data
             assert "google.com" in data
 
     def test_correct_filename(self, tmpdir):
-        result = util.generate_inventory_file("mons", "google.com", "uuid", tmp_dir=str(tmpdir))
+        result = util.generate_inventory_file([("mons", "google.com")], "uuid", tmp_dir=str(tmpdir))
         assert "uuid_" in result
 
     def test_multiple_hosts(self, tmpdir):
         hosts = ['google.com', 'redhat.com']
-        result = util.generate_inventory_file("mons", hosts, "uuid", tmp_dir=str(tmpdir))
+        result = util.generate_inventory_file([("mons", hosts)], "uuid", tmp_dir=str(tmpdir))
         with open(result, 'r') as f:
             data = [line.strip() for line in f.readlines()]
             assert "[mons]" in data
             assert "google.com" in data
             assert "redhat.com" in data
 
+    def test_multiple_groups(self, tmpdir):
+        hosts = ['google.com', 'redhat.com']
+        inventory = [('mons', hosts), ('osds', 'osd1.host')]
+        result = util.generate_inventory_file(inventory, "uuid", tmp_dir=str(tmpdir))
+        with open(result, 'r') as f:
+            data = [line.strip() for line in f.readlines()]
+            assert "[mons]" in data
+            assert "google.com" in data
+            assert "redhat.com" in data
+            assert "[osds]" in data
+            assert "osd1.host" in data
+
     def test_tmp_dir(self, tmpdir):
-        result = util.generate_inventory_file("mons", "google.com", "uuid", tmp_dir=str(tmpdir))
+        result = util.generate_inventory_file([("mons", "google.com")], "uuid", tmp_dir=str(tmpdir))
         assert str(tmpdir) in result
 
 

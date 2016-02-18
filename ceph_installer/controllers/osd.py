@@ -40,7 +40,7 @@ class OSDController(object):
         models.commit()
         kwargs = dict(extra_vars=extra_vars, tags="package-install")
         call_ansible.apply_async(
-            args=('osd', hosts, identifier),
+            args=([('osds', hosts)], identifier),
             kwargs=kwargs,
         )
 
@@ -71,7 +71,7 @@ class OSDController(object):
         models.commit()
         kwargs = dict(extra_vars=extra_vars, skip_tags="package-install")
         call_ansible.apply_async(
-            args=('osd', hosts, identifier),
+            args=([('osds', hosts)], identifier),
             kwargs=kwargs,
         )
 

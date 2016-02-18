@@ -10,12 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task
-def call_ansible(component, hosts, identifier, tags="", skip_tags="", extra_vars=None):
+def call_ansible(inventory, identifier, tags="", skip_tags="", extra_vars=None):
     """
     This task builds an ansible-playbook command and runs it.
 
-    ``component``: What component we're going to work with: mon, rgw, osd, calamari
-    ``hosts``: A list of hosts to run ansible against, these host must be resolvable
+    ``inventory``: A list of tuples that details an ansible inventory. For example:
+                   [('mons', ['mon1.host', 'mon2.host']), ('osds', ['osd1.host'])]
     ``tags``: The tags as a comma-delimeted string that represents all the tags
               this ansible call should follow. For example "package-install, other-tag"
     ``skip_tags``: The tags as a comma-delimeted string that represents all the tags
@@ -25,8 +25,7 @@ def call_ansible(component, hosts, identifier, tags="", skip_tags="", extra_vars
     """
     if not extra_vars:
         extra_vars = dict()
-    component_title = "%s%s" % (component, '' if component.endswith('s') else 's')
-    hosts_file = util.generate_inventory_file(component_title, hosts, identifier)
+    hosts_file = util.generate_inventory_file(inventory, identifier)
     command = process.make_ansible_command(hosts_file, identifier, tags=tags, extra_vars=extra_vars, skip_tags=skip_tags)
     task = models.Task.query.filter_by(identifier=identifier).first()
     task.command = ' '.join(command)
