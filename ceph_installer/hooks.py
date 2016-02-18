@@ -86,3 +86,15 @@ class SystemCheckHook(PecanHook):
             except SystemCheckError as system_error:
                 message = render('json', {'message': system_error.message})
                 raise WSGIHTTPException(content_type='application/json', body=message)
+
+
+class CustomErrorHook(PecanHook):
+    """
+    Only needed for prod environments where it looks like multi-worker servers
+    will swallow exceptions. This will ensure a traceback is logged correctly.
+    """
+
+    def on_error(self, state, exc):
+        # TODO: do not complain with a traceback when the error is an
+        # HTTPNotFound
+        logger.exception('unhandled error by ceph-installer')
