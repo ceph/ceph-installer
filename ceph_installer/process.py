@@ -1,19 +1,21 @@
+import os
 import subprocess
 import tempfile
 import logging
 import json
 
-from ceph_installer.util import which, get_playbook_path
+from ceph_installer.util import which, get_ceph_ansible_path
 
 logger = logging.getLogger(__name__)
 
 
-def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_tags=''):
+def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_tags='', playbook='site.yml.sample'):
     """
     This utility will compose the command needed to run ansible, capture its
     stdout and stderr to a file
     """
-    playbook = get_playbook_path()
+    ceph_ansible_path = get_ceph_ansible_path()
+    playbook = os.path.join(ceph_ansible_path, playbook)
     ansible_path = which('ansible-playbook')
     if not extra_vars:
         extra_vars = dict()

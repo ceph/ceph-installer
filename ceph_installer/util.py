@@ -106,29 +106,22 @@ def which(executable):
             return executable_path
 
 
-def get_playbook_path():
+def get_ceph_ansible_path():
     """
-    Try to determine where does the ansible playbook lives. It does this by
+    Try to determine where does the ceph-ansible repo lives. It does this by
     looking into an environment variable first which takes precedence (for
     now).
     """
     try:
-        playbook_path = os.environ['CEPH_PLAYBOOK']
+        repo_path = os.environ['CEPH_ANSIBLE_PATH']
     except KeyError:
         # TODO: Fallback nicely into looking maybe in some directory that is
         # included with the ceph_installer application or a well know path defined by
         # the packaging of said playbooks
-        logger.warning('"CEPH_PLAYBOOK" environment variable is not defined')
-        playbook_path = '/tmp/ceph-ansible/'
+        logger.warning('"CEPH_ANSIBLE_PATH" environment variable is not defined')
+        repo_path = '/usr/share/ceph-ansible'
 
-    if os.path.isfile(playbook_path):
-        # we have what should be a YAML
-        return playbook_path
-    else:
-        # assume the site.yml file living in this directory
-        return os.path.join(playbook_path, 'site.yml')
-
-    # TODO: error here in a way that a controller can handle it and report back
+    return repo_path
 
 
 def get_endpoint(request_url, *args):
