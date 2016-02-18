@@ -69,7 +69,11 @@ class OSDController(object):
         # we need an explicit commit here because the command may finish before
         # we conclude this request
         models.commit()
-        kwargs = dict(extra_vars=extra_vars, skip_tags="package-install")
+        kwargs = dict(
+            extra_vars=extra_vars,
+            skip_tags="package-install",
+            playbook="osd-configure.yml",
+        )
         call_ansible.apply_async(
             args=([('osds', hosts)], identifier),
             kwargs=kwargs,
