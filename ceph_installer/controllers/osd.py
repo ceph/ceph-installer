@@ -58,10 +58,10 @@ class OSDController(object):
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
         extra_vars = util.get_install_extra_vars(request.json)
-        del request.json['host']
-        if 'redhat_storage' in request.json:
-            del request.json['redhat_storage']
         extra_vars.update(request.json)
+        del extra_vars['host']
+        if 'redhat_storage' in request.json:
+            del extra_vars['redhat_storage']
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
