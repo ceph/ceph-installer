@@ -446,6 +446,8 @@ Body ::
         'cluster_network': '0.0.0.0/0',
         'redhat_storage': False,
         'monitor_hosts': ['mon1.host', 'mon2.host'],
+        # FIXME: this should be a list, each monitor might have a different interface
+        'monitor_interface': "eth0",
         'callback': 'http://example.com/task-callback/'
     }
 
