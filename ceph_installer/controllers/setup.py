@@ -59,3 +59,23 @@ class SetupController(object):
             key.write(key_contents.read())
             key.seek(0)
         response.app_iter = FileIter(key)
+
+    @expose(content_type='application/octet-stream')
+    def host_key(self):
+        """
+        Serves the SSH *host* key for the user that own the current service, so
+        that it can be consumed by the setup script
+        """
+        command = [
+                'ssh-keyscan', '-t', 'rsa',
+                'localhost']
+        out, err, code = process.run(command)
+        if code != 0:
+            error(500, err)
+
+        # define the file to download
+        response.headers['Content-Disposition'] = 'attachment; filename=host_key'
+        key = StringIO()
+        key.write(out)
+        key.seek(0)
+        response.app_iter = FileIter(key)
