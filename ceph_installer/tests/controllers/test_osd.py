@@ -52,8 +52,7 @@ class TestOSDController(object):
 
     def test_configure_success(self, session, monkeypatch):
         monkeypatch.setattr(osd.call_ansible, 'apply_async', lambda args, kwargs: None)
-        result = session.app.post_json("/api/osd/configure/", params=self.configure_data,
-                                       expect_errors=True)
+        result = session.app.post_json("/api/osd/configure/", params=self.configure_data)
         assert result.status_int == 200
         assert result.json['endpoint'] == '/api/osd/configure/'
         assert result.json['identifier'] is not None
@@ -64,8 +63,7 @@ class TestOSDController(object):
             assert "mon.host" in inventory[1][1]
 
         monkeypatch.setattr(osd.call_ansible, 'apply_async', check)
-        result = session.app.post_json("/api/osd/configure/", params=self.configure_data,
-                                       expect_errors=True)
+        result = session.app.post_json("/api/osd/configure/", params=self.configure_data)
         assert result.status_int == 200
 
     def test_configure_redhat_storage(self, session, monkeypatch):
@@ -77,8 +75,7 @@ class TestOSDController(object):
         data = self.configure_data.copy()
         data["redhat_storage"] = True
         monkeypatch.setattr(osd.call_ansible, 'apply_async', check)
-        result = session.app.post_json("/api/osd/configure/", params=data,
-                                       expect_errors=True)
+        result = session.app.post_json("/api/osd/configure/", params=data)
         assert result.status_int == 200
 
     def test_configure_playbook(self, session, monkeypatch):
@@ -86,6 +83,5 @@ class TestOSDController(object):
             assert "osd-configure.yml" in kwargs["playbook"]
 
         monkeypatch.setattr(osd.call_ansible, 'apply_async', check)
-        result = session.app.post_json("/api/osd/configure/", params=self.configure_data,
-                                       expect_errors=True)
+        result = session.app.post_json("/api/osd/configure/", params=self.configure_data)
         assert result.status_int == 200
