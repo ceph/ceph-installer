@@ -160,12 +160,14 @@ def make_agent_script(url, target_host):
     template = templates.setup_script + templates.agent_script
     ssh_key_address = get_endpoint(url, 'setup', 'key')
     agent_endpoint = get_endpoint(url, 'api', 'agent')
+    host_key_address = get_endpoint(url, 'setup', 'host_key')
     script = StringIO()
     script.write(
         template.format(
             ssh_key_address=ssh_key_address,
             target_host=target_host,
             agent_endpoint=agent_endpoint,
+            host_key_address=host_key_address,
         )
     )
     script.seek(0)
@@ -179,10 +181,12 @@ def make_setup_script(url):
     properly create the right location for the serving of the public ssh key.
     """
     ssh_key_address = get_endpoint(url, 'setup', 'key')
+    host_key_address = get_endpoint(url, 'setup', 'host_key')
     script = StringIO()
     script.write(
         templates.setup_script.format(
             ssh_key_address=ssh_key_address,
+            host_key_address=host_key_address,
         )
     )
     script.seek(0)
