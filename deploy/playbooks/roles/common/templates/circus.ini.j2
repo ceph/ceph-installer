@@ -25,3 +25,4 @@ stderr_stream.filename=/var/log/circus/celery-stderr.log
 [env:celery,{{ app_name }}]
 PECAN_CONFIG = {{ app_home }}/src/{{ app_name }}/config/config.py
 CEPH_ANSIBLE_PATH = {{ app_home }}/ceph-ansible
+HOME = /home/{{ ansible_ssh_user }}
