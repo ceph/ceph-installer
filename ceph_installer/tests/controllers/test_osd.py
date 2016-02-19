@@ -4,9 +4,6 @@ from ceph_installer.controllers import osd
 class TestOSDController(object):
 
     def setup(self):
-        self.configure_data = self.get_configure_data()
-
-    def get_configure_data(self):
         data = dict(
             host="node1",
             monitor_interface="eth0",
@@ -18,7 +15,7 @@ class TestOSDController(object):
             public_network="0.0.0.0/24",
             cluster_network="0.0.0.0/24",
         )
-        return data
+        self.configure_data = data
 
     def test_index_get(self, session):
         result = session.app.get("/api/osd/")
