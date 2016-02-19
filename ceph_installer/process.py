@@ -51,11 +51,13 @@ def run(arguments, send_input=None, **kwargs):
 
         (stdout, stderr, returncode)
     """
+    env = os.environ.copy()
     logger.info('Running command: %s' % ' '.join(arguments))
     process = subprocess.Popen(
         arguments,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        env=env,
         **kwargs)
     if send_input:
         out, err = process.communicate(send_input)
