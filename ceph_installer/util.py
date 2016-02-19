@@ -181,10 +181,12 @@ def make_setup_script(url):
     properly create the right location for the serving of the public ssh key.
     """
     ssh_key_address = get_endpoint(url, 'setup', 'key')
+    host_key_address = get_endpoint(url, 'setup', 'host_key')
     script = StringIO()
     script.write(
         templates.setup_script.format(
             ssh_key_address=ssh_key_address,
+            host_key_address=host_key_address,
         )
     )
     script.seek(0)
