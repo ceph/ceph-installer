@@ -41,7 +41,49 @@ class TestMonController(object):
     def test_configure_hosts(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
         data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134")
+        result = session.app.post_json("/api/mon/configure/", params=data)
+        assert result.json['endpoint'] == '/api/mon/configure/'
+        assert result.json['identifier'] is not None
+
+    def test_configure_monitors_not_a_list(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors="invalid")
         result = session.app.post_json("/api/mon/configure/", params=data,
                                        expect_errors=True)
+        assert result.status_int == 400
+        assert "monitors" in result.json["message"]
+
+    def test_configure_monitors_not_a_list_of_objects(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=['mon1', 'mon2'])
+        result = session.app.post_json("/api/mon/configure/", params=data,
+                                       expect_errors=True)
+        assert result.status_int == 400
+        assert "monitors" in result.json["message"]
+
+    def test_configure_monitors_missing_host_key(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        mons = [{"foo": "bar"}]
+        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=mons)
+        result = session.app.post_json("/api/mon/configure/", params=data,
+                                       expect_errors=True)
+        assert result.status_int == 400
+        assert "monitors" in result.json["message"]
+
+    def test_configure_monitors_missing_interface_key(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        mons = [{"host": "mon1.host"}]
+        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=mons)
+        result = session.app.post_json("/api/mon/configure/", params=data,
+                                       expect_errors=True)
+        assert result.status_int == 400
+        assert "monitors" in result.json["message"]
+
+    def test_configure_valid_monitors(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        mons = [{"host": "mon1.host", "interface": "eth1"}]
+        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=mons)
+        result = session.app.post_json("/api/mon/configure/", params=data)
+        assert result.status_int == 200
         assert result.json['endpoint'] == '/api/mon/configure/'
         assert result.json['identifier'] is not None

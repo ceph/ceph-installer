@@ -10,6 +10,15 @@ def list_of_devices(value):
     assert isinstance(value, list), "requires format: ['/dev/sdb', '/dev/sdc']"
 
 
+def list_of_monitors(value):
+    msg = "requires format: [{'host': 'mon1.host', 'interface': 'eth1'},{'host': 'mon2.host', 'interface': 'enp0s8'}]"
+    assert isinstance(value, list), msg
+    for monitor in value:
+        assert isinstance(monitor, dict), msg
+        assert "host" in monitor, msg
+        assert "interface" in monitor, msg
+
+
 install_schema = (
     ("hosts", list_of_hosts),
     (optional("redhat_storage"), types.boolean),
@@ -20,6 +29,7 @@ mon_configure_schema = (
     ("host", types.string),
     ("monitor_interface", types.string),
     (optional("monitor_secret"), types.string),
+    (optional("monitors"), list_of_monitors),
     (optional("redhat_storage"), types.boolean),
 )
 
