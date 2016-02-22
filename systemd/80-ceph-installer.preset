@@ -1,0 +1,3 @@
+# ceph-installer web service
+
+enable ceph-installer.service

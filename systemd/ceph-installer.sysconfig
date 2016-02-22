@@ -1,0 +1,2 @@
+PECAN_CONFIG = /etc/ceph-installer/prod.py
+CEPH_PLAYBOOK = /usr/share/ceph-ansible/site.yml.sample
