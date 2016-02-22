@@ -3,7 +3,7 @@ from ceph_installer import hooks
 # Server Specific Configurations
 server = {
     'port': '8181',
-    'host': 'localhost'
+    'host': '0.0.0.0'
 }
 
 # Pecan Application Configurations
