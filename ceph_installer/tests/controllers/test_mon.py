@@ -80,7 +80,13 @@ class TestMonController(object):
         assert "monitors" in result.json["message"]
 
     def test_configure_valid_monitors(self, session, monkeypatch):
-        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        def check(args, kwargs):
+            inventory = args[0]
+            hosts = inventory[0][1]
+            assert "node1" in hosts
+            assert "mon1.host monitor_interface=eth1" in hosts
+
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', check)
         mons = [{"host": "mon1.host", "interface": "eth1"}]
         data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=mons)
         result = session.app.post_json("/api/mon/configure/", params=data)
