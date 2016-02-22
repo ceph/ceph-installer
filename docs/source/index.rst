@@ -93,53 +93,73 @@ request::
 
     curl -d '{"hosts": ["mon1.host"], "redhat_storage": true}' -X POST http://installer.hosts/api/mon/install/
 
-response::
+response:
 
-    {
-        "endpoint": "/api/mon/install/",
-        "succeeded": false,
-        "stdout": null,
-        "started": null,
-        "exit_code": null,
-        "ended": null,
-        "command": null,
-        "stderr": null,
-        "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
-    }
+  .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+         "endpoint": "/api/mon/install/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
+     }
 
 Note: the identifier can be immediately used get task metadata information::
 
     curl http:://installer.host/api/tasks/47f60562-a96b-4ac6-be07-71726b595793/
-    {
-        "endpoint": "/api/mon/install/",
-        "succeeded": false,
-        "stdout": null,
-        "started": "2016-02-15 14:24:06.414728",
-        "exit_code": null,
-        "ended": null,
-        "command": "/usr/local/bin/ansible-playbook /tmp/ceph-ansible/site.yml -i /var/folders/t8/smzdykh12h39f8r0vwv5vzf00000gn/T/47f60562-a96b-4ac6-be07-71726b595793__ilpiv --extra-vars {\"ceph_stable\": true} --tags package-install",
-        "stderr": null,
-        "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
-    }
+
+response:
+
+  .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+         "endpoint": "/api/mon/install/",
+         "succeeded": false,
+         "stdout": null,
+         "started": "2016-02-15 14:24:06.414728",
+         "exit_code": null,
+         "ended": null,
+         "command": "/usr/local/bin/ansible-playbook /tmp/ceph-ansible/site.yml -i /var/folders/t8/smzdykh12h39f8r0vwv5vzf00000gn/T/47f60562-a96b-4ac6-be07-71726b595793__ilpiv --extra-vars {\"ceph_stable\": true} --tags package-install",
+         "stderr": null,
+         "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
+     }
 
 3.- Install OSDs:
 
 request::
+
     curl -d '{"hosts": ["osd1.host", "osd2.host"], "redhat_storage": true}' -X POST http://installer.hosts/api/osd/install/
 
-response::
+response:
 
-    {
-        "endpoint": "/api/osd/install/",
-        "succeeded": false,
-        "stdout": null,
-        "started": null,
-        "exit_code": null,
-        "ended": null,
-        "command": null,
-        "stderr": null,
-        "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
-    }
+  .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+
+     {
+         "endpoint": "/api/osd/install/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
+     }
 
 
 Task metadata for the previous request is then available at::
@@ -150,21 +170,27 @@ Task metadata for the previous request is then available at::
 4.- Configure monitor:
 
 request::
+
     curl -d '{"host": "mon1.host", "monitor_interface": "eth0", "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/mon/configure/
 
-response::
+response:
 
-    {
-        "endpoint": "/api/mon/configure/",
-        "succeeded": false,
-        "stdout": null,
-        "started": null,
-        "exit_code": null,
-        "ended": null,
-        "command": null,
-        "stderr": null,
-        "identifier": "4fe75438-1c76-40f9-b39c-9dbe78af28ed"
-    }
+  .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+         "endpoint": "/api/mon/configure/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "4fe75438-1c76-40f9-b39c-9dbe78af28ed"
+     }
 
 Task metadata for the previous request is then available at::
 
@@ -178,21 +204,27 @@ collocate the journal in the same device as the OSD. This is *not ideal* and
 describe.
 
 request::
+
     curl -d '{"host": "osd1.host", "devices": ["/dev/sdb/"], "journal_collocation": true, "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a"}' -X POST http://installer.hosts/api/osd/configure/
 
-response::
+response:
 
-    {
-        "endpoint": "/api/osd/configure/",
-        "succeeded": false,
-        "stdout": null,
-        "started": null,
-        "exit_code": null,
-        "ended": null,
-        "command": null,
-        "stderr": null,
-        "identifier": "4af5189e-0e6c-4aa3-930c-b0ca6adb2545"
-    }
+  .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+         "endpoint": "/api/osd/configure/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "4af5189e-0e6c-4aa3-930c-b0ca6adb2545"
+     }
 
 Task metadata for the previous request is then available at::
 
@@ -200,23 +232,29 @@ Task metadata for the previous request is then available at::
 
 
 request::
+
     curl -d '{"host": "osd2.host", "devices": ["/dev/sdc/"],
     "journal_collocation": true}' -X POST
     http://installer.hosts/api/osd/configure/
 
-response::
+response:
 
-    {
-        "endpoint": "/api/osd/configure/",
-        "succeeded": false,
-        "stdout": null,
-        "started": null,
-        "exit_code": null,
-        "ended": null,
-        "command": null,
-        "stderr": null,
-        "identifier": "f248c190-4bb1-47d5-9188-c98434419f39"
-    }
+  .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+         "endpoint": "/api/osd/configure/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "f248c190-4bb1-47d5-9188-c98434419f39"
+     }
 
 Task metadata for the previous request is then available at::
 
@@ -243,6 +281,33 @@ certain requirements like: a deployment user, ssh keys, and sudo permissions.
 
 ``setup``
 =========
+
+.. http:get:: /setup/
+
+  Generates a BASH script to be downloaded as ``setup.sh``. This
+  script should be executed with super user privileges on the remote node as it
+  will perform the following actions:
+
+  * create an ``ceph-installer`` user
+  * ensure that the ``ceph-installer`` user can use sudo without a password prompt
+  * remove the ``requiretty`` from ``/etc/sudoers.d/ceph-installer``, so that SSH
+    connections allow non-interactive sessions from using ``sudo``
+  * retrieve the SSH key that will be used for provisioning (see
+    :ref:`provisioning_key`)
+  * append the provisioning key onto ``$HOME/ceph-installer/.ssh/authorized_keys``
+
+
+
+   **Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Disposition: attachment; filename=setup.sh
+      Content-Type: application/octet-stream; charset=UTF-8
+
+   :statuscode 200: no error
+   :statuscode 500: Server Error (see :ref:`server_errors`)
 
 ``/setup/``
 -----------
@@ -271,15 +336,16 @@ request*.
 ``api``
 =======
 
-``/api/``
----------
-* ``GET``: Will return the current status of the service.
+.. http:get:: /api/
+
+    Will return the current status of the service.
 
 Responses:
 ^^^^^^^^^^
-200: All components of the system are operational
+   :statuscode 200: All components of the system are operational
 Body: ``{}``
 
+   :statuscode 500: Server Error (see :ref:`server_errors`)
 500: System Error
 Body: ``{"message": "Sample Error message"}``
 
@@ -316,6 +382,8 @@ or failure states).
 The request for the callback URL will be an HTTP POST with the full JSON
 metadata of the task.
 
+.. warning::
+    The callback system has not been implemented yet.
 
 Polling
 -------
@@ -505,6 +573,60 @@ Body ::
 ``/api/calamari/configure/``
 ----------------------------
 # TODO
+
+
+.. _server_errors:
+
+Known Server Errors
+-------------------
+These are possible server errors and failures that are handled by the
+application itself. Once handled the server will reply with a JSON body and
+a single ``message`` key.
+
+No Celery worker running:
+
+  .. sourcecode:: http
+
+     HTTP/1.1 500 Internal Server Error
+     Content-Type: application/json
+
+     {"message": "No running Celery worker was found"}
+
+Missing Ansible:
+
+  .. sourcecode:: http
+
+     HTTP/1.1 500 Internal Server Error
+     Content-Type: application/json
+
+     {"message": "Could not find ansible in system paths"}
+
+RabbitMQ connection errors:
+
+  .. sourcecode:: http
+
+     HTTP/1.1 500 Internal Server Error
+     Content-Type: application/json
+
+     {"message": "Error connecting to RabbitMQ"}
+
+RabbitMQ is not running:
+
+  .. sourcecode:: http
+
+     HTTP/1.1 500 Internal Server Error
+     Content-Type: application/json
+
+     {"message": "RabbitMQ is not running or not reachable"}
+
+Database connectivity:
+
+  .. sourcecode:: http
+
+     HTTP/1.1 500 Internal Server Error
+     Content-Type: application/json
+
+     {"message": "Could not connect or retrieve information from the database"}
 
 ceph-installer release process
 ==============================
