@@ -322,44 +322,78 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 ``osd``
 =======
 
+.. http:post:: /api/osd/install/
 
-``/api/osd/install/``
----------------------
-* ``POST``: Start the installation process for monitor(s)
-Body ::
+   Start the installation process for OSD(s)
 
-    {
-        "hosts": ["osd1.example.com", "osd2.example.com"],
-        "redhat_storage": False,
-        "callback": "http://example.com/task-callback/"
-    }
+   **Response**:
 
+   .. sourcecode:: http
 
-``/api/osd/configure/``
------------------------
-* ``POST``: Configure OSD(s)
-Body ::
+     HTTP/1.1 200 OK
+     Content-Type: application/json
 
-    {
-        "devices": ["/dev/sdb"],
-        "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
-        "host": "osd1.example.com",
-        # TODO: support other osd scenarios
-        # you either do journal_collocation, raw_multi_journal or osd_directory
-        "journal_collocation": True,
-        "journal_size": 0,
-        "public_network": "0.0.0.0/0",
-        "cluster_network": "0.0.0.0/0",
-        "redhat_storage": False,
-        "monitor_hosts": ["mon1.host", "mon2.host"],
-        # FIXME: this should be a list, each monitor might have a different interface
-        "monitor_interface": "eth0",
-        "callback": "http://example.com/task-callback/"
-    }
+     {
+         "endpoint": "/api/osd/install/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
+     }
 
+   **Request**:
 
-``journal_collocate`` will use the same device as the OSD for the journal. This
-is not ideal and might incur in a performance penalty.
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "hosts": ["osd1.example.com", "osd2.example.com"],
+          "redhat_storage": false,
+      }
+
+   :<json array hosts: (required) The hostname to configure
+   :<json boolean redhat_storage: (optional) Use the downstream version of
+                                  RedHat Storage.
+
+.. http:post:: /api/osd/configure/
+
+   The only osd provisioning scenario that this API supports is where a raw
+   device is used as a journal. No journal collocation or OSD directory is
+   allowed.
+
+   **Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "devices": ["/dev/sdb"],
+          "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
+          "host": "osd1.example.com",
+          "journal_size": 0,
+          "public_network": "0.0.0.0/0",
+          "cluster_network": "0.0.0.0/0",
+          "redhat_storage": false,
+          "monitor_hosts": ["mon1.host", "mon2.host"],
+      }
+
+   :<json array devices: (required) The devices to use for OSDs
+   :<json string fsid: (required) The ``fsid`` for the cluster
+   :<json string host: (required) The hostname to configure
+   :<json int journal_size: (required) The size to use for the journal
+   :<json string public_network: (required) The public network for the cluster
+   :<json string cluster_network: (required) The cluster-only network
+   :<json boolean redhat_storage: (optional) Use the downstream version of
+                                  RedHat Storage.
+   :<json array monitor_hosts: (required) The monitors for the current cluster
 
 
 ``rgw``
