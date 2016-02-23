@@ -81,6 +81,8 @@ The top level endpoints are:
 * :ref:`api`
 
 
+.. _setup:
+
 ``setup``
 =========
 
@@ -95,7 +97,7 @@ The top level endpoints are:
   * remove the ``requiretty`` from ``/etc/sudoers.d/ceph-installer``, so that SSH
     connections allow non-interactive sessions from using ``sudo``
   * retrieve the SSH key that will be used for provisioning (see
-    :ref:`provisioning_key`)
+    :http:get:`/setup/key/`)
   * append the provisioning key onto ``$HOME/ceph-installer/.ssh/authorized_keys``
 
    **Response**:
@@ -130,6 +132,8 @@ The top level endpoints are:
    :statuscode 200: no error
    :statuscode 500: Server Error (see :ref:`server_errors`)
 
+
+.. _api:
 
 ``api``
 =======
@@ -403,6 +407,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 ``/api/rgw/install/``
 ---------------------
 * ``POST``: Start the installation process for monitor(s)
+
 Body ::
 
     {
@@ -415,6 +420,7 @@ Body ::
 ``/api/rgw/configure/``
 -----------------------
 * ``POST``: Configure OSD(s)
+
 ``name`` is optional, will default to ``rgw.$short-hostname``, using the
 examples below, that would be ``rgw.node1`` and ``rgw.node2``. It is allowed to
 specify a ``name`` to alter this default behavior.
@@ -434,6 +440,7 @@ Body ::
 ``/api/calamari/install/``
 --------------------------
 * ``POST``: Start the installation process for calamari
+
 Body ::
 
     {
