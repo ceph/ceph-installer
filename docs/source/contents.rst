@@ -5,6 +5,7 @@ ceph-installer contents
    :maxdepth: 2
 
    index.rst
+   cluster.rst
 
 
 Development
