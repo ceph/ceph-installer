@@ -25,11 +25,13 @@ install_schema = (
 )
 
 mon_configure_schema = (
+    ("cluster_network", types.string),
     ("fsid", types.string),
     ("host", types.string),
     ("monitor_interface", types.string),
-    (optional("monitor_secret"), types.string),
+    ("monitor_secret", types.string),
     (optional("monitors"), list_of_monitors),
+    ("public_network", types.string),
     (optional("redhat_storage"), types.boolean),
 )
 

@@ -3,6 +3,16 @@ from ceph_installer.controllers import mon
 
 class TestMonController(object):
 
+    def setup(self):
+        self.configure_data = dict(
+            monitor_secret="secret",
+            cluster_network="0.0.0.0/24",
+            public_network="0.0.0.0/24",
+            host="node1",
+            monitor_interface="eth0",
+            fsid="1720107309134",
+        )
+
     def test_index_get(self, session):
         result = session.app.get("/api/mon/")
         assert result.status_int == 200
@@ -40,14 +50,14 @@ class TestMonController(object):
 
     def test_configure_hosts(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
-        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134")
-        result = session.app.post_json("/api/mon/configure/", params=data)
+        result = session.app.post_json("/api/mon/configure/", params=self.configure_data)
         assert result.json['endpoint'] == '/api/mon/configure/'
         assert result.json['identifier'] is not None
 
     def test_configure_monitors_not_a_list(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
-        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors="invalid")
+        data = self.configure_data.copy()
+        data["monitors"] = "invalid"
         result = session.app.post_json("/api/mon/configure/", params=data,
                                        expect_errors=True)
         assert result.status_int == 400
@@ -55,7 +65,8 @@ class TestMonController(object):
 
     def test_configure_monitors_not_a_list_of_objects(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
-        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=['mon1', 'mon2'])
+        data = self.configure_data.copy()
+        data["monitors"] = "['mon1', 'mon2']"
         result = session.app.post_json("/api/mon/configure/", params=data,
                                        expect_errors=True)
         assert result.status_int == 400
@@ -64,7 +75,8 @@ class TestMonController(object):
     def test_configure_monitors_missing_host_key(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
         mons = [{"foo": "bar"}]
-        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=mons)
+        data = self.configure_data.copy()
+        data['monitors'] = mons
         result = session.app.post_json("/api/mon/configure/", params=data,
                                        expect_errors=True)
         assert result.status_int == 400
@@ -72,8 +84,9 @@ class TestMonController(object):
 
     def test_configure_monitors_missing_interface_key(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
-        mons = [{"host": "mon1.host"}]
-        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=mons)
+        mons = [{"host": "mon0.host"}]
+        data = self.configure_data.copy()
+        data['monitors'] = mons
         result = session.app.post_json("/api/mon/configure/", params=data,
                                        expect_errors=True)
         assert result.status_int == 400
@@ -83,12 +96,13 @@ class TestMonController(object):
         def check(args, kwargs):
             inventory = args[0]
             hosts = inventory[0][1]
-            assert "node1" in hosts
+            assert "node1 monitor_interface=eth0" in hosts
             assert "mon1.host monitor_interface=eth1" in hosts
 
         monkeypatch.setattr(mon.call_ansible, 'apply_async', check)
         mons = [{"host": "mon1.host", "interface": "eth1"}]
-        data = dict(host="node1", monitor_interface="eth0", fsid="1720107309134", monitors=mons)
+        data = self.configure_data.copy()
+        data["monitors"] = mons
         result = session.app.post_json("/api/mon/configure/", params=data)
         assert result.status_int == 200
         assert result.json['endpoint'] == '/api/mon/configure/'
