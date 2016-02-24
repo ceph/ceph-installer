@@ -1,0 +1,14 @@
+[Unit]
+Description=ceph installer celery service
+After=network.target rabbitmq-server.service
+Requires=rabbitmq-server.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/celery -A async worker --loglevel=info
+EnvironmentFile=-/etc/sysconfig/ceph-installer
+User=ceph-installer
+WorkingDirectory=/usr/lib/python2.7/site-packages/ceph_installer
+
+[Install]
+WantedBy=multi-user.target

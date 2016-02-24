@@ -1,0 +1,14 @@
+[Unit]
+Description=ceph installer gunicorn service
+After=network.target ceph-installer-celery.service
+Requires=ceph-installer-celery.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/gunicorn_pecan -w 10 -t 300 /etc/ceph-installer/prod.py
+EnvironmentFile=-/etc/sysconfig/ceph-installer
+User=ceph-installer
+WorkingDirectory=/usr/lib/python2.7/site-packages/ceph_installer/
+
+[Install]
+WantedBy=multi-user.target
