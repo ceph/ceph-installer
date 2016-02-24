@@ -409,6 +409,25 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                           Provide a list of objects representing the monitor host and its interface.
 
 
+``status``
+==========
+
+.. http:get:: /api/status/
+
+   Get the system status for the service. Performs checks against different
+   required systems and return an HTTP 500 error status code with a message.
+
+   **Response**:
+
+   .. sourcecode:: http
+
+     HTTP/1.1 500 Internal Server Error
+     Content-Type: application/json
+
+     {"message": "RabbitMQ is not running or not reachable"}
+
+  :statuscode 500: Server Error (see :ref:`server_errors`)
+
 .. _server_errors:
 
 Known Server Errors
