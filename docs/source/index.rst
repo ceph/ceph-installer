@@ -322,8 +322,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string host: (required) The hostname to configure
    :<json string monitor_interface: (required) The interface name (e.g. "eth0")
    :<json string monitor_secret: (required) A key to use when creating the monitor keyrings.
-   :<json string cluster_network: (required) The subnet that the cluster will listen on.
-   :<json string public_network: (required) The public subnet that the cluster will reside on.
+   :<json string public_network: (required) The public network for the cluster.
+   :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
    :<json array monitors: (optional) This is only optional when no other monitors currently exist
                           in the cluster. If you're configuring a mon for an existing cluster, provide
                           a list of objects representing the monitor host and its interface.
@@ -402,7 +402,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
    :<json string public_network: (required) The public network for the cluster
-   :<json string cluster_network: (required) The cluster-only network
+   :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   RedHat Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.

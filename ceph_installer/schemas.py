@@ -25,7 +25,7 @@ install_schema = (
 )
 
 mon_configure_schema = (
-    ("cluster_network", types.string),
+    (optional("cluster_network"), types.string),
     ("fsid", types.string),
     ("host", types.string),
     ("monitor_interface", types.string),
@@ -36,7 +36,7 @@ mon_configure_schema = (
 )
 
 osd_configure_schema = (
-    ("cluster_network", types.string),
+    (optional("cluster_network"), types.string),
     ("devices", list_of_devices),
     ("fsid", types.string),
     ("host", types.string),

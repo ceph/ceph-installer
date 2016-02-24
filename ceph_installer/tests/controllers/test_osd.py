@@ -12,7 +12,6 @@ class TestOSDController(object):
             journal_collocation=True,
             journal_size=100,
             public_network="0.0.0.0/24",
-            cluster_network="0.0.0.0/24",
         )
         self.configure_data = data
 
