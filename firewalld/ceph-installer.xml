@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Ceph Installer HTTP service</short>
+  <description>The service allows you to install and configure ceph via a RestFul API that accepts and returns JSON responses along with meaningful error codes and messages.</description>
+  <port protocol="tcp" port="8181"/>
+</service>
