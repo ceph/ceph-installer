@@ -104,6 +104,5 @@ class TestMonController(object):
         data = self.configure_data.copy()
         data["monitors"] = mons
         result = session.app.post_json("/api/mon/configure/", params=data)
-        assert result.status_int == 200
         assert result.json['endpoint'] == '/api/mon/configure/'
         assert result.json['identifier'] is not None
