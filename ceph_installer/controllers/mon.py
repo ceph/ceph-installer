@@ -54,7 +54,10 @@ class MONController(object):
     @configure.when(method='POST', template='json')
     @validate(schemas.mon_configure_schema, handler="/errors/schema")
     def configure_post(self):
-        hosts = ["{} monitor_interface={}".format(request.json['host'], request.json["monitor_interface"])]
+        hosts = util.parse_monitors([{
+            "host": request.json['host'],
+            "interface": request.json["monitor_interface"],
+        }])
         monitors = request.json.get("monitors")
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
