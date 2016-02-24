@@ -87,6 +87,11 @@ class CustomErrorHook(PecanHook):
             if exc.code == 404:
                 logger.error("Not Found: %s" % state.request.url)
                 return
+            # explicit redirect codes that should not be handled at all by this
+            # utility
+            elif exc.code in [300, 301, 302, 303, 304, 305, 306, 307, 308]:
+                return
+
         logger.exception('unhandled error by ceph-installer')
         for check in system_checks:
             try:
