@@ -6,10 +6,9 @@ class TestOSDController(object):
     def setup(self):
         data = dict(
             host="node1",
-            monitor_interface="eth0",
             fsid="1720107309134",
             devices=['/dev/sdb'],
-            monitor_hosts=["mon.host"],
+            monitors=[{"host": "mon1.host", "interface": "eth1"}],
             journal_collocation=True,
             journal_size=100,
             public_network="0.0.0.0/24",
@@ -60,7 +59,7 @@ class TestOSDController(object):
     def test_configure_monitor_hosts(self, session, monkeypatch):
         def check(args, kwargs):
             inventory = args[0]
-            assert "mon.host" in inventory[1][1]
+            assert "mon1.host monitor_interface=eth1" in inventory[1][1]
 
         monkeypatch.setattr(osd.call_ansible, 'apply_async', check)
         result = session.app.post_json("/api/osd/configure/", params=self.configure_data)

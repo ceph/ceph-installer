@@ -54,12 +54,13 @@ class OSDController(object):
     @validate(schemas.osd_configure_schema, handler="/errors/schema")
     def configure_post(self):
         hosts = [request.json['host']]
-        monitor_hosts = request.json["monitor_hosts"]
+        monitor_hosts = util.parse_monitors(request.json["monitors"])
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
         extra_vars = util.get_install_extra_vars(request.json)
         extra_vars.update(request.json)
         del extra_vars['host']
+        del extra_vars['monitors']
         if 'redhat_storage' in request.json:
             del extra_vars['redhat_storage']
         identifier = str(uuid4())

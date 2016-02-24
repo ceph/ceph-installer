@@ -42,8 +42,7 @@ osd_configure_schema = (
     ("host", types.string),
     ("journal_collocation", types.boolean),
     ("journal_size", types.integer),
-    ("monitor_hosts", list_of_hosts),
-    ("monitor_interface", types.string),
+    ("monitors", list_of_monitors),
     ("public_network", types.string),
     (optional("redhat_storage"), types.boolean),
 )

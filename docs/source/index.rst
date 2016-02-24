@@ -394,7 +394,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "public_network": "0.0.0.0/0",
           "cluster_network": "0.0.0.0/0",
           "redhat_storage": false,
-          "monitor_hosts": ["mon1.host", "mon2.host"],
+          "monitors": [{"host": "mon0.host", "interface": "eth1"}],
       }
 
    :<json array devices: (required) The devices to use for OSDs
@@ -405,7 +405,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string cluster_network: (required) The cluster-only network
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   RedHat Storage.
-   :<json array monitor_hosts: (required) The monitors for the current cluster
+   :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
+                          Provide a list of objects representing the monitor host and its interface.
 
 
 ``rgw``
