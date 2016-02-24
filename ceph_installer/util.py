@@ -38,6 +38,38 @@ def generate_inventory_file(inventory, task_uuid, tmp_dir=None):
     return inventory_file.name
 
 
+def parse_monitors(monitors):
+    """
+    Given a list of dictionaries, returns a list of hosts that
+    can be used in an ansible inventory. These host lines can include
+    host variables as well.
+
+    For example, monitors in this format:
+
+        [
+            {"host": "mon0.host", "interface": "eth0"},
+            {"host": "mon1.host", "interface": "enp0s8"},
+        ]
+
+    Would return the following:
+
+        ["mon0.host monitor_interface=eth0", "mon1.host monitor_interface=enp0s8"]
+    """
+    hosts = []
+    var_map = dict(
+        interface="monitor_interface",
+    )
+    for mon in monitors:
+        host = []
+        host.append(mon["host"])
+        for k, v in var_map.iteritems():
+            if k in mon:
+                host.append("{}={}".format(v, mon[k]))
+        hosts.append(" ".join(host))
+
+    return hosts
+
+
 def mkdir(path, exist_ok=True, mode=0755):
     """
     Create a directory if it already exists do not error. Anything else should

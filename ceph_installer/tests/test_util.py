@@ -93,3 +93,31 @@ class TestGetInstallExtraVars(object):
         data = dict(redhat_storage=False)
         result = util.get_install_extra_vars(data)
         assert result == {'ceph_stable': True}
+
+
+class TestParseMonitors(object):
+
+    def test_with_interface(self):
+        data = [
+            {"host": "mon0.host", "interface": "eth0"},
+            {"host": "mon1.host", "interface": "eth1"},
+        ]
+        results = util.parse_monitors(data)
+        assert "mon0.host monitor_interface=eth0" in results
+        assert "mon1.host monitor_interface=eth1" in results
+
+    def test_one_with_no_interface(self):
+        data = [
+            {"host": "mon0.host"},
+            {"host": "mon1.host", "interface": "eth1"},
+        ]
+        results = util.parse_monitors(data)
+        assert "mon0.host" == results[0]
+        assert "mon1.host monitor_interface=eth1" in results
+
+    def test_invalid_extra_var(self):
+        data = [
+            {"host": "mon1.host", "foo": "bar"},
+        ]
+        results = util.parse_monitors(data)
+        assert "mon1.host" == results[0]

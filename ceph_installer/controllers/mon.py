@@ -54,14 +54,20 @@ class MONController(object):
     @configure.when(method='POST', template='json')
     @validate(schemas.mon_configure_schema, handler="/errors/schema")
     def configure_post(self):
-        hosts = [request.json['host']]
+        hosts = util.parse_monitors([{
+            "host": request.json['host'],
+            "interface": request.json["monitor_interface"],
+        }])
+        monitors = request.json.get("monitors")
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
         extra_vars = util.get_install_extra_vars(request.json)
-        extra_vars['monitor_interface'] = request.json['monitor_interface']
-        extra_vars['fsid'] = request.json['fsid']
-        if request.json.get('monitor_secret'):
-            extra_vars['monitor_secret'] = request.json.get('monitor_secret')
+        extra_vars.update(request.json)
+        if monitors:
+            hosts.extend(util.parse_monitors(monitors))
+            del extra_vars['monitors']
+        del extra_vars['host']
+        del extra_vars['monitor_interface']
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
