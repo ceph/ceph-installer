@@ -1,6 +1,3 @@
-from datetime import datetime
-from uuid import uuid4
-
 from ceph_installer import hooks
 from ceph_installer.controllers import status
 
