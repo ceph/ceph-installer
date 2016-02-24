@@ -6,7 +6,6 @@ class TestMonController(object):
     def setup(self):
         self.configure_data = dict(
             monitor_secret="secret",
-            cluster_network="0.0.0.0/24",
             public_network="0.0.0.0/24",
             host="node1",
             monitor_interface="eth0",
