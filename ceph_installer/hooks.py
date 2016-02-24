@@ -2,7 +2,6 @@ from celery.task.control import inspect
 from errno import errorcode
 from ceph_installer import models
 from ceph_installer.util import which
-from pecan import render
 from pecan.hooks import PecanHook
 from sqlalchemy.exc import OperationalError
 from webob.exc import WSGIHTTPException
