@@ -409,60 +409,6 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                           Provide a list of objects representing the monitor host and its interface.
 
 
-``rgw``
-=======
-
-
-``/api/rgw/install/``
----------------------
-* ``POST``: Start the installation process for monitor(s)
-
-Body ::
-
-    {
-        "hosts": ["rgw1.example.com", "rgw2.example.com"],
-        "redhat_storage": False,
-        "callback": "http://example.com/task-callback/"
-    }
-
-
-``/api/rgw/configure/``
------------------------
-* ``POST``: Configure OSD(s)
-
-``name`` is optional, will default to ``rgw.$short-hostname``, using the
-examples below, that would be ``rgw.node1`` and ``rgw.node2``. It is allowed to
-specify a ``name`` to alter this default behavior.
-
-Body ::
-
-    {
-        "name": "main",
-        "hostname": "rgw1.example.com",
-        "callback": "http://example.com/task-callback/"
-    }
-
-
-``calamari``
-============
-
-``/api/calamari/install/``
---------------------------
-* ``POST``: Start the installation process for calamari
-
-Body ::
-
-    {
-        "host": ["calamari.example.com"],
-        "redhat_storage": False,
-        "callback": "http://example.com/task-callback/"
-    }
-
-``/api/calamari/configure/``
-----------------------------
-# TODO
-
-
 .. _server_errors:
 
 Known Server Errors
