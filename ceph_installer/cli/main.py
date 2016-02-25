@@ -1,5 +1,4 @@
 import sys
-import logging
 
 from tambo import Transport
 import ceph_installer
