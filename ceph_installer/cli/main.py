@@ -39,26 +39,8 @@ Global Options:
 
     @catches(KeyboardInterrupt)
     def main(self, argv):
-        # Set console logging first with some defaults, to prevent having exceptions
-        # before hitting logging configuration. The defaults can/will get overridden
-        # later.
-
-        # Console Logger
-        sh = logging.StreamHandler()
-        sh.setFormatter(log.color_format())
-        sh.setLevel(logging.WARNING)
-
-        # because we're in a module already, __name__ is not the ancestor of
-        # the rest of the package; use the root as the logger for everyone
-        root_logger = logging.getLogger()
-
-        # allow all levels at root_logger, handlers control individual levels
-        root_logger.setLevel(logging.DEBUG)
-        root_logger.addHandler(sh)
-
-        options = [['--log', '--logging']]
         parser = Transport(argv, mapper=self.mapper,
-                           options=options, check_help=False,
+                           options=[], check_help=False,
                            check_version=False)
         parser.parse_args()
         parser.catch_help = self.help(parser.subhelp())
