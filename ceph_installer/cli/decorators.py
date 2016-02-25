@@ -4,7 +4,7 @@ import traceback
 from functools import wraps
 
 
-def catches(catch=None, handler=None, exit=True, handle_all=False):
+def catches(catch=None, handler=None, exit=True, handle_all=False, logger=None):
     """
     Very simple decorator that tries any of the exception(s) passed in as
     a single exception class or tuple (containing multiple ones) returning the
@@ -58,7 +58,7 @@ def catches(catch=None, handler=None, exit=True, handle_all=False):
     :param handle_all: Handle all other exceptions via logging.
     """
     catch = catch or Exception
-    logger = logging.getLogger('ceph_deploy')
+    logger = logger or logging.getLogger('ceph-installer')
 
     def decorate(f):
 
