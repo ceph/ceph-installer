@@ -1,0 +1,109 @@
+from os import path
+import sys
+import requests
+import time
+from textwrap import dedent
+from tambo import Transport
+
+from ceph_installer import process
+from ceph_installer.cli import log, constants
+
+this_dir = path.abspath(path.dirname(__file__))
+top_dir = path.dirname(path.dirname(this_dir))
+playbook_path = path.join(top_dir, 'deploy/playbooks')
+
+
+class Task(object):
+
+    help = "/api/tasks/ operations"
+    options = [] #['--poll', 'stdout', 'stderr']
+    _help = dedent("""
+    Human-readable task information: stdout, stderr, and the ability to "poll"
+    a task that waits until the command completes to be able to show the output
+    in a readable way.
+
+    Usage::
+
+        ceph-installer task $IDENTIFIER
+
+    Options:
+
+    --poll        Poll until the task has completed (either on failure or success)
+    stdout        Retrieve the stdout output from the task
+    stderr        Retrieve the stderr output from the task
+    """)
+
+    def __init__(self, arguments):
+        self.arguments = arguments
+        self.tasks_url = path.join(constants.server_address, 'api/tasks')
+        self.identifier = ''
+
+    @property
+    def request_url(self):
+        url = path.join(self.tasks_url, self.identifier)
+        # and add a trailing slash so that the request is done at the correct
+        # canonical url
+        if not url.endswith('/'):
+            url = "%s/" % url
+        return url
+
+    def std(self, output):
+        """
+        :arg output: stderr or stdout
+        """
+        response = requests.get(self.request_url)
+        json = response.json()
+        if response.status_code >= 400:
+            log.error(json['message'])
+        print json[output]
+
+    def summary(self):
+        response = requests.get(self.request_url)
+        json = response.json()
+        if response.status_code >= 400:
+            log.error(json['message'])
+        for k, v in json.items():
+            log.debug("%s: %s" % (k, v))
+
+    def process_response(self):
+        response = requests.get(self.request_url)
+        json = response.json()
+        if response.status_code >= 400:
+            return log.error(json['message'])
+        return json
+
+    def poll(self):
+        json = self.process_response()
+        completed = json['ended']
+        while not completed:
+            sequence = ['.', '..', '...', '....']
+            for s in sequence:
+                sys.stdout.write('\r' + ' '*80)
+                string = "Waiting for completed task%s" % s
+                sys.stdout.write('\r' + string)
+                time.sleep(0.3)
+                sys.stdout.flush()
+            json = self.process_response()
+            completed = json['ended']
+        sys.stdout.write('\r' + ' '*80)
+        sys.stdout.flush()
+        sys.stdout.write('\r'+'Task Completed!\n')
+        for k, v in json.items():
+            log.debug("%s: %s" % (k, v))
+
+    def main(self):
+        parser = Transport(self.arguments, options=self.options, check_help=True)
+        parser.catch_help = self._help
+        parser.parse_args()
+        parser.catches_help()
+        if not parser.unknown_commands:
+            log.error("it is required to pass an identifer, but none was provided")
+            raise SystemExit(1)
+        self.identifier = parser.unknown_commands[-1]
+        if parser.has('stdout'):
+            return self.std('stdout')
+        elif parser.has('stderr'):
+            return self.std('stderr')
+        elif parser.has('--poll'):
+            return self.poll()
+        self.summary()
