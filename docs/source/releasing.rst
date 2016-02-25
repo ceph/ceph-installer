@@ -13,7 +13,7 @@ When you are ready to cut a new version:
 #. Commit your setup.py change as "version 1.2.3".
    ::
 
-      git commit setup.py -m 'version 1.2.3'
+      git commit ceph_installer/__init__.py -m 'version 1.2.3'
 
 #. Tag and release to PyPI (known as "py-p-i" for you plebs).
    ::
