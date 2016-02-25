@@ -64,6 +64,7 @@ setup(
         'pecan-notario',
         'notario>=0.0.11',
         'tambo',
+        'requests',
     ],
     zip_safe=False,
     include_package_data=True,
