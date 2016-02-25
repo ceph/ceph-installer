@@ -2,7 +2,6 @@ from celery.task.control import inspect
 from errno import errorcode
 from ceph_installer import models
 from ceph_installer.util import which
-from pecan import render
 from pecan.hooks import PecanHook
 from sqlalchemy.exc import OperationalError
 from webob.exc import WSGIHTTPException
@@ -66,35 +65,39 @@ def database_connection():
             "Could not connect or retrieve information from the database: %s" % exc.message)
 
 
-class SystemCheckHook(PecanHook):
-    """
-    Perform a series of system checks which prevents the service from doing any
-    work unless everything required checks out.
-    """
-
-    def before(self, state):
-        """
-        Executed before a controller gets called. When an error condition is
-        detected (one of the callables raises a ``SystemCheckError``) it sets
-        the response status to 500 and returns a JSON response with the
-        appropriate reason.
-        """
-        for check in [ansible_exists, rabbitmq_is_running, celery_has_workers,
-                      database_connection]:
-            try:
-                check()
-            except SystemCheckError as system_error:
-                message = render('json', {'message': system_error.message})
-                raise WSGIHTTPException(content_type='application/json', body=message)
+system_checks = (
+    ansible_exists,
+    rabbitmq_is_running,
+    celery_has_workers,
+    database_connection
+)
 
 
 class CustomErrorHook(PecanHook):
     """
-    Only needed for prod environments where it looks like multi-worker servers
-    will swallow exceptions. This will ensure a traceback is logged correctly.
+    Ensure a traceback is logged correctly on error conditions.
+
+    When an error condition is detected (one of the callables raises
+    a ``SystemCheckError``) it sets the response status to 500 and returns
+    a JSON response with the appropriate reason.
     """
 
     def on_error(self, state, exc):
-        # TODO: do not complain with a traceback when the error is an
-        # HTTPNotFound
+        if isinstance(exc, WSGIHTTPException):
+            if exc.code == 404:
+                logger.error("Not Found: %s" % state.request.url)
+                return
+            # explicit redirect codes that should not be handled at all by this
+            # utility
+            elif exc.code in [300, 301, 302, 303, 304, 305, 306, 307, 308]:
+                return
+
         logger.exception('unhandled error by ceph-installer')
+        for check in system_checks:
+            try:
+                check()
+            except SystemCheckError as system_error:
+                state.response.json_body = {'message': system_error.message}
+                state.response.status = 500
+                state.response.content_type = 'application/json'
+                return state.response

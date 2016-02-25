@@ -1,6 +1,7 @@
 from pecan import expose
 from ceph_installer.controllers import (
-    tasks, mon, osd, rgw, calamari, errors, setup, agent
+    tasks, mon, osd, rgw, calamari, errors, setup, agent,
+    status
 )
 
 
@@ -18,6 +19,7 @@ class ApiController(object):
     osd = osd.OSDController()
     rgw = rgw.RGWController()
     calamari = calamari.CalamariController()
+    status = status.StatusController()
 
 
 class RootController(object):
