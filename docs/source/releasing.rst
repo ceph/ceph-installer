@@ -5,10 +5,10 @@ ceph-installer release process
 
 When you are ready to cut a new version:
 
-#. Bump the version number in setup.py.
+#. Bump the version number in ceph_installer/__init__.py.
    ::
 
-      vim setup.py
+      vim ceph_installer/__init__.py
 
 #. Commit your setup.py change as "version 1.2.3".
    ::
