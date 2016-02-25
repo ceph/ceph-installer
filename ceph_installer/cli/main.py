@@ -37,7 +37,7 @@ Global Options:
         version = ceph_installer.__version__
         return self._help % (version, subhelp)
 
-    @catches(KeyboardInterrupt)
+    @catches(KeyboardInterrupt, logger=log)
     def main(self, argv):
         parser = Transport(argv, mapper=self.mapper,
                            options=[], check_help=False,
