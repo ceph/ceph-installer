@@ -27,7 +27,7 @@ class SetupController(object):
     @expose(content_type='application/octet-stream')
     def key(self):
         """
-        Serves the public SSH key for the user that own the current service
+        Serves the public SSH key for the user that owns the current service
         """
         # look for the ssh key of the current user
         private_key_path = os.path.expanduser('~/.ssh/id_rsa')
@@ -54,6 +54,15 @@ class SetupController(object):
 
         # define the file to download
         response.headers['Content-Disposition'] = 'attachment; filename=id_rsa.pub'
+
+        # finally, before serving the key, make sure that the host that is asking for
+        # the key is added to the "known_hosts" file of the user running the service
+        command = ['ssh-keyscan', '-t', 'rsa', request.client_addr]
+        out, err, code = process.run(command)
+        known_hosts_file = os.path.expanduser('~/.ssh/known_hosts')
+        with open(known_hosts_file, 'a') as f:
+            f.write(out)
+
         with open(public_key_path) as key_contents:
             key = StringIO()
             key.write(key_contents.read())
