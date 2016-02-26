@@ -1,51 +1,116 @@
-%if "%{?scl}" == "ruby193"
-    %global scl_prefix %{scl}-
-    %global scl_ruby /usr/bin/ruby193-ruby
-%else
-    %global scl_ruby /usr/bin/ruby
-%endif
+%global commitdate COMMITDATE
+%global commit COMMIT
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
-Name:       ceph-installer
-Version:    0.1.1
-Release:    1%{?dist}
-Summary:    HTTP API for a streamlined Ceph installer using Ansible
-License:    GPLv3+
-URL:        https://github.com/ceph/ceph-installer
+%define srcname ceph-installer
 
-#Source0:    https://github.com/ceph/%{name}/archive/%{version}.tar.gz
-Source0:    %{name}-%{version}.tar.gz
+Name:           ceph-installer
+Version:        VERSION
+Release:        1.%{commitdate}git%{shortcommit}%{?dist}
+Summary:        A service to provision Ceph clusters
+License:        MIT
+URL:            https://github.com/ceph/ceph-installer
+Source0:        https://github.com/ceph/%{srcname}/archive/%{commit}/%{srcname}-%{version}-%{shortcommit}.tar.gz
 
-BuildArch:  noarch
+BuildArch:      noarch
 
-Requires:   %{?scl_prefix}foreman-installer >= 1.7.0
-Requires:   takora
+Requires: ansible
+Requires: ceph-ansible
+Requires: openssh
+Requires: python-pecan
+Requires: python-celery
+Requires: python-sqlalchemy
+Requires: python-gunicorn
+Requires: python-pecan-notario
+Requires: rabbitmq-server
+Requires(pre):    shadow-utils
+Requires(preun):  systemd
+Requires(postun): systemd
+Requires(post):   systemd
+
+BuildRequires: systemd
+BuildRequires: openssh
+BuildRequires: python2-devel
+BuildRequires: pytest
+BuildRequires: python-pecan
+BuildRequires: python-celery
+BuildRequires: python-sqlalchemy
+BuildRequires: python-pecan-notario
 
 %description
-This is a Ceph installer service that allows you to provision a cluster with an HTTP API
-and a command line tool using Ansible playbooks.
+An HTTP API to provision and control the deployment process of Ceph clusters.
 
 %prep
-%setup -q
+%autosetup -p1 -n %{srcname}-%{commit}
 
 %build
-#replace shebangs for SCL
-%if %{?scl:1}%{!?scl:0}
-  sed -ri '1sX(/usr/bin/ruby|/usr/bin/env ruby)X%{scl_ruby}X' bin/ceph-installer
-%endif
+%{__python} setup.py build
 
 %install
-#install -d -m0755 %{buildroot}%{_datadir}/foreman-installer
-#cp -Rp hooks modules %{buildroot}%{_datadir}/foreman-installer
-install -d -m0755 %{buildroot}%{_sbindir}
-cp -p bin/* %{buildroot}%{_sbindir}
-install -d -m0755 %{buildroot}%{_sysconfdir}/foreman/
-cp -p config/* %{buildroot}%{_sysconfdir}/foreman
+%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+
+install -p -D -m 644 systemd/ceph-installer.service \
+                     %{buildroot}%{_unitdir}/ceph-installer.service
+
+install -p -D -m 644 systemd/ceph-installer-celery.service \
+                     %{buildroot}%{_unitdir}/ceph-installer-celery.service
+
+install -p -D -m 644 systemd/ceph-installer.sysconfig \
+                     %{buildroot}%{_sysconfdir}/sysconfig/ceph-installer
+
+install -p -D -m 644 systemd/80-ceph-installer.preset \
+                     %{buildroot}%{_prefix}/lib/systemd/system-preset/80-ceph-installer.preset
+
+install -p -D -m 644 firewalld/ceph-installer.xml \
+                     %{buildroot}%{_prefix}/lib/firewalld/services/ceph-installer.xml
+
+install -p -D -m 644 config/prod.py \
+                     %{buildroot}%{_sysconfdir}/ceph-installer/prod.py
+
+mkdir -p %{buildroot}%{_var}/lib/ceph-installer
+
+%check
+py.test-%{python2_version} -v ceph_installer/tests
+
+%pre
+getent group ceph-installer >/dev/null || groupadd -r ceph-installer
+getent passwd ceph-installer >/dev/null || \
+    useradd -r -g ceph-installer -d %{_var}/lib/ceph-installer \
+    -s /bin/bash \
+    -c "system account for ceph-installer REST API" ceph-installer
+exit 0
+
+%post
+if [ $1 -eq 1 ] ; then
+   su - ceph-installer -c "/bin/pecan populate /etc/ceph-installer/prod.py"
+fi
+%systemd_post ceph-installer.service
+%systemd_post ceph-installer-celery.service
+systemctl start ceph-installer.service >/dev/null 2>&1 || :
+test -f %{_bindir}/firewall-cmd && firewall-cmd --reload --quiet || true
+
+%preun
+%systemd_preun ceph-installer.service
+%systemd_preun ceph-installer-celery.service
+
+%postun
+%systemd_postun_with_restart ceph-installer.service
+%systemd_postun_with_restart ceph-installer-celery.service
 
 %files
-%{!?_licensedir:%global license %%doc}
+%doc README.rst
 %license LICENSE
-%doc README.md docs
-%config %attr(600, root, root) %{_sysconfdir}/foreman/%{name}.yaml
-%config(noreplace) %attr(600, root, root) %{_sysconfdir}/foreman/%{name}.answers.yaml
-%{_sbindir}/ceph-installer
-#%{_datadir}/foreman-installer/*
+%{_bindir}/ceph-installer
+%{python2_sitelib}/*
+%{_unitdir}/ceph-installer.service
+%{_unitdir}/ceph-installer-celery.service
+%{_prefix}/lib/systemd/system-preset/80-ceph-installer.preset
+%config(noreplace) %{_sysconfdir}/sysconfig/ceph-installer
+%config(noreplace) %{_sysconfdir}/ceph-installer/prod.py
+%exclude %{_sysconfdir}/ceph-installer/prod.pyc
+%exclude %{_sysconfdir}/ceph-installer/prod.pyo
+%dir %attr (-, ceph-installer, ceph-installer) %{_var}/lib/ceph-installer
+%dir %attr(0750, root, root) %{_prefix}/lib/firewalld/services
+%{_prefix}/lib/firewalld/services/ceph-installer.xml
+
+%changelog
