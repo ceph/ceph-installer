@@ -12,12 +12,15 @@ class ErrorController(object):
     def schema(self, **kw):
         response.status = 400
         schema_logger.error(request.validation_error)
-        path = request.validation_error._format_path()
-        message = '%s%sfailed validation, %s' % (
-            path,
-            '' if path.endswith(' ') else ' ',
-            request.validation_error.reason
-        )
+        try:
+            path = request.validation_error._format_path()
+            message = '%s%sfailed validation, %s' % (
+                path,
+                '' if path.endswith(' ') else ' ',
+                request.validation_error.reason
+            )
+        except AttributeError:
+            message = "invalid JSON was received"
         return dict(message=message)
 
     @expose('json')

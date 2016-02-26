@@ -8,6 +8,12 @@ class TestSchemaErrors(object):
         message = result.json['message']
         assert message.endswith('an empty dictionary object was provided')
 
+    def test_install_invalid_json(self, session):
+        # note how we are not using post_json for the request
+        result = session.app.post("/api/mon/install/", params={2: 1}, expect_errors=True)
+        message = result.json['message']
+        assert message == 'invalid JSON was received'
+
     def test_host_is_invalid(self, session):
         params = {'hosts': ''}
         result = session.app.post_json("/api/mon/install/", params=params,
