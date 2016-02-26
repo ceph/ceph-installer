@@ -62,6 +62,7 @@ setup(
         'sqlalchemy',
         'gunicorn',
         'pecan-notario',
+        'notario>=0.0.11',
         'tambo',
     ],
     zip_safe=False,
