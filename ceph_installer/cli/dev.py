@@ -41,8 +41,8 @@ class Dev(object):
         parser.catch_help = self._help
         parser.parse_args()
         parser.catches_help()
-        branch = parser.get('branch', 'master')
-        user = parser.get('user', 'vagrant')
+        branch = parser.get('--branch', 'master')
+        user = parser.get('--user', 'vagrant')
         high_verbosity = '-vvvv' if parser.has('-vvvv') else '-v'
         if not parser.unknown_commands:
             log.error("it is required to pass a host to deploy to, but none was provided")
