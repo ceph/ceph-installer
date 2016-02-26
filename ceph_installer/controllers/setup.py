@@ -54,10 +54,10 @@ class SetupController(object):
 
         # define the file to download
         response.headers['Content-Disposition'] = 'attachment; filename=id_rsa.pub'
-
         # finally, before serving the key, make sure that the host that is asking for
         # the key is added to the "known_hosts" file of the user running the service
-        command = ['ssh-keyscan', '-t', 'rsa', request.client_addr]
+        client = request.client_addr or request.environ['HTTP_REMOTE_ADDR']
+        command = ['ssh-keyscan', '-t', 'rsa', client]
         out, err, code = process.run(command)
         known_hosts_file = os.path.expanduser('~/.ssh/known_hosts')
         with open(known_hosts_file, 'a') as f:
