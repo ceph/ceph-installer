@@ -38,10 +38,18 @@ def call_ansible(inventory, identifier, tags="", skip_tags="", extra_vars=None, 
     # for this subprocess call to the directory where the playbook resides
     # allows ansible to properly find action plugins defined in ceph-ansible.
     kwargs = dict(cwd=working_dir)
-    out, err, exit_code = process.run(command, **kwargs)
-    task.succeeded = not exit_code
-    task.exit_code = exit_code
-    task.stdout = out
-    task.stderr = err
+    try:
+        out, err, exit_code = process.run(command, **kwargs)
+    except Exception as error:
+        task.succeeded = False
+        task.exit_code = -1
+        task.stderr = str(error)
+        logger.exception('failed to run command')
+    else:
+        task.succeeded = not exit_code
+        task.exit_code = exit_code
+        task.stdout = out
+        task.stderr = err
+
     task.ended = datetime.now()
     models.commit()
