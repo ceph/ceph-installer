@@ -3,7 +3,7 @@ import sys
 from tambo import Transport
 import ceph_installer
 from ceph_installer.cli import log
-from ceph_installer.cli import dev
+from ceph_installer.cli import dev, task
 from ceph_installer.cli.decorators import catches
 
 
@@ -23,7 +23,7 @@ Global Options:
 %s
     """
 
-    mapper = {'dev': dev.Dev}
+    mapper = {'dev': dev.Dev, 'task': task.Task}
 
     def __init__(self, argv=None, parse=True):
         self.plugin_help = "No plugins found/loaded"
@@ -36,7 +36,7 @@ Global Options:
         version = ceph_installer.__version__
         return self._help % (version, subhelp)
 
-    @catches(KeyboardInterrupt, logger=log)
+    @catches(KeyboardInterrupt, handle_all=True, logger=log)
     def main(self, argv):
         parser = Transport(argv, mapper=self.mapper,
                            options=[], check_help=False,

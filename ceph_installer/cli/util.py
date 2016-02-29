@@ -74,3 +74,4 @@ class colorize(str):
 red_arrow = colorize.make('-->').red
 blue_arrow = colorize.make('-->').blue
 bold_arrow = colorize.make('-->').bold
+yellow_arrow = colorize.make('-->').yellow

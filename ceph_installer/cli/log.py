@@ -19,3 +19,8 @@ def debug(message):
 def info(message):
     line = "%s %s\n" % (util.bold_arrow, message)
     sys.stdout.write(line)
+
+
+def warning(message):
+    line = "%s %s\n" % (util.yellow_arrow, message)
+    sys.stderr.write(line)
