@@ -4,7 +4,7 @@ from ceph_installer import models, tasks
 class TestCallAnsible(object):
 
     def setup(self):
-        task = models.Task(
+        models.Task(
             identifier='aaaa',
             endpoint='/api/test/',
         )
