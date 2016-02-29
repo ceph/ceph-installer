@@ -56,10 +56,11 @@ class Task(object):
         json = response.json()
         if response.status_code >= 400:
             return log.error(json['message'])
-        value = json.get(key)
-        if not value:
+        try:
+            value = json[key]
+            log.info("%s: %s" % (key, value))
+        except KeyError:
             return log.warning('no value found for: "%s"' % key)
-        log.info(value)
 
     def summary(self):
         response = requests.get(self.request_url)
