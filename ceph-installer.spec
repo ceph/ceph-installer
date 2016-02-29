@@ -21,6 +21,7 @@ Requires: python-pecan
 Requires: python-celery
 Requires: python-sqlalchemy
 Requires: python-gunicorn
+Requires: python-requests
 Requires: python-pecan-notario
 Requires: rabbitmq-server
 Requires(pre):    shadow-utils
