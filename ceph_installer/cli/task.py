@@ -5,18 +5,13 @@ import time
 from textwrap import dedent
 from tambo import Transport
 
-from ceph_installer import process
 from ceph_installer.cli import log, constants
-
-this_dir = path.abspath(path.dirname(__file__))
-top_dir = path.dirname(path.dirname(this_dir))
-playbook_path = path.join(top_dir, 'deploy/playbooks')
 
 
 class Task(object):
 
     help = "/api/tasks/ operations"
-    options = [] #['--poll', 'stdout', 'stderr']
+    options = []
     _help = dedent("""
     Human-readable task information: stdout, stderr, and the ability to "poll"
     a task that waits until the command completes to be able to show the output
