@@ -88,7 +88,7 @@ class Task(object):
                 time.sleep(0.3)
                 sys.stdout.flush()
             json = self.process_response(silent=True)
-        completed = json.get('ended', False)
+            completed = json.get('ended', False)
         sys.stdout.write('\r' + ' '*80)
         sys.stdout.flush()
         sys.stdout.write('\r'+'Task Completed!\n')
