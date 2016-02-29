@@ -52,6 +52,7 @@ def run(arguments, send_input=None, **kwargs):
         (stdout, stderr, returncode)
     """
     env = os.environ.copy()
+    env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
     logger.info('Running command: %s' % ' '.join(arguments))
     process = subprocess.Popen(
         arguments,
