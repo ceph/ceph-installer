@@ -31,6 +31,11 @@ class Task(object):
     --poll        Poll until the task has completed (either on failure or success)
     stdout        Retrieve the stdout output from the task
     stderr        Retrieve the stderr output from the task
+    command       The actual command used to call ansible
+    ended         The timestamp (in UTC) when the command completed
+    started       The timestamp (in UTC) when the command started
+    exit_code     The shell exit status for the process
+    succeeded     Boolean value to indicate if process completed correctly
     """)
 
     def __init__(self, arguments):
