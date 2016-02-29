@@ -51,6 +51,7 @@ class Task(object):
         """
         :arg key: any actual key that can be present in the JSON output
         """
+        log.info('requesting task at: %s' % self.request_url)
         response = requests.get(self.request_url)
         json = response.json()
         if response.status_code >= 400:
