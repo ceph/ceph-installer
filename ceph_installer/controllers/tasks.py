@@ -9,7 +9,7 @@ class TaskController(object):
     def __init__(self, task_id):
         self.task = Task.query.filter_by(identifier=task_id).first()
         if not self.task:
-            error(404, '%s is not avilable' % task_id)
+            error(404, '%s is not available' % task_id)
 
     @expose('json')
     def index(self):
