@@ -47,15 +47,18 @@ class Task(object):
             url = "%s/" % url
         return url
 
-    def std(self, output):
+    def get(self, key):
         """
-        :arg output: stderr or stdout
+        :arg key: any actual key that can be present in the JSON output
         """
         response = requests.get(self.request_url)
         json = response.json()
         if response.status_code >= 400:
-            log.error(json['message'])
-        print json[output]
+            return log.error(json['message'])
+        value = json.get(key)
+        if not value:
+            return log.warning('no value found for: "%s"' % key)
+        log.info(value)
 
     def summary(self):
         response = requests.get(self.request_url)
@@ -104,10 +107,14 @@ class Task(object):
             log.error("it is required to pass an identifer, but none was provided")
             raise SystemExit(1)
         self.identifier = parser.unknown_commands[-1]
-        if parser.has('stdout'):
-            return self.std('stdout')
-        elif parser.has('stderr'):
-            return self.std('stderr')
-        elif parser.has('--poll'):
+        if parser.has('--poll'):
             return self.poll()
+
+        for key in [
+                'stdout', 'stderr', 'command', 'ended',
+                'started', 'succeeded', 'exit_code']:
+            if parser.has(key):
+                return self.get(key)
+
+        # if nothing else matches, just try to give a generic, full summary
         self.summary()
