@@ -65,8 +65,8 @@ install -p -D -m 644 systemd/80-ceph-installer.preset \
 install -p -D -m 644 firewalld/ceph-installer.xml \
                      %{buildroot}%{_prefix}/lib/firewalld/services/ceph-installer.xml
 
-install -p -D -m 644 config/prod.py \
-                     %{buildroot}%{_sysconfdir}/ceph-installer/prod.py
+install -p -D -m 644 config/config.py \
+                     %{buildroot}%{_sysconfdir}/ceph-installer/config.py
 
 mkdir -p %{buildroot}%{_var}/lib/ceph-installer
 
@@ -83,7 +83,7 @@ exit 0
 
 %post
 if [ $1 -eq 1 ] ; then
-   su - ceph-installer -c "/bin/pecan populate /etc/ceph-installer/prod.py"
+   su - ceph-installer -c "/bin/pecan populate /etc/ceph-installer/config.py"
 fi
 %systemd_post ceph-installer.service
 %systemd_post ceph-installer-celery.service
@@ -107,9 +107,9 @@ test -f %{_bindir}/firewall-cmd && firewall-cmd --reload --quiet || true
 %{_unitdir}/ceph-installer-celery.service
 %{_prefix}/lib/systemd/system-preset/80-ceph-installer.preset
 %config(noreplace) %{_sysconfdir}/sysconfig/ceph-installer
-%config(noreplace) %{_sysconfdir}/ceph-installer/prod.py
-%exclude %{_sysconfdir}/ceph-installer/prod.pyc
-%exclude %{_sysconfdir}/ceph-installer/prod.pyo
+%config(noreplace) %{_sysconfdir}/ceph-installer/config.py
+%exclude %{_sysconfdir}/ceph-installer/config.pyc
+%exclude %{_sysconfdir}/ceph-installer/config.pyo
 %dir %attr (-, ceph-installer, ceph-installer) %{_var}/lib/ceph-installer
 %dir %attr(0750, root, root) %{_prefix}/lib/firewalld/services
 %{_prefix}/lib/firewalld/services/ceph-installer.xml
