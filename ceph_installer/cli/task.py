@@ -69,7 +69,8 @@ class Task(object):
         response = requests.get(self.request_url)
         json = response.json()
         if response.status_code >= 400:
-            log.error(json['message'])
+            if not silent:
+                log.error(json['message'])
             return {}
         return json
 
