@@ -14,9 +14,6 @@ curl -s -L -o ansible.pub {ssh_key_address}
 mkdir -m 700 -p /home/ceph-installer/.ssh
 cat ansible.pub >> /home/ceph-installer/.ssh/authorized_keys
 
-echo "--> adding provisioning host key to /home/ceph-installer/.ssh/known_hosts"
-curl {host_key_address} >> /home/ceph-installer/.ssh/known_hosts
-
 echo "--> ensuring correct permissions on .ssh/authorized_keys"
 chown -R ceph-installer:ceph-installer /home/ceph-installer/.ssh
 chmod 600 /home/ceph-installer/.ssh/authorized_keys
