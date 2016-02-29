@@ -73,8 +73,10 @@ class Task(object):
         return json
 
     def poll(self):
-        json = self.process_response()
-        completed = json['ended']
+        log.info('Polling task at: %s' % self.request_url)
+        json = self.process_response() or {}
+        # JSON could be set to None
+        completed = json.get('ended', False)
         while not completed:
             sequence = ['.', '..', '...', '....']
             for s in sequence:
@@ -83,8 +85,8 @@ class Task(object):
                 sys.stdout.write('\r' + string)
                 time.sleep(0.3)
                 sys.stdout.flush()
-            json = self.process_response()
-            completed = json['ended']
+            json = self.process_response() or {}
+        completed = json.get('ended', False)
         sys.stdout.write('\r' + ' '*80)
         sys.stdout.flush()
         sys.stdout.write('\r'+'Task Completed!\n')
