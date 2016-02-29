@@ -65,16 +65,17 @@ class Task(object):
         for k, v in json.items():
             log.debug("%s: %s" % (k, v))
 
-    def process_response(self):
+    def process_response(self, silent=False):
         response = requests.get(self.request_url)
         json = response.json()
         if response.status_code >= 400:
-            return log.error(json['message'])
+            log.error(json['message'])
+            return {}
         return json
 
     def poll(self):
         log.info('Polling task at: %s' % self.request_url)
-        json = self.process_response() or {}
+        json = self.process_response()
         # JSON could be set to None
         completed = json.get('ended', False)
         while not completed:
@@ -85,7 +86,7 @@ class Task(object):
                 sys.stdout.write('\r' + string)
                 time.sleep(0.3)
                 sys.stdout.flush()
-            json = self.process_response() or {}
+            json = self.process_response(silent=True)
         completed = json.get('ended', False)
         sys.stdout.write('\r' + ' '*80)
         sys.stdout.flush()
