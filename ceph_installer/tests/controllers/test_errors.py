@@ -31,3 +31,24 @@ class TestSchemaErrors(object):
         message = result.json['message']
         assert message.endswith('not of type boolean')
         assert 'redhat_storage' in message
+
+
+class TestErrors(object):
+
+    def test_unavailable(self, session):
+        result = session.app.get("/errors/unavailable/",
+                                 expect_errors=True)
+        message = result.json['message']
+        assert message == 'service unavailable'
+
+    def test_forbidden(self, session):
+        result = session.app.get("/errors/forbidden/",
+                                 expect_errors=True)
+        message = result.json['message']
+        assert message == 'forbidden'
+
+    def test_invalid(self, session):
+        result = session.app.get("/errors/forbidden/",
+                                 expect_errors=True)
+        message = result.json['message']
+        assert message == 'forbidden'
