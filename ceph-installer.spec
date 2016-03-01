@@ -1,11 +1,11 @@
-%global commitdate COMMITDATE
-%global commit COMMIT
+%global commitdate @COMMITDATE@
+%global commit @COMMIT@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define srcname ceph-installer
 
 Name:           ceph-installer
-Version:        VERSION
+Version:        @VERSION@
 Release:        1.%{commitdate}git%{shortcommit}%{?dist}
 Summary:        A service to provision Ceph clusters
 License:        MIT
