@@ -11,7 +11,7 @@ app = {
     'root': 'ceph_installer.controllers.root.RootController',
     'modules': ['ceph_installer'],
     'debug': False,
-    'hooks': [hooks.CustomErrorHook()]
+    'hooks': [hooks.SystemCheckHook()]
 }
 
 logging = {
@@ -27,7 +27,7 @@ logging = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'color'
+            'formatter': 'simple'
         }
     },
     'formatters': {
@@ -47,7 +47,7 @@ logging = {
 
 sqlalchemy = {
     # XXX Determine the right location for the database
-    'url': 'sqlite:////tmp/ceph_installer.db',
+    'url': 'sqlite:////var/lib/ceph-installer/ceph_installer.db',
     'echo':          True,
     'echo_pool':     True,
     'pool_recycle':  3600,

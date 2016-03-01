@@ -5,6 +5,16 @@
   file: path={{ app_home }} owner={{ ansible_ssh_user }} group={{ ansible_ssh_user }} state=directory recurse=yes
   register: app_home_created
 
+- name: "create /var/lib database location for {{ app_name }}"
+  sudo: yes
+  file:
+    path: "/var/lib/{{ app_name }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    state: directory
+    recurse: yes
+  sudo: yes
+
 - name: Update apt cache
   apt:
     update_cache: yes

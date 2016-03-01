@@ -169,8 +169,8 @@ def get_endpoint(request_url, *args):
     this service was accessed from. All args would then be used to append to
     the main url::
 
-        >>> get_endpoint('http://localhost:8080/some/endpoint', 'api', 'setup')
-        'http://localhost:8080/api/setup/'
+        >>> get_endpoint('http://localhost:8181/some/endpoint', 'api', 'setup')
+        'http://localhost:8181/api/setup/'
 
     ``request_url``: A string representing the full URL like ``http://api.example.com/api/``.
     """
