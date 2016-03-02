@@ -237,3 +237,22 @@ def get_install_extra_vars(json):
         extra_vars["ceph_stable"] = True
 
     return extra_vars
+
+
+def get_osd_configure_extra_vars(json):
+    """
+    Given a request.json dictionary from the api/osd/configure/ endpoint,
+    this method will generate and return a dict to be used as extra_vars
+    for ceph_installer.tasks.install.
+    """
+    extra_vars = get_install_extra_vars(json)
+    extra_vars['raw_multi_journal'] = True
+    extra_vars['raw_journal_devices'] = json["journal_devices"]
+    extra_vars.update(json)
+    del extra_vars['host']
+    del extra_vars['monitors']
+    del extra_vars['journal_devices']
+    if 'redhat_storage' in json:
+        del extra_vars['redhat_storage']
+
+    return extra_vars

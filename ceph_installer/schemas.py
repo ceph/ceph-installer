@@ -40,7 +40,7 @@ osd_configure_schema = (
     ("devices", list_of_devices),
     ("fsid", types.string),
     ("host", types.string),
-    ("journal_collocation", types.boolean),
+    ("journal_devices", list_of_devices),
     ("journal_size", types.integer),
     ("monitors", list_of_monitors),
     ("public_network", types.string),

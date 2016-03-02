@@ -9,7 +9,7 @@ class TestOSDController(object):
             fsid="1720107309134",
             devices=['/dev/sdb'],
             monitors=[{"host": "mon1.host", "interface": "eth1"}],
-            journal_collocation=True,
+            journal_devices=["/dev/sdc"],
             journal_size=100,
             public_network="0.0.0.0/24",
         )

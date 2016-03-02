@@ -95,6 +95,35 @@ class TestGetInstallExtraVars(object):
         assert result == {'ceph_stable': True}
 
 
+class TestGetOSDConfigureExtraVars(object):
+
+    def setup(self):
+        self.data = dict(
+            host="node1",
+            fsid="1720107309134",
+            devices=['/dev/sdb'],
+            monitors=[{"host": "mon1.host", "interface": "eth1"}],
+            journal_devices=["/dev/sdc"],
+            journal_size=100,
+            public_network="0.0.0.0/24",
+        )
+
+    def test_raw_multi_journal_is_set(self):
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert "raw_multi_journal" in result
+
+    def test_raw_journal_devices(self):
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert "raw_journal_devices" in result
+        assert result["raw_journal_devices"] == ["/dev/sdc"]
+
+    def test_redhat_storage_not_present(self):
+        data = self.data.copy()
+        data["redhat_storage"] = True
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert "redhat_storage" not in result
+
+
 class TestParseMonitors(object):
 
     def test_with_interface(self):
