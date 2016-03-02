@@ -108,11 +108,20 @@ class TestGetOSDConfigureExtraVars(object):
             public_network="0.0.0.0/24",
         )
 
-    def test_journal_devices(self):
+    def test_raw_multi_journal_is_set(self):
         result = util.get_osd_configure_extra_vars(self.data)
         assert "raw_multi_journal" in result
+
+    def test_raw_journal_devices(self):
+        result = util.get_osd_configure_extra_vars(self.data)
         assert "raw_journal_devices" in result
         assert result["raw_journal_devices"] == ["/dev/sdc"]
+
+    def test_redhat_storage_not_present(self):
+        data = self.data.copy()
+        data["redhat_storage"] = True
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert "redhat_storage" not in result
 
 
 class TestParseMonitors(object):
