@@ -57,15 +57,7 @@ class OSDController(object):
         monitor_hosts = util.parse_monitors(request.json["monitors"])
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
-        extra_vars = util.get_install_extra_vars(request.json)
-        extra_vars['raw_multi_journal'] = True
-        extra_vars['raw_journal_devices'] = request.json["journal_devices"]
-        extra_vars.update(request.json)
-        del extra_vars['host']
-        del extra_vars['monitors']
-        del extra_vars['journal_devices']
-        if 'redhat_storage' in request.json:
-            del extra_vars['redhat_storage']
+        extra_vars = util.get_osd_configure_extra_vars(request.json)
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,

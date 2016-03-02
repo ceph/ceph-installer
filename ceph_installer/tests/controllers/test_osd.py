@@ -76,18 +76,6 @@ class TestOSDController(object):
         result = session.app.post_json("/api/osd/configure/", params=data)
         assert result.status_int == 200
 
-    def test_configure_journal_devices(self, session, monkeypatch):
-        def check(args, kwargs):
-            extra_vars = kwargs["extra_vars"]
-            assert "journal_devices" not in extra_vars
-            assert "raw_journal_devices" in extra_vars
-            assert "raw_multi_journal" in extra_vars
-            assert extra_vars['raw_journal_devices'] == ["/dev/sdc"]
-
-        data = self.configure_data.copy()
-        monkeypatch.setattr(osd.call_ansible, 'apply_async', check)
-        session.app.post_json("/api/osd/configure/", params=data)
-
     def test_configure_playbook(self, session, monkeypatch):
         def check(args, kwargs):
             assert "osd-configure.yml" in kwargs["playbook"]
