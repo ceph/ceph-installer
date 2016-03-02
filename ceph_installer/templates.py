@@ -5,6 +5,20 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+if [ ! -f /etc/os-release ]; then
+    echo "Unable to determine a supported system"
+    echo "will not proceed with installation"
+    exit 2
+fi
+
+source /etc/os-release
+if [ "$ID" != "ubuntu" ] && [ "$ID" != "rhel" ]; then
+    echo "Unsupported system detected: $ID"
+    echo "will not proceed with installation"
+    exit 3
+fi
+
+
 echo "--> creating new user with disabled password: ceph-installer"
 useradd -m ceph-installer
 passwd -d ceph-installer
