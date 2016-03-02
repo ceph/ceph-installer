@@ -53,7 +53,7 @@ class Dev(object):
             "-i", "%s," % parser.unknown_commands[-1],
             high_verbosity,
             "-u", user,
-            "--extra-vars", '"branch=%s"' % branch,
+            "--extra-vars", 'branch=%s' % branch,
             "deploy.yml",
         ]
         log.debug("Running command: %s" % ' '.join(command))
