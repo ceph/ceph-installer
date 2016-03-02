@@ -9,7 +9,7 @@ class TestOSDController(object):
             fsid="1720107309134",
             devices=['/dev/sdb'],
             monitors=[{"host": "mon1.host", "interface": "eth1"}],
-            journal_collocation=True,
+            journal_devices=["/dev/sdc"],
             journal_size=100,
             public_network="0.0.0.0/24",
         )
@@ -75,6 +75,18 @@ class TestOSDController(object):
         monkeypatch.setattr(osd.call_ansible, 'apply_async', check)
         result = session.app.post_json("/api/osd/configure/", params=data)
         assert result.status_int == 200
+
+    def test_configure_journal_devices(self, session, monkeypatch):
+        def check(args, kwargs):
+            extra_vars = kwargs["extra_vars"]
+            assert "journal_devices" not in extra_vars
+            assert "raw_journal_devices" in extra_vars
+            assert "raw_multi_journal" in extra_vars
+            assert extra_vars['raw_journal_devices'] == ["/dev/sdc"]
+
+        data = self.configure_data.copy()
+        monkeypatch.setattr(osd.call_ansible, 'apply_async', check)
+        session.app.post_json("/api/osd/configure/", params=data)
 
     def test_configure_playbook(self, session, monkeypatch):
         def check(args, kwargs):
