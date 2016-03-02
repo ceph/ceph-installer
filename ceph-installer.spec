@@ -24,6 +24,7 @@ Requires: python-gunicorn
 Requires: python-requests
 Requires: python-pecan-notario
 Requires: rabbitmq-server
+Requires: python-tambo
 Requires(pre):    shadow-utils
 Requires(preun):  systemd
 Requires(postun): systemd
