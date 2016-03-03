@@ -311,8 +311,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "monitor_interface": "eth0",
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "monitor_secret": "AQA7P8dWAAAAABAAH/tbiZQn/40Z8pr959UmEA==",
-          "cluster_network": "0.0.0.0/24",
-          "public_network": "0.0.0.0/24",
+          "cluster_network": "0.0.0.0/0",
+          "public_network": "0.0.0.0/0",
           "monitors": [{"host": "mon0.host", "interface": "eth1"}],
           "redhat_storage": false,
       }
