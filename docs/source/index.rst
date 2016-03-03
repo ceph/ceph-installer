@@ -292,7 +292,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
    :<json array hosts: (required) The hostname to configure
    :<json boolean redhat_storage: (optional) Use the downstream version of
-                                  RedHat Storage.
+                                  Red Hat Ceph Storage.
 
 
 .. http:post:: /api/mon/configure/
@@ -328,7 +328,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                           in the cluster. If you're configuring a mon for an existing cluster, provide
                           a list of objects representing the monitor host and its interface.
    :<json boolean redhat_storage: (optional) Use the downstream version of
-                                  RedHat Storage.
+                                  Red Hat Ceph Storage.
 
 
 ``osd``
@@ -371,7 +371,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
    :<json array hosts: (required) The hostname to configure
    :<json boolean redhat_storage: (optional) Use the downstream version of
-                                  RedHat Storage.
+                                  Red Hat Ceph Storage.
 
 .. http:post:: /api/osd/configure/
 
@@ -406,7 +406,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string public_network: (required) The public network for the cluster
    :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
    :<json boolean redhat_storage: (optional) Use the downstream version of
-                                  RedHat Storage.
+                                  Red Hat Ceph Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
                           Provide a list of objects representing the monitor host and its interface.
 
