@@ -112,6 +112,31 @@ The top level endpoints are:
    :statuscode 500: Server Error (see :ref:`server_errors`)
 
 
+.. http:get:: /setup/agent/
+
+  Generates a BASH script to be downloaded as ``agent-setup.sh``. Just like the
+  :http:get:`/setup/` endpoint but also installing and configuring the
+  ``rhscon-agent`` in the system. This script should also be executed with
+  super user privileges on the remote node and it will perform the same actions
+  as :http:get:`/setup/` with the addition of the following:
+
+  * install the ``rhscon-agent`` and configure the ``salt-minion`` to point
+    back to the master server (uses the same host as where the
+    ``ceph-installer`` service is running)
+
+
+   **Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Disposition: attachment; filename=agent-setup.sh
+      Content-Type: application/octet-stream; charset=UTF-8
+
+   :statuscode 200: no error
+   :statuscode 500: Server Error (see :ref:`server_errors`)
+
+
 .. _provisioning_key:
 
 .. http:get:: /setup/key/
@@ -399,7 +424,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       }
 
    :<json array devices: (required) The devices to use for OSDs
-   :<json array journal_devices: (required) The devices to use for journal 
+   :<json array journal_devices: (required) The devices to use for journal
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
