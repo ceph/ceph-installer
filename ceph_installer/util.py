@@ -257,7 +257,18 @@ def get_osd_configure_extra_vars(json):
     for ceph_installer.tasks.install.
     """
     extra_vars = get_install_extra_vars(json)
+
+    # enforce this option, which is the only one supported
     extra_vars['raw_multi_journal'] = True
+
+    device_map = json["devices"]
+    devices = []
+    journal_devices = []
+
+    for device, journal in device_map.items():
+        devices.append(device)
+        journal_devices.append(journal)
+
     extra_vars['raw_journal_devices'] = json["journal_devices"]
     extra_vars.update(json)
     del extra_vars['host']
