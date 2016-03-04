@@ -14,7 +14,7 @@ import pytest
 os.environ['HOME'] = tempfile.mkdtemp(suffix='.ceph-installer-home')
 
 DBNAME = 'ceph_installertest.db'
-BIND = 'sqlite:////tmp'
+BIND = 'sqlite:///' + os.environ['HOME']
 
 
 def config_file():
