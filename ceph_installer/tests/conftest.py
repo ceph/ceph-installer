@@ -1,4 +1,5 @@
 import os
+import tempfile
 from pecan.testing import load_test_app
 
 from copy import deepcopy
@@ -9,6 +10,8 @@ from sqlalchemy.pool import NullPool
 
 from ceph_installer import models as _db
 import pytest
+
+os.environ['HOME'] = tempfile.mkdtemp(suffix='.ceph-installer-home')
 
 DBNAME = 'ceph_installertest.db'
 BIND = 'sqlite:////tmp'

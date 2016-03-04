@@ -235,6 +235,9 @@ def get_install_extra_vars(json):
     else:
         # use the latest upstream stable version
         extra_vars["ceph_stable"] = True
+    # fetch_directory must be a writable location.
+    fetch = os.path.join(os.environ['HOME'], 'fetch')
+    extra_vars["fetch_directory"] = fetch
 
     return extra_vars
 

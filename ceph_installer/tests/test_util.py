@@ -81,7 +81,11 @@ class TestGetInstallExtraVars(object):
     def test_no_extra_vars(self):
         data = dict()
         result = util.get_install_extra_vars(data)
-        assert result == {'ceph_stable': True}
+        expected = {
+            'ceph_stable': True,
+            'fetch_directory': os.path.join(os.environ['HOME'], 'fetch'),
+        }
+        assert result == expected
 
     def test_redhat_storage_is_true(self):
         data = dict(redhat_storage=True)
@@ -92,7 +96,11 @@ class TestGetInstallExtraVars(object):
     def test_redhat_storage_is_false(self):
         data = dict(redhat_storage=False)
         result = util.get_install_extra_vars(data)
-        assert result == {'ceph_stable': True}
+        expected = {
+            'ceph_stable': True,
+            'fetch_directory': os.path.join(os.environ['HOME'], 'fetch'),
+        }
+        assert result == expected
 
 
 class TestGetOSDConfigureExtraVars(object):
