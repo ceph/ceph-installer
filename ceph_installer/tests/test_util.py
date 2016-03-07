@@ -131,9 +131,8 @@ class TestGetOSDConfigureExtraVars(object):
         self.data = dict(
             host="node1",
             fsid="1720107309134",
-            devices=['/dev/sdb'],
+            devices={'/dev/sdb': '/dev/sdc'},
             monitors=[{"host": "mon1.host", "interface": "eth1"}],
-            journal_devices=["/dev/sdc"],
             journal_size=100,
             public_network="0.0.0.0/24",
         )
