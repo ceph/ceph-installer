@@ -229,9 +229,15 @@ def get_install_extra_vars(json):
     """
     extra_vars = dict()
     redhat_storage = json.get("redhat_storage", False)
+    use_cdn = json.get("redhat_use_cdn", True)
     if redhat_storage:
         extra_vars["ceph_stable_rh_storage"] = True
-        extra_vars["ceph_stable_rh_storage_cdn_install"] = True
+        if not use_cdn:
+            # this tells ceph-ansible to install from the
+            # existing repos on the system
+            extra_vars["ceph_origin"] = "distro"
+        else:
+            extra_vars["ceph_stable_rh_storage_cdn_install"] = True
     else:
         # use the latest upstream stable version
         extra_vars["ceph_stable"] = True
