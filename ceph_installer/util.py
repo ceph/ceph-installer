@@ -229,7 +229,9 @@ def get_install_extra_vars(json):
     """
     extra_vars = dict()
     redhat_storage = json.get("redhat_storage", False)
+    logger.info("Setting redhat_storage to %s", redhat_storage)
     use_cdn = json.get("redhat_use_cdn", True)
+    logger.info("Setting redhat_use_cdn to %s", use_cdn)
     if redhat_storage:
         extra_vars["ceph_stable_rh_storage"] = True
         if not use_cdn:
