@@ -469,7 +469,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       Content-Type: application/json
 
       {
-          "devices": ["/dev/sdb"],
+          "devices": {"/dev/sdb":"/dev/sdc"},
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "host": "osd1.example.com",
           "journal_size": 0,
@@ -480,7 +480,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "monitors": [{"host": "mon0.host", "interface": "eth1"}],
       }
 
-   :<json array devices: (required) The devices to use for OSDs
+   :<json object devices: (required) A mapping of OSD device to Journal
+                          like device: {"device": "journal"}.
    :<json array journal_devices: (required) The devices to use for journal
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
