@@ -336,8 +336,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "monitor_interface": "eth0",
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "monitor_secret": "AQA7P8dWAAAAABAAH/tbiZQn/40Z8pr959UmEA==",
-          "cluster_network": "0.0.0.0/0",
-          "public_network": "0.0.0.0/0",
+          "cluster_network": "192.0.2.0/24",
+          "public_network": "198.51.100.0/24",
           "monitors": [{"host": "mon0.host", "interface": "eth1"}],
           "redhat_storage": false,
       }
@@ -417,8 +417,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "host": "osd1.example.com",
           "journal_size": 0,
           "journal_devices": ["/dev/sdc"],
-          "public_network": "0.0.0.0/0",
-          "cluster_network": "0.0.0.0/0",
+          "cluster_network": "192.0.2.0/24",
+          "public_network": "198.51.100.0/24",
           "redhat_storage": false,
           "monitors": [{"host": "mon0.host", "interface": "eth1"}],
       }
