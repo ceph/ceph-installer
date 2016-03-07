@@ -7,7 +7,7 @@ class TestOSDController(object):
         data = dict(
             host="node1",
             fsid="1720107309134",
-            devices=['/dev/sdb'],
+            devices={'/dev/sdb': '/dev/sdc'},
             monitors=[{"host": "mon1.host", "interface": "eth1"}],
             journal_devices=["/dev/sdc"],
             journal_size=100,
@@ -29,7 +29,8 @@ class TestOSDController(object):
         result = session.app.get("/api/osd/configure", expect_errors=True)
         assert result.status_int == 405
 
-    def test_configure_devices_is_wrong_type(self, session):
+    def test_configure_devices_is_wrong_type(self, session, monkeypatch):
+        monkeypatch.setattr(osd.call_ansible, 'apply_async', lambda args, kwargs: None)
         data = self.configure_data.copy()
         data['devices'] = "/dev/sdb"
         result = session.app.post_json("/api/osd/configure/", params=data,
@@ -37,8 +38,19 @@ class TestOSDController(object):
         assert result.status_int == 400
         message = result.json["message"]
         assert 'devices' in message
+        assert 'not of type dictionary' in message
+
+    def test_configure_devices_is_wrong_type_in_key(self, session, monkeypatch):
+        monkeypatch.setattr(osd.call_ansible, 'apply_async', lambda args, kwargs: None)
+        data = self.configure_data.copy()
+        data['devices'] = {"/dev/sdb": 1}
+        result = session.app.post_json("/api/osd/configure/", params=data,
+                                       expect_errors=True)
+        assert result.status_int == 400
+        message = result.json["message"]
+        assert '/dev/sdb' in message
         assert message.endswith(
-            "failed validation, requires format: ['/dev/sdb', '/dev/sdc']"
+                '1 failed validation, not of type string'
         )
 
     def test_configure_invalid_field(self, session):
