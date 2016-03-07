@@ -321,7 +321,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                                   Red Hat Ceph Storage.
    :<json boolean redhat_use_cdn: (optional) Use the Red Hat CDN and subscription-manager
                                   to install Red Hat Ceph Storage. This assumes the node is
-                                  already registered with subscription-manager. If false,
+                                  already registered with subscription-manager. If ``false``,
                                   Red Hat Ceph Storage will be installed by using repos that
                                   must have already been created on the node.
 
@@ -398,11 +398,17 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       {
           "hosts": ["osd1.example.com", "osd2.example.com"],
           "redhat_storage": false,
+          "redhat_use_cdn": true,
       }
 
    :<json array hosts: (required) The hostname to configure
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   Red Hat Ceph Storage.
+   :<json boolean redhat_use_cdn: (optional) Use the Red Hat CDN and subscription-manager
+                                  to install Red Hat Ceph Storage. This assumes the node is
+                                  already registered with subscription-manager. If ``false``,
+                                  Red Hat Ceph Storage will be installed by using repos that
+                                  must have already been created on the node.
 
 .. http:post:: /api/osd/configure/
 
