@@ -1,4 +1,6 @@
-from notario.validators import types
+from notario.validators import types, recursive
+from notario.utils import forced_leaf_validator
+from notario.exceptions import Invalid
 from notario.decorators import optional
 
 
@@ -8,6 +10,23 @@ def list_of_hosts(value):
 
 def list_of_devices(value):
     assert isinstance(value, list), "requires format: ['/dev/sdb', '/dev/sdc']"
+
+
+@forced_leaf_validator
+def devices_object(_object, *args):
+    error_msg = 'not of type dictionary'
+    try:
+        assert isinstance(_object, dict)
+    except AssertionError:
+        if args:
+            raise Invalid('dict type', pair='value', msg=None, reason=error_msg, *args)
+        raise
+
+    v = recursive.AllObjects((types.string, types.string))
+    # this is truly unfortunate but we don't have access to the 'tree' here
+    # (the tree is the path to get to the failing key. We settle by just being
+    # able to report nicely.
+    v(_object, [])
 
 
 def list_of_monitors(value):
@@ -38,7 +57,7 @@ mon_configure_schema = (
 
 osd_configure_schema = (
     (optional("cluster_network"), types.string),
-    ("devices", list_of_devices),
+    ("devices", devices_object),
     ("fsid", types.string),
     ("host", types.string),
     ("journal_devices", list_of_devices),
