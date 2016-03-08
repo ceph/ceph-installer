@@ -48,17 +48,17 @@ This is the list of the current services and system dependencies needed:
 
 System requirements:
 
-* RabbitMQ
 * Ansible
+* RabbitMQ
 
 Application requirements:
 
-* pecan
 * celery
-* sqlalchemy
-* gunicorn
 * notario
+* gunicorn
+* pecan
 * pecan-notario
+* sqlalchemy
 
 Ceph Versions
 =============
