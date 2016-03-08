@@ -276,6 +276,51 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
   :statuscode 500: Server Error (see :ref:`server_errors`)
 
 
+``agent``
+=======
+
+.. http:post:: /api/agent/
+
+   Start the installation process for ceph-agent(s)
+
+   **Response**:
+
+   .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+         "endpoint": "/api/agent/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
+     }
+
+   **Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+
+      {
+          "hosts": ["mon1.example.com", "mon2.example.com", "mon3.example.com"],
+      }
+
+   :<json array hosts: (required) The hostnames to which to install and
+                                  configure. For simplicity's sake, the agent
+                                  host's salt-minion will point at a salt
+                                  master on the same host where ceph-installer
+                                  is running.
+
+
 ``mon``
 =======
 
