@@ -17,14 +17,14 @@ BuildArch:      noarch
 Requires: ansible
 Requires: ceph-ansible
 Requires: openssh
-Requires: python-pecan
 Requires: python-celery
-Requires: python-sqlalchemy
 Requires: python-gunicorn
-Requires: python-requests
+Requires: python-pecan
 Requires: python-pecan-notario
-Requires: rabbitmq-server
+Requires: python-requests
+Requires: python-sqlalchemy
 Requires: python-tambo
+Requires: rabbitmq-server
 Requires(pre):    shadow-utils
 Requires(preun):  systemd
 Requires(postun): systemd
@@ -34,10 +34,10 @@ BuildRequires: systemd
 BuildRequires: openssh
 BuildRequires: python2-devel
 BuildRequires: pytest
-BuildRequires: python-pecan
 BuildRequires: python-celery
-BuildRequires: python-sqlalchemy
+BuildRequires: python-pecan
 BuildRequires: python-pecan-notario
+BuildRequires: python-sqlalchemy
 
 %description
 An HTTP API to provision and control the deployment process of Ceph clusters.
