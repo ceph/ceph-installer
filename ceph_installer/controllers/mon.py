@@ -31,6 +31,7 @@ class MONController(object):
     def install_post(self):
         hosts = request.json.get('hosts')
         install_calamari = request.json.get('calamari', False)
+        verbose_ansible = request.json.get('verbose', False)
         extra_vars = util.get_install_extra_vars(request.json)
         extra_vars['calamari'] = install_calamari
         identifier = str(uuid4())
@@ -43,8 +44,10 @@ class MONController(object):
         models.commit()
         kwargs = dict(
             extra_vars=extra_vars,
-            tags="package-install"
+            tags="package-install",
+            verbose_ansible=verbose_ansible,
         )
+
         call_ansible.apply_async(
             args=([('mons', hosts)], identifier),
             kwargs=kwargs,
@@ -63,6 +66,7 @@ class MONController(object):
             "host": request.json['host'],
             "interface": request.json["monitor_interface"],
         }])
+        verbose_ansible = request.json.get('verbose', False)
         monitors = request.json.get("monitors")
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
@@ -72,6 +76,8 @@ class MONController(object):
         # like "calamari" are not looked up explicitly. If they are passed in
         # they will be used.
         extra_vars.update(request.json)
+        if 'verbose' in extra_vars:
+            del extra_vars['verbose']
         if monitors:
             hosts.extend(util.parse_monitors(monitors))
             del extra_vars['monitors']
@@ -85,7 +91,11 @@ class MONController(object):
         # we need an explicit commit here because the command may finish before
         # we conclude this request
         models.commit()
-        kwargs = dict(extra_vars=extra_vars, skip_tags="package-install")
+        kwargs = dict(
+            extra_vars=extra_vars,
+            skip_tags="package-install",
+            verbose_ansible=verbose_ansible,
+            )
         call_ansible.apply_async(
             args=([('mons', hosts)], identifier),
             kwargs=kwargs,
