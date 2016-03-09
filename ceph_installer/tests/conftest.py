@@ -22,6 +22,19 @@ def config_file():
     return os.path.join(here, 'config.py')
 
 
+@pytest.fixture
+def argtest():
+    """
+    Simple helper to use with monkeypatch so that a callable can be inspected
+    afterwards to see if it was called with certain arguments.
+    """
+    class TestArgs(object):
+        def __call__(self, *args, **kwargs):
+            self.args = list(args)
+            self.kwargs = kwargs
+    return TestArgs()
+
+
 @pytest.fixture(scope='session')
 def app(request):
     config = configuration.conf_from_file(config_file()).to_dict()

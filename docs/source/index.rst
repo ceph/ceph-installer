@@ -312,13 +312,15 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
       {
           "hosts": ["mon1.example.com", "mon2.example.com", "mon3.example.com"],
+          "master": "master.example.com"
       }
 
    :<json array hosts: (required) The hostnames to which to install and
-                                  configure. For simplicity's sake, the agent
-                                  host's salt-minion will point at a salt
-                                  master on the same host where ceph-installer
-                                  is running.
+                       configure. For simplicity's sake, the agent host's
+                       salt-minion will point at a salt master on the same host
+                       where ceph-installer is running.
+   :<json string master: (optional) If not provided, it will look at the
+                         request and use ``SERVER_NAME``.
 
 
 ``mon``

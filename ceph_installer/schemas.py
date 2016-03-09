@@ -44,6 +44,11 @@ install_schema = (
     (optional("redhat_use_cdn"), types.boolean),
 )
 
+agent_install_schema = (
+    ("hosts", list_of_hosts),
+    (optional("master"), types.string),
+)
+
 mon_configure_schema = (
     (optional("cluster_network"), types.string),
     ("fsid", types.string),

@@ -21,10 +21,13 @@ class AgentController(object):
         error(405)
 
     @index.when(method='POST', template='json')
-    @validate(schemas.install_schema, handler="/errors/schema")
+    @validate(schemas.agent_install_schema, handler="/errors/schema")
     def install(self):
+        master = request.json.get('master', request.server_name)
+        logger.info('defining "%s" as the master host for the minion configuration', master)
         hosts = request.json.get('hosts')
         extra_vars = util.get_install_extra_vars(request.json)
+        extra_vars['agent_master_host'] = master
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
