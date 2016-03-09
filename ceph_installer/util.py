@@ -255,14 +255,35 @@ def get_osd_configure_extra_vars(json):
     Given a request.json dictionary from the api/osd/configure/ endpoint,
     this method will generate and return a dict to be used as extra_vars
     for ceph_installer.tasks.install.
+
+    This new dictionary "translates" exposed/documented keys and values to
+    variables that ceph-ansible can consume correctly. That is the reason why
+    some of these keys are dropped from the incoming dictionary to the outgoing
+    one.
     """
     extra_vars = get_install_extra_vars(json)
+
+    # enforce this option, which is the only "scenario" supported
     extra_vars['raw_multi_journal'] = True
-    extra_vars['raw_journal_devices'] = json["journal_devices"]
+
+    device_map = json["devices"]
+    devices = []
+    journal_devices = []
+
+    for device, journal in device_map.items():
+        devices.append(device)
+        journal_devices.append(journal)
+
+    # add the corresponding device and journal to what ceph-ansible expects
+    extra_vars['devices'] = devices
+    extra_vars['raw_journal_devices'] = journal_devices
+
     extra_vars.update(json)
+
+    # These are items that came via the JSON that should never be passed into
+    # ceph-ansible because they are no longer needed
     del extra_vars['host']
     del extra_vars['monitors']
-    del extra_vars['journal_devices']
     if 'redhat_storage' in json:
         del extra_vars['redhat_storage']
 
