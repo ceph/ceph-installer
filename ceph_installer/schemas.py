@@ -28,8 +28,6 @@ install_schema = (
 agent_install_schema = (
     ("hosts", list_of_hosts),
     (optional("master"), types.string),
-    (optional("redhat_storage"), types.boolean),
-    (optional("redhat_use_cdn"), types.boolean),
 )
 
 mon_configure_schema = (
