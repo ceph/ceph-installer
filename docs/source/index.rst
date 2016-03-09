@@ -473,7 +473,6 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "host": "osd1.example.com",
           "journal_size": 0,
-          "journal_devices": ["/dev/sdc"],
           "cluster_network": "192.0.2.0/24",
           "public_network": "198.51.100.0/24",
           "redhat_storage": false,
@@ -482,7 +481,6 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
    :<json object devices: (required) A mapping of OSD device to Journal
                           like device: {"device": "journal"}.
-   :<json array journal_devices: (required) The devices to use for journal
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
