@@ -27,10 +27,12 @@ class MONController(object):
         error(405)
 
     @install.when(method='POST', template='json')
-    @validate(schemas.install_schema, handler="/errors/schema")
+    @validate(schemas.mon_install_schema, handler="/errors/schema")
     def install_post(self):
         hosts = request.json.get('hosts')
+        install_calamari = request.json.get('calamari', False)
         extra_vars = util.get_install_extra_vars(request.json)
+        extra_vars['calamari'] = install_calamari
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
@@ -39,7 +41,10 @@ class MONController(object):
         # we need an explicit commit here because the command may finish before
         # we conclude this request
         models.commit()
-        kwargs = dict(extra_vars=extra_vars, tags="package-install")
+        kwargs = dict(
+            extra_vars=extra_vars,
+            tags="package-install"
+        )
         call_ansible.apply_async(
             args=([('mons', hosts)], identifier),
             kwargs=kwargs,
