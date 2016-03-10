@@ -57,6 +57,7 @@ mon_install_schema = (
 )
 
 mon_configure_schema = (
+    (optional("calamari"), types.boolean),
     (optional("cluster_network"), types.string),
     ("fsid", types.string),
     ("host", types.string),
