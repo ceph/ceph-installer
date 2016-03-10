@@ -328,7 +328,9 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
 .. http:post:: /api/mon/install/
 
-   Start the installation process for monitor(s)
+   Start the installation process for monitor(s). It is allowed to flag the
+   need to install the ``calamari-server`` package which provides a restful API
+   for a cluster.
 
    **Response**:
 
@@ -358,11 +360,14 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
 
       {
+          "calamari": false,
           "hosts": ["mon1.example.com", "mon2.example.com", "mon3.example.com"],
           "redhat_storage": false,
           "redhat_use_cdn": true,
       }
 
+   :<json boolean calamari: (optional) include installation of the ``calamari-server`` (a.k.a.
+                                   ``calamari-lite``. Defaults to ``false``.
    :<json array hosts: (required) The hostname to configure
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   Red Hat Ceph Storage.
@@ -385,6 +390,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       Content-Type: application/json
 
       {
+          "calamari": false,
           "host": "mon1.example.com",
           "monitor_interface": "eth0",
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
@@ -396,6 +402,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       }
 
 
+   :<json boolean calamari: (optional) include configuration of the ``calamari-server`` (a.k.a.
+                                   ``calamari-lite``. Defaults to ``false``.
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json string monitor_interface: (required) The interface name (e.g. "eth0")

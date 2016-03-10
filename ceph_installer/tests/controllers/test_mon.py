@@ -105,3 +105,48 @@ class TestMonController(object):
         result = session.app.post_json("/api/mon/configure/", params=data)
         assert result.json['endpoint'] == '/api/mon/configure/'
         assert result.json['identifier'] is not None
+
+
+class TestMonWithCalamari(object):
+
+    def setup(self):
+        self.configure_data = dict(
+            calamari = True,
+            monitor_secret="secret",
+            public_network="0.0.0.0/24",
+            host="node1",
+            monitor_interface="eth0",
+            fsid="1720107309134",
+        )
+
+    def test_install_with_calamari(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        data = {"hosts": ["node1"], "calamari": True}
+        session.app.post_json("/api/mon/install/", params=data)
+        extra_vars = argtest.kwargs['kwargs']['extra_vars']
+        assert extra_vars['calamari'] is True
+
+    def test_install_without_calamari(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        data = {"hosts": ["node1"]}
+        session.app.post_json("/api/mon/install/", params=data)
+        extra_vars = argtest.kwargs['kwargs']['extra_vars']
+        assert extra_vars['calamari'] is False
+
+    def test_configure_with_calamari(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        session.app.post_json("/api/mon/configure/", params=self.configure_data)
+        extra_vars = argtest.kwargs['kwargs']['extra_vars']
+        assert extra_vars['calamari'] is True
+
+    def test_configure_without_calamari(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        self.configure_data.pop('calamari')
+        session.app.post_json("/api/mon/configure/", params=self.configure_data)
+        extra_vars = argtest.kwargs['kwargs']['extra_vars']
+        # 'calamari' will not be passed in as it wasn't defined explicitly
+        assert extra_vars.get('calamari') is None
