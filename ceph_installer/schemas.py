@@ -49,6 +49,13 @@ agent_install_schema = (
     (optional("master"), types.string),
 )
 
+mon_install_schema = (
+    (optional("calamari"), types.boolean),
+    ("hosts", list_of_hosts),
+    (optional("redhat_storage"), types.boolean),
+    (optional("redhat_use_cdn"), types.boolean),
+)
+
 mon_configure_schema = (
     (optional("cluster_network"), types.string),
     ("fsid", types.string),
