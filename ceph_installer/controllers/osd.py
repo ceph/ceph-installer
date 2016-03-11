@@ -42,11 +42,11 @@ class OSDController(object):
         kwargs = dict(
             extra_vars=extra_vars,
             tags="package-install",
-            verbose_ansible=verbose_ansible,
+            verbose=verbose_ansible,
         )
         call_ansible.apply_async(
             args=([('osds', hosts)], identifier),
-            kwargs=kwargs,
+            kwargs=kwargs
         )
 
         return task
@@ -78,11 +78,11 @@ class OSDController(object):
             extra_vars=extra_vars,
             skip_tags="package-install",
             playbook="osd-configure.yml",
-            verbose_ansible=verbose_ansible,
+            verbose=verbose_ansible,
         )
         call_ansible.apply_async(
             args=([('osds', hosts), ('mons', monitor_hosts)], identifier),
-            kwargs=kwargs,
+            kwargs=kwargs
         )
 
         return task
