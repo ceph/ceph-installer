@@ -152,6 +152,11 @@ class TestGetOSDConfigureExtraVars(object):
         result = util.get_osd_configure_extra_vars(self.data)
         assert "redhat_storage" not in result
 
+    def test_devices_should_be_a_list(self):
+        # regression
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert result["devices"] == ["/dev/sdb"]
+
 
 class TestParseMonitors(object):
 
