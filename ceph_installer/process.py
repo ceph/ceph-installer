@@ -19,7 +19,7 @@ def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_
     if kw.get('verbose'):
         verbose_flag = '-vvvv'
     else:
-        verbose_flag = ''
+        verbose_flag = '-v'
     ceph_ansible_path = get_ceph_ansible_path()
     playbook = os.path.join(ceph_ansible_path, playbook)
     ansible_path = which('ansible-playbook')
