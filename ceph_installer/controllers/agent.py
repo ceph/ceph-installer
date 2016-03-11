@@ -26,6 +26,7 @@ class AgentController(object):
         master = request.json.get('master', request.server_name)
         logger.info('defining "%s" as the master host for the minion configuration', master)
         hosts = request.json.get('hosts')
+        verbose_ansible = request.json.get('verbose', False)
         extra_vars = util.get_install_extra_vars(request.json)
         extra_vars['agent_master_host'] = master
         identifier = str(uuid4())
@@ -36,7 +37,7 @@ class AgentController(object):
         # we need an explicit commit here because the command may finish before
         # we conclude this request
         models.commit()
-        kwargs = dict(extra_vars=extra_vars)
+        kwargs = dict(extra_vars=extra_vars, verbose=verbose_ansible)
         call_ansible.apply_async(
             args=([('agents', hosts)], identifier),
             kwargs=kwargs,
