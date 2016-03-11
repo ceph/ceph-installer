@@ -45,7 +45,7 @@ class MONController(object):
         kwargs = dict(
             extra_vars=extra_vars,
             tags="package-install",
-            verbose_ansible=verbose_ansible,
+            verbose=verbose_ansible,
         )
 
         call_ansible.apply_async(
@@ -94,7 +94,7 @@ class MONController(object):
         kwargs = dict(
             extra_vars=extra_vars,
             skip_tags="package-install",
-            verbose_ansible=verbose_ansible,
+            verbose=verbose_ansible,
             )
         call_ansible.apply_async(
             args=([('mons', hosts)], identifier),
