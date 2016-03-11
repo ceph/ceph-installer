@@ -43,3 +43,22 @@ class TestAgentController(object):
         session.app.post_json("/api/agent/", params=data)
         ansible_extra_args = argtest.kwargs['kwargs']['extra_vars']
         assert ansible_extra_args['agent_master_host'] == 'localhost'
+
+
+class TestAgentVerbose(object):
+
+    def test_install_verbose(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            agent.call_ansible, 'apply_async', argtest)
+        data = {"hosts": ["node1"], "verbose": True}
+        session.app.post_json("/api/agent/", params=data)
+        kwargs = argtest.kwargs['kwargs']
+        assert kwargs['verbose'] is True
+
+    def test_install_non_verbose(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            agent.call_ansible, 'apply_async', argtest)
+        data = {"hosts": ["node1"]}
+        session.app.post_json("/api/agent/", params=data)
+        kwargs = argtest.kwargs['kwargs']
+        assert kwargs['verbose'] is False
