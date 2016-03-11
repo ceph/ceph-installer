@@ -150,3 +150,48 @@ class TestMonWithCalamari(object):
         extra_vars = argtest.kwargs['kwargs']['extra_vars']
         # 'calamari' will not be passed in as it wasn't defined explicitly
         assert extra_vars.get('calamari') is None
+
+
+class TestMonVerbose(object):
+
+    def setup(self):
+        self.configure_data = dict(
+            verbose=True,
+            monitor_secret="secret",
+            public_network="0.0.0.0/24",
+            host="node1",
+            monitor_interface="eth0",
+            fsid="1720107309134",
+        )
+
+    def test_install_verbose(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        data = {"hosts": ["node1"], "verbose": True}
+        session.app.post_json("/api/mon/install/", params=data)
+        kwargs = argtest.kwargs['kwargs']
+        assert kwargs['verbose'] is True
+
+    def test_install_non_verbose(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        data = {"hosts": ["node1"]}
+        session.app.post_json("/api/mon/install/", params=data)
+        kwargs = argtest.kwargs['kwargs']
+        assert kwargs['verbose'] is False
+
+    def test_configure_verbose(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        session.app.post_json("/api/mon/configure/", params=self.configure_data)
+        kwargs = argtest.kwargs['kwargs']
+        assert kwargs['verbose'] is True
+
+    def test_configure_non_verbose(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        self.configure_data.pop('verbose')
+        session.app.post_json("/api/mon/configure/", params=self.configure_data)
+        kwargs = argtest.kwargs['kwargs']
+        assert kwargs['verbose'] is False
+
