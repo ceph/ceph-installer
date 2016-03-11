@@ -262,6 +262,10 @@ def get_osd_configure_extra_vars(json):
     one.
     """
     extra_vars = get_install_extra_vars(json)
+    # The extra_vars dictionary gets updated here *with whatever exists in the
+    # json* so any modifications must happen after this is performed to ensure
+    # that changes are not overwritten.
+    extra_vars.update(json)
 
     # enforce this option, which is the only "scenario" supported
     extra_vars['raw_multi_journal'] = True
@@ -277,8 +281,6 @@ def get_osd_configure_extra_vars(json):
     # add the corresponding device and journal to what ceph-ansible expects
     extra_vars['devices'] = devices
     extra_vars['raw_journal_devices'] = journal_devices
-
-    extra_vars.update(json)
 
     # These are items that came via the JSON that should never be passed into
     # ceph-ansible because they are no longer needed
