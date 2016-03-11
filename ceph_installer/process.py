@@ -9,11 +9,17 @@ from ceph_installer.util import which, get_ceph_ansible_path
 logger = logging.getLogger(__name__)
 
 
-def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_tags='', playbook='site.yml.sample'):
+def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_tags='', playbook='site.yml.sample', **kw):
     """
     This utility will compose the command needed to run ansible, capture its
     stdout and stderr to a file
+    ``verbose``: Optional keyword argument, to flag the need for increased
+                 verbosity when running ansible
     """
+    if kw.get('verbose'):
+        verbose_flag = '-vvvv'
+    else:
+        verbose_flag = '-v'
     ceph_ansible_path = get_ceph_ansible_path()
     playbook = os.path.join(ceph_ansible_path, playbook)
     ansible_path = which('ansible-playbook')
@@ -23,7 +29,8 @@ def make_ansible_command(hosts_file, identifier, extra_vars=None, tags='', skip_
     extra_vars = json.dumps(extra_vars)
 
     cmd = [
-        ansible_path, '-u', 'ceph-installer', playbook, '-i', hosts_file, "--extra-vars", extra_vars,
+        ansible_path, verbose_flag, '-u', 'ceph-installer',
+        playbook, '-i', hosts_file, "--extra-vars", extra_vars,
     ]
 
     if tags:

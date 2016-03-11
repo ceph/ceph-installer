@@ -42,11 +42,13 @@ install_schema = (
     ("hosts", list_of_hosts),
     (optional("redhat_storage"), types.boolean),
     (optional("redhat_use_cdn"), types.boolean),
+    (optional("verbose"), types.boolean),
 )
 
 agent_install_schema = (
     ("hosts", list_of_hosts),
     (optional("master"), types.string),
+    (optional("verbose"), types.boolean),
 )
 
 mon_install_schema = (
@@ -54,6 +56,7 @@ mon_install_schema = (
     ("hosts", list_of_hosts),
     (optional("redhat_storage"), types.boolean),
     (optional("redhat_use_cdn"), types.boolean),
+    (optional("verbose"), types.boolean),
 )
 
 mon_configure_schema = (
@@ -66,6 +69,7 @@ mon_configure_schema = (
     (optional("monitors"), list_of_monitors),
     ("public_network", types.string),
     (optional("redhat_storage"), types.boolean),
+    (optional("verbose"), types.boolean),
 )
 
 osd_configure_schema = (
@@ -77,4 +81,5 @@ osd_configure_schema = (
     ("monitors", list_of_monitors),
     ("public_network", types.string),
     (optional("redhat_storage"), types.boolean),
+    (optional("verbose"), types.boolean),
 )

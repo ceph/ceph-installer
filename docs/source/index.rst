@@ -299,7 +299,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
          "ended": null,
          "command": null,
          "stderr": null,
-         "identifier": "47f60562-a96b-4ac6-be07-71726b595793"
+         "identifier": "47f60562-a96b-4ac6-be07-71726b595793",
+          "verbose": false,
      }
 
    **Request**:
@@ -321,6 +322,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                        where ceph-installer is running.
    :<json string master: (optional) If not provided, it will look at the
                          request and use ``SERVER_NAME``.
+   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
 
 
 ``mon``
@@ -364,6 +366,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "hosts": ["mon1.example.com", "mon2.example.com", "mon3.example.com"],
           "redhat_storage": false,
           "redhat_use_cdn": true,
+          "verbose": false,
       }
 
    :<json boolean calamari: (optional) include installation of the ``calamari-server`` (a.k.a.
@@ -376,6 +379,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                                   already registered with subscription-manager. If ``false``,
                                   Red Hat Ceph Storage will be installed by using repos that
                                   must have already been created on the node.
+   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
 
 
 .. http:post:: /api/mon/configure/
@@ -399,6 +403,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "public_network": "198.51.100.0/24",
           "monitors": [{"host": "mon0.host", "interface": "eth1"}],
           "redhat_storage": false,
+          "verbose": false,
       }
 
 
@@ -415,6 +420,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                           a list of objects representing the monitor host and its interface.
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   Red Hat Ceph Storage.
+   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
 
 
 ``osd``
@@ -454,6 +460,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "hosts": ["osd1.example.com", "osd2.example.com"],
           "redhat_storage": false,
           "redhat_use_cdn": true,
+          "verbose": false,
       }
 
    :<json array hosts: (required) The hostname to configure
@@ -464,6 +471,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                                   already registered with subscription-manager. If ``false``,
                                   Red Hat Ceph Storage will be installed by using repos that
                                   must have already been created on the node.
+   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
 
 .. http:post:: /api/osd/configure/
 
@@ -487,6 +495,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "public_network": "198.51.100.0/24",
           "redhat_storage": false,
           "monitors": [{"host": "mon0.host", "interface": "eth1"}],
+          "verbose": false,
       }
 
    :<json object devices: (required) A mapping of OSD device to Journal
@@ -500,6 +509,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                                   Red Hat Ceph Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
                           Provide a list of objects representing the monitor host and its interface.
+   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
 
 
 ``status``
