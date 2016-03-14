@@ -66,6 +66,9 @@ class OSDController(object):
         extra_vars = util.get_osd_configure_extra_vars(request.json)
         if 'verbose' in extra_vars:
             del extra_vars['verbose']
+        if 'conf' in extra_vars:
+            extra_vars['ceph_conf_overrides'] = request.json['conf']
+            del extra_vars['conf']
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
