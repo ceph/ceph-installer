@@ -3,7 +3,7 @@ import sys
 from tambo import Transport
 import ceph_installer
 from ceph_installer.cli import log
-from ceph_installer.cli import dev, task
+from ceph_installer.cli import dev, task, constants
 from ceph_installer.cli.decorators import catches
 
 
@@ -12,6 +12,7 @@ class CephInstaller(object):
 A command line utility to install and configure Ceph using an HTTP API as a REST service
 to call Ansible.
 
+Address: %s
 Version: %s
 
 Global Options:
@@ -19,6 +20,9 @@ Global Options:
 --log, --logging    Set the level of logging. Acceptable values:
                     debug, warning, error, critical
 
+Environment Variables:
+CEPH_INSTALLER_ADDRESS    Define the location of the installer.
+                          Defaults to "http://localhost:8181"
 
 %s
     """
@@ -34,7 +38,10 @@ Global Options:
 
     def help(self, subhelp):
         version = ceph_installer.__version__
-        return self._help % (version, subhelp)
+        return self._help % (
+            constants.server_address, version,
+            subhelp
+        )
 
     @catches(KeyboardInterrupt, handle_all=True, logger=log)
     def main(self, argv):
