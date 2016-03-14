@@ -38,6 +38,14 @@ def list_of_monitors(value):
         assert "interface" in monitor, msg
 
 
+conf = (
+    (optional("global"), types.dictionary),
+    (optional("mds"), types.dictionary),
+    (optional("mon"), types.dictionary),
+    (optional("osd"), types.dictionary),
+    (optional("rgw"), types.dictionary),
+)
+
 install_schema = (
     ("hosts", list_of_hosts),
     (optional("redhat_storage"), types.boolean),
