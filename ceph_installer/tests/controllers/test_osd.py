@@ -95,6 +95,22 @@ class TestOSDController(object):
         result = session.app.post_json("/api/osd/configure/", params=self.configure_data)
         assert result.status_int == 200
 
+    def test_configure_with_conf(self, session, monkeypatch):
+        monkeypatch.setattr(osd.call_ansible, 'apply_async', lambda args, kwargs: None)
+        self.configure_data['conf'] = {"global": {"auth supported": "cephx"}}
+        result = session.app.post_json("/api/osd/configure/", params=self.configure_data)
+        assert result.json['endpoint'] == '/api/osd/configure/'
+        assert result.json['identifier'] is not None
+
+    def test_configure_with_invalid_conf(self, session, monkeypatch):
+        monkeypatch.setattr(osd.call_ansible, 'apply_async', lambda args, kwargs: None)
+        self.configure_data['conf'] = {"global": {"auth supported": "cephx"}, "monn": 1}
+        result = session.app.post_json("/api/osd/configure/", params=self.configure_data,
+                                       expect_errors=True)
+        assert result.status_int == 400
+        assert "unexpected item in data" in result.json["message"]
+
+
 
 class TestOsdVerbose(object):
 
