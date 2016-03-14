@@ -38,6 +38,14 @@ def list_of_monitors(value):
         assert "interface" in monitor, msg
 
 
+conf = (
+    (optional("global"), types.dictionary),
+    (optional("mds"), types.dictionary),
+    (optional("mon"), types.dictionary),
+    (optional("osd"), types.dictionary),
+    (optional("rgw"), types.dictionary),
+)
+
 install_schema = (
     ("hosts", list_of_hosts),
     (optional("redhat_storage"), types.boolean),
@@ -62,6 +70,7 @@ mon_install_schema = (
 mon_configure_schema = (
     (optional("calamari"), types.boolean),
     (optional("cluster_network"), types.string),
+    (optional("conf"), conf),
     ("fsid", types.string),
     ("host", types.string),
     ("monitor_interface", types.string),
@@ -74,6 +83,7 @@ mon_configure_schema = (
 
 osd_configure_schema = (
     (optional("cluster_network"), types.string),
+    (optional("conf"), conf),
     ("devices", devices_object),
     ("fsid", types.string),
     ("host", types.string),

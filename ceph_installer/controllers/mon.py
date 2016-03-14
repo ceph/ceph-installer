@@ -78,6 +78,9 @@ class MONController(object):
         extra_vars.update(request.json)
         if 'verbose' in extra_vars:
             del extra_vars['verbose']
+        if 'conf' in extra_vars:
+            extra_vars['ceph_conf_overrides'] = request.json['conf']
+            del extra_vars['conf']
         if monitors:
             hosts.extend(util.parse_monitors(monitors))
             del extra_vars['monitors']
@@ -95,7 +98,7 @@ class MONController(object):
             extra_vars=extra_vars,
             skip_tags="package-install",
             verbose=verbose_ansible,
-            )
+        )
         call_ansible.apply_async(
             args=([('mons', hosts)], identifier),
             kwargs=kwargs,
