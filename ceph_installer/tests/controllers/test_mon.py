@@ -53,6 +53,21 @@ class TestMonController(object):
         assert result.json['endpoint'] == '/api/mon/configure/'
         assert result.json['identifier'] is not None
 
+    def test_configure_with_conf(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        self.configure_data['conf'] = {"global": {"auth supported": "cephx"}}
+        result = session.app.post_json("/api/mon/configure/", params=self.configure_data)
+        assert result.json['endpoint'] == '/api/mon/configure/'
+        assert result.json['identifier'] is not None
+
+    def test_configure_with_invalid_conf(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        self.configure_data['conf'] = {"global": {"auth supported": "cephx"}, "monn": 1}
+        result = session.app.post_json("/api/mon/configure/", params=self.configure_data,
+                                       expect_errors=True)
+        assert result.status_int == 400
+        assert "unexpected item in data" in result.json["message"]
+
     def test_configure_monitors_not_a_list(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
         data = self.configure_data.copy()
@@ -111,7 +126,7 @@ class TestMonWithCalamari(object):
 
     def setup(self):
         self.configure_data = dict(
-            calamari = True,
+            calamari=True,
             monitor_secret="secret",
             public_network="0.0.0.0/24",
             host="node1",
@@ -194,4 +209,3 @@ class TestMonVerbose(object):
         session.app.post_json("/api/mon/configure/", params=self.configure_data)
         kwargs = argtest.kwargs['kwargs']
         assert kwargs['verbose'] is False
-
