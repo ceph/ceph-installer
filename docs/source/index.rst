@@ -395,6 +395,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
       {
           "calamari": false,
+          "conf": {"global": {"auth supported": "cephx"}},
           "host": "mon1.example.com",
           "monitor_interface": "eth0",
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
@@ -409,6 +410,9 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
    :<json boolean calamari: (optional) include configuration of the ``calamari-server`` (a.k.a.
                                    ``calamari-lite``. Defaults to ``false``.
+   :<json object conf: (optional) An object that maps ceph.conf sections (only
+                       global, mon, osd, rgw, mds allowed) to keys and values. Anything defined in
+                       this mapping will override existing settings.
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json string monitor_interface: (required) The interface name (e.g. "eth0")
@@ -487,6 +491,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       Content-Type: application/json
 
       {
+          "conf": {"global": {"auth supported": "cephx"}},
           "devices": {"/dev/sdb":"/dev/sdc"},
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "host": "osd1.example.com",
@@ -498,6 +503,9 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "verbose": false,
       }
 
+   :<json object conf: (optional) An object that maps ceph.conf sections (only
+                       global, mon, osd, rgw, mds allowed) to keys and values. Anything defined in
+                       this mapping will override existing settings.
    :<json object devices: (required) A mapping of OSD device to Journal
                           like device: {"device": "journal"}.
    :<json string fsid: (required) The ``fsid`` for the cluster
