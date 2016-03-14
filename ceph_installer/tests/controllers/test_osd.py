@@ -110,6 +110,20 @@ class TestOSDController(object):
         assert result.status_int == 400
         assert "unexpected item in data" in result.json["message"]
 
+    def test_configure_monitor_name_is_set(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            osd.call_ansible, 'apply_async', argtest)
+        self.configure_data['host'] = "mon1.host"
+        session.app.post_json("/api/osd/configure/", params=self.configure_data)
+        kwargs = argtest.kwargs['kwargs']
+        assert kwargs['extra_vars']['monitor_name'] == "mon1.host"
+
+    def test_configure_monitor_name_is_not_set(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            osd.call_ansible, 'apply_async', argtest)
+        session.app.post_json("/api/osd/configure/", params=self.configure_data)
+        kwargs = argtest.kwargs['kwargs']
+        assert "monitor_name" not in kwargs['extra_vars']
 
 
 class TestOsdVerbose(object):

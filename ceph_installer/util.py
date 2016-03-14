@@ -282,6 +282,16 @@ def get_osd_configure_extra_vars(json):
     extra_vars['devices'] = devices
     extra_vars['raw_journal_devices'] = journal_devices
 
+    monitor_hosts = [mon['host'] for mon in json["monitors"]]
+    host = json['host']
+    if host in monitor_hosts:
+        logger.info("The host %s is in both the OSD and MON groups.", host)
+        # The role ceph-mon isn't used during on OSD configure so the
+        # monitor_name variable is never set, but it needs to exist because
+        # the ceph-common role will attempt to restart mons because this host
+        # is both a mon and an osd.
+        extra_vars['monitor_name'] = host
+
     # These are items that came via the JSON that should never be passed into
     # ceph-ansible because they are no longer needed
     del extra_vars['host']

@@ -157,6 +157,14 @@ class TestGetOSDConfigureExtraVars(object):
         result = util.get_osd_configure_extra_vars(self.data)
         assert result["devices"] == ["/dev/sdb"]
 
+    def test_monitor_name_is_set(self):
+        # simulates the scenario where this host is a mon and an osd
+        data = self.data.copy()
+        data['host'] = "mon1.host"
+        result = util.get_osd_configure_extra_vars(data)
+        assert "monitor_name" in result
+        assert result['monitor_name'] == "mon1.host"
+
 
 class TestParseMonitors(object):
 
