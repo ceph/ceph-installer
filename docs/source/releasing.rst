@@ -15,7 +15,7 @@ When you are ready to cut a new version:
 
       git commit ceph_installer/__init__.py -m 'version 1.2.3'
 
-#. Tag and release to PyPI (known as "py-p-i" for you plebs).
+#. Tag and release to PyPI.
    ::
 
       python setup.py release
