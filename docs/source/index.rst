@@ -502,7 +502,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "verbose": false,
       }
 
-   :<json object conf: (optional) An object that maps ceph.conf sections (only
+   :<json object conf: (optional, default: ``null``) An object that maps ceph.conf sections (only
                        global, mon, osd, rgw, mds allowed) to keys and values. Anything defined in
                        this mapping will override existing settings.
    :<json object devices: (required) A mapping of OSD device to Journal
@@ -511,7 +511,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
    :<json string public_network: (required) The public network for the cluster
-   :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
+   :<json string cluster_network: (optional, default: ``public_network``) The network exposed to cluster clients
    :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
                                   Red Hat Ceph Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
