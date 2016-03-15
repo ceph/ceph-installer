@@ -300,7 +300,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
          "command": null,
          "stderr": null,
          "identifier": "47f60562-a96b-4ac6-be07-71726b595793",
-          "verbose": false,
+         "verbose": false,
      }
 
    **Request**:
@@ -320,9 +320,9 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                        configure. For simplicity's sake, the agent host's
                        salt-minion will point at a salt master on the same host
                        where ceph-installer is running.
-   :<json string master: (optional) If not provided, it will look at the
+   :<json string master: (optional, default: ``SERVER_NAME``) If not provided, it will look at the
                          request and use ``SERVER_NAME``.
-   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
+   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
 
 
 ``mon``
@@ -369,17 +369,16 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "verbose": false,
       }
 
-   :<json boolean calamari: (optional) include installation of the ``calamari-server`` (a.k.a.
-                                   ``calamari-lite``. Defaults to ``false``.
+   :<json boolean calamari: (optional, default: ``false``) include installation of the ``calamari-server`` (a.k.a.
+                                   ``calamari-lite``
    :<json array hosts: (required) The hostname to configure
-   :<json boolean redhat_storage: (optional) Use the downstream version of
-                                  Red Hat Ceph Storage.
-   :<json boolean redhat_use_cdn: (optional) Use the Red Hat CDN and subscription-manager
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of Red Hat Ceph Storage.
+   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat CDN and subscription-manager
                                   to install Red Hat Ceph Storage. This assumes the node is
                                   already registered with subscription-manager. If ``false``,
                                   Red Hat Ceph Storage will be installed by using repos that
                                   must have already been created on the node.
-   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
+   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
 
 
 .. http:post:: /api/mon/configure/
@@ -424,7 +423,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                           a list of objects representing the monitor host and its interface.
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   Red Hat Ceph Storage.
-   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
+   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
 
 
 ``osd``
@@ -468,14 +467,14 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       }
 
    :<json array hosts: (required) The hostname to configure
-   :<json boolean redhat_storage: (optional) Use the downstream version of
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
                                   Red Hat Ceph Storage.
-   :<json boolean redhat_use_cdn: (optional) Use the Red Hat CDN and subscription-manager
+   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat CDN and subscription-manager
                                   to install Red Hat Ceph Storage. This assumes the node is
                                   already registered with subscription-manager. If ``false``,
                                   Red Hat Ceph Storage will be installed by using repos that
                                   must have already been created on the node.
-   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
+   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
 
 .. http:post:: /api/osd/configure/
 
@@ -503,7 +502,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "verbose": false,
       }
 
-   :<json object conf: (optional) An object that maps ceph.conf sections (only
+   :<json object conf: (optional, default: ``null``) An object that maps ceph.conf sections (only
                        global, mon, osd, rgw, mds allowed) to keys and values. Anything defined in
                        this mapping will override existing settings.
    :<json object devices: (required) A mapping of OSD device to Journal
@@ -512,12 +511,26 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
    :<json string public_network: (required) The public network for the cluster
-   :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
-   :<json boolean redhat_storage: (optional) Use the downstream version of
+   :<json string cluster_network: (optional, default: ``public_network``) The network exposed to cluster clients
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
                                   Red Hat Ceph Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
                           Provide a list of objects representing the monitor host and its interface.
-   :<json boolean verbose: (optional) Increase the verbosity when calling ansible
+   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
+
+
+Journals
+--------
+Journals are defined as devices and are "mapped" in a JSON object. The object
+maps a device to a journal. Any one journal can be used for more than one
+device. For example, for a ``/dev/sdx`` journal device one can do::
+
+    ...
+    "devices": {"/dev/sdb": "/dev/sdx", "/dev/sdc": "/dev/sdx"}
+    ...
+
+ That example would use the journal "/dev/sdx" for both "/dev/sdb" and
+ "/dev/sdc"
 
 
 ``status``
