@@ -512,11 +512,25 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json int journal_size: (required) The size to use for the journal
    :<json string public_network: (required) The public network for the cluster
    :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
-   :<json boolean redhat_storage: (optional) Use the downstream version of
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
                                   Red Hat Ceph Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
                           Provide a list of objects representing the monitor host and its interface.
    :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
+
+
+Journals
+--------
+Journals are defined as devices and are "mapped" in a JSON object. The object
+maps a device to a journal. Any one journal can be used for more than one
+device. For example, for a ``/dev/sdx`` journal device one can do::
+
+    ...
+    "devices": {"/dev/sdb": "/dev/sdx", "/dev/sdc": "/dev/sdx"}
+    ...
+
+ That example would use the journal "/dev/sdx" for both "/dev/sdb" and
+ "/dev/sdc"
 
 
 ``status``
