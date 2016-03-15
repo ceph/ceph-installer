@@ -15,11 +15,12 @@ Source0:        https://github.com/ceph/%{srcname}/archive/%{commit}/%{srcname}-
 BuildArch:      noarch
 
 Requires: ansible
-Requires: ceph-ansible
+Requires: ceph-ansible >= 1.0.2
 Requires: openssh
 Requires: python-celery
 Requires: python-gunicorn
-Requires: python-pecan
+Requires: python-notario >= 0.0.11
+Requires: python-pecan >= 1
 Requires: python-pecan-notario
 Requires: python-requests
 Requires: python-sqlalchemy
@@ -35,7 +36,7 @@ BuildRequires: openssh
 BuildRequires: python2-devel
 BuildRequires: pytest
 BuildRequires: python-celery
-BuildRequires: python-pecan
+BuildRequires: python-pecan >= 1
 BuildRequires: python-pecan-notario
 BuildRequires: python-sqlalchemy
 
