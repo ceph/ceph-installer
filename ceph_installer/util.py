@@ -54,17 +54,30 @@ def parse_monitors(monitors):
     Would return the following:
 
         ["mon0.host monitor_interface=eth0", "mon1.host monitor_interface=enp0s8"]
+
+    Because the API allows for both ``interface`` or ``address`` this utility
+    will look for both.  Ideally, only one should be defined, but it is up to
+    the client to ensure that the one that is needed is passed to the API.
     """
     hosts = []
-    var_map = dict(
-        interface="monitor_interface",
-    )
+
     for mon in monitors:
         host = []
         host.append(mon["host"])
-        for k, v in var_map.iteritems():
-            if k in mon:
-                host.append("{}={}".format(v, mon[k]))
+
+        # This is an 'either or' situation. The schema engine does not allow us
+        # to play with situations that might have one key or the other. That
+        # problem gets solved here by trying to use monitor_interface first and
+        # then falling back to its address if defined.
+        try:
+            host.append("monitor_interface=%s" % mon['interface'])
+        except KeyError:
+            try:
+                host.append("monitor_address=%s" % mon['address'])
+            except KeyError:
+                # do not append monitor_* and just use the host
+                pass
+
         hosts.append(" ".join(host))
 
     return hosts
