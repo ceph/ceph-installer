@@ -44,14 +44,14 @@ def parse_monitors(monitors):
     can be used in an ansible inventory. These host lines can include
     host variables as well.
 
-    For example, monitors in this format:
+    For example, monitors in this format::
 
         [
             {"host": "mon0.host", "interface": "eth0"},
             {"host": "mon1.host", "interface": "enp0s8"},
         ]
 
-    Would return the following:
+    Would return the following::
 
         ["mon0.host monitor_interface=eth0", "mon1.host monitor_interface=enp0s8"]
 
