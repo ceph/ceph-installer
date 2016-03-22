@@ -177,6 +177,15 @@ class TestParseMonitors(object):
         assert "mon0.host monitor_interface=eth0" in results
         assert "mon1.host monitor_interface=eth1" in results
 
+    def test_with_address(self):
+        data = [
+            {"host": "mon0.host", "address": "eth0"},
+            {"host": "mon1.host", "address": "eth1"},
+        ]
+        results = util.parse_monitors(data)
+        assert "mon0.host monitor_address=eth0" in results
+        assert "mon1.host monitor_address=eth1" in results
+
     def test_one_with_no_interface(self):
         data = [
             {"host": "mon0.host"},

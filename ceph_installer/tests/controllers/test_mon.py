@@ -8,7 +8,7 @@ class TestMonController(object):
             monitor_secret="secret",
             public_network="0.0.0.0/24",
             host="node1",
-            monitor_interface="eth0",
+            interface="eth0",
             fsid="1720107309134",
         )
 
@@ -130,7 +130,7 @@ class TestMonWithCalamari(object):
             monitor_secret="secret",
             public_network="0.0.0.0/24",
             host="node1",
-            monitor_interface="eth0",
+            interface="eth0",
             fsid="1720107309134",
         )
 
@@ -175,7 +175,15 @@ class TestMonVerbose(object):
             monitor_secret="secret",
             public_network="0.0.0.0/24",
             host="node1",
-            monitor_interface="eth0",
+            interface="eth0",
+            fsid="1720107309134",
+        )
+        self.configure_data_addr = dict(
+            verbose=True,
+            monitor_secret="secret",
+            public_network="0.0.0.0/24",
+            host="node1",
+            address="10.0.0.1",
             fsid="1720107309134",
         )
 
@@ -209,3 +217,17 @@ class TestMonVerbose(object):
         session.app.post_json("/api/mon/configure/", params=self.configure_data)
         kwargs = argtest.kwargs['kwargs']
         assert kwargs['verbose'] is False
+
+    def test_configure_with_monitor_address(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        session.app.post_json("/api/mon/configure/", params=self.configure_data_addr)
+        args = argtest.kwargs['args'][0][0]
+        assert args == ('mons', [u'node1 monitor_address=10.0.0.1'])
+
+    def test_configure_with_monitor_interface(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            mon.call_ansible, 'apply_async', argtest)
+        session.app.post_json("/api/mon/configure/", params=self.configure_data)
+        args = argtest.kwargs['args'][0][0]
+        assert args == ('mons', [u'node1 monitor_interface=eth0'])

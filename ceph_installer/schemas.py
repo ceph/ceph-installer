@@ -68,12 +68,13 @@ mon_install_schema = (
 )
 
 mon_configure_schema = (
+    (optional("address"), types.string),
     (optional("calamari"), types.boolean),
     (optional("cluster_network"), types.string),
     (optional("conf"), conf),
     ("fsid", types.string),
     ("host", types.string),
-    ("monitor_interface", types.string),
+    (optional("interface"), types.string),
     ("monitor_secret", types.string),
     (optional("monitors"), list_of_monitors),
     ("public_network", types.string),

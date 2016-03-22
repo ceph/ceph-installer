@@ -62,10 +62,15 @@ class MONController(object):
     @configure.when(method='POST', template='json')
     @validate(schemas.mon_configure_schema, handler="/errors/schema")
     def configure_post(self):
-        hosts = util.parse_monitors([{
-            "host": request.json['host'],
-            "interface": request.json["monitor_interface"],
-        }])
+        monitor_mapping = dict(host=request.json['host'])
+
+        # Only add interface and address if they exist
+        for key in ['interface', 'address']:
+            try:
+                monitor_mapping[key] = request.json[key]
+            except KeyError:
+                pass
+        hosts = util.parse_monitors([monitor_mapping])
         verbose_ansible = request.json.get('verbose', False)
         monitors = request.json.get("monitors")
         # even with configuring we need to tell ceph-ansible
@@ -85,7 +90,8 @@ class MONController(object):
             hosts.extend(util.parse_monitors(monitors))
             del extra_vars['monitors']
         del extra_vars['host']
-        del extra_vars['monitor_interface']
+        extra_vars.pop('interface', None)
+        extra_vars.pop('address', None)
         identifier = str(uuid4())
         task = models.Task(
             identifier=identifier,
