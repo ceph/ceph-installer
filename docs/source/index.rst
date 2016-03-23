@@ -396,7 +396,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "calamari": false,
           "conf": {"global": {"auth supported": "cephx"}},
           "host": "mon1.example.com",
-          "monitor_interface": "eth0",
+          "interface": "eth0",
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "monitor_secret": "AQA7P8dWAAAAABAAH/tbiZQn/40Z8pr959UmEA==",
           "cluster_network": "192.0.2.0/24",
@@ -414,13 +414,16 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                        this mapping will override existing settings.
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
-   :<json string monitor_interface: (required) The interface name (e.g. "eth0")
+   :<json string interface: (required if: ``address`` is not defined) The interface name for the IP used by
+                            the monitor. (e.g. "eth0") Either ``interface`` or ``address`` must be provided.
+   :<json string address: (required if: ``interface`` is not defined) The IP address of the monitor.
+                          Either ``interface`` or ``address`` must be provided.
    :<json string monitor_secret: (required) A key to use when creating the monitor keyrings.
    :<json string public_network: (required) The public network for the cluster.
    :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
    :<json array monitors: (optional) This is only optional when no other monitors currently exist
                           in the cluster. If you're configuring a mon for an existing cluster, provide
-                          a list of objects representing the monitor host and its interface.
+                          a list of objects representing the monitor host and its ``interface`` or ``address``.
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   Red Hat Ceph Storage.
    :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
@@ -498,7 +501,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "cluster_network": "192.0.2.0/24",
           "public_network": "198.51.100.0/24",
           "redhat_storage": false,
-          "monitors": [{"host": "mon0.host", "interface": "eth1"}],
+          "monitors": [{"host": "mon0.host", "interface": "eth1"}, {"host": "mon1.host", "address": "10.0.0.1"}],
           "verbose": false,
       }
 
@@ -515,7 +518,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
                                   Red Hat Ceph Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
-                          Provide a list of objects representing the monitor host and its interface.
+                          Provide a list of objects representing the monitor host and its ``interface`` or ``address``.
    :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
 
 
