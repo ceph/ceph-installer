@@ -2,6 +2,12 @@
 changelog
 =========
 
+1.0.2 (2016-03-28)
+------------------
+
+- Adds the ability to use ``address`` instead of ``interface`` when configuring
+  MONs or OSDs. This replaces the ``monitor_interface`` parameter.
+
 1.0.1 (2016-03-14)
 ------------------
 
