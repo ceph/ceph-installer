@@ -419,8 +419,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string address: (required if: ``interface`` is not defined) The IP address of the monitor.
                           Either ``interface`` or ``address`` must be provided.
    :<json string monitor_secret: (required) A key to use when creating the monitor keyrings.
-   :<json string public_network: (required) The public network for the cluster.
-   :<json string cluster_network: (optional) If not provided, this will default to ``public_network``.
+   :<json string public_network: (required) The public network subnet for the cluster (in `CIDR`_ notation).
+   :<json string cluster_network: (optional) If not provided, this will default to the ``public_network` subnet (in `CIDR`_ notation).
    :<json array monitors: (optional) This is only optional when no other monitors currently exist
                           in the cluster. If you're configuring a mon for an existing cluster, provide
                           a list of objects representing the monitor host and its ``interface`` or ``address``.
@@ -513,8 +513,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
-   :<json string public_network: (required) The public network for the cluster
-   :<json string cluster_network: (optional, default: ``public_network``) The network exposed to cluster clients
+   :<json string public_network: (required) The public network subnet for the cluster (in `CIDR`_ notation).
+   :<json string cluster_network: (optional, default: ``public_network``) The network subnet exposed to cluster clients (in `CIDR`_ notation).
    :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
                                   Red Hat Ceph Storage.
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
@@ -607,3 +607,7 @@ Database connectivity:
      Content-Type: application/json
 
      {"message": "Could not connect or retrieve information from the database"}
+
+
+
+.. _CIDR: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
