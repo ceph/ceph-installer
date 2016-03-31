@@ -89,6 +89,9 @@ class MONController(object):
         if monitors:
             hosts.extend(util.parse_monitors(monitors))
             del extra_vars['monitors']
+        if "cluster_name" in extra_vars:
+            extra_vars["cluster"] = extra_vars["cluster_name"]
+            del extra_vars["cluster_name"]
         del extra_vars['host']
         extra_vars.pop('interface', None)
         extra_vars.pop('address', None)

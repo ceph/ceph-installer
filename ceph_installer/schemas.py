@@ -70,6 +70,7 @@ mon_install_schema = (
 mon_configure_schema = (
     (optional("address"), types.string),
     (optional("calamari"), types.boolean),
+    (optional("cluster_name"), types.string),
     (optional("cluster_network"), types.string),
     (optional("conf"), conf),
     ("fsid", types.string),
@@ -83,6 +84,7 @@ mon_configure_schema = (
 )
 
 osd_configure_schema = (
+    (optional("cluster_name"), types.string),
     (optional("cluster_network"), types.string),
     (optional("conf"), conf),
     ("devices", devices_object),

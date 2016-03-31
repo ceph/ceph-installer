@@ -53,6 +53,15 @@ class TestMonController(object):
         assert result.json['endpoint'] == '/api/mon/configure/'
         assert result.json['identifier'] is not None
 
+    def test_configure_with_cluster_name(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', argtest)
+        self.configure_data['cluster_name'] = "lol"
+        session.app.post_json("/api/mon/configure/", params=self.configure_data)
+        extra_vars = argtest.kwargs['kwargs']['extra_vars']
+        assert "cluster" in extra_vars
+        assert "cluster_name" not in extra_vars
+        assert extra_vars["cluster"] == "lol"
+
     def test_configure_with_conf(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
         self.configure_data['conf'] = {"global": {"auth supported": "cephx"}}
