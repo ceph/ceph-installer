@@ -125,6 +125,16 @@ class TestOSDController(object):
         kwargs = argtest.kwargs['kwargs']
         assert "monitor_name" not in kwargs['extra_vars']
 
+    def test_configure_with_cluster_name(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            osd.call_ansible, 'apply_async', argtest)
+        self.configure_data['cluster_name'] = "lol"
+        session.app.post_json("/api/osd/configure/", params=self.configure_data)
+        extra_vars = argtest.kwargs['kwargs']['extra_vars']
+        assert "cluster" in extra_vars
+        assert "cluster_name" not in extra_vars
+        assert extra_vars["cluster"] == "lol"
+
 
 class TestOsdVerbose(object):
 

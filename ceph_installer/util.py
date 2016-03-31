@@ -305,6 +305,10 @@ def get_osd_configure_extra_vars(json):
         # is both a mon and an osd.
         extra_vars['monitor_name'] = host
 
+    if "cluster_name" in extra_vars:
+        extra_vars["cluster"] = extra_vars["cluster_name"]
+        del extra_vars["cluster_name"]
+
     # These are items that came via the JSON that should never be passed into
     # ceph-ansible because they are no longer needed
     del extra_vars['host']
