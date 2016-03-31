@@ -399,6 +399,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "interface": "eth0",
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "monitor_secret": "AQA7P8dWAAAAABAAH/tbiZQn/40Z8pr959UmEA==",
+          "cluster_name": "my-ceph-cluster",
           "cluster_network": "192.0.2.0/24",
           "public_network": "198.51.100.0/24",
           "monitors": [{"host": "mon0.host", "interface": "eth1"}],
@@ -427,6 +428,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   Red Hat Ceph Storage.
    :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
+   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom name for the ceph cluster.
 
 
 ``osd``
@@ -498,6 +500,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
           "host": "osd1.example.com",
           "journal_size": 0,
+          "cluster_name": "my-ceph-cluster",
           "cluster_network": "192.0.2.0/24",
           "public_network": "198.51.100.0/24",
           "redhat_storage": false,
@@ -520,6 +523,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
    :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
                           Provide a list of objects representing the monitor host and its ``interface`` or ``address``.
    :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
+   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom name for the ceph cluster.
 
 
 Journals
