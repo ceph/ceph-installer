@@ -2,6 +2,12 @@
 changelog
 =========
 
+1.0.3 (2016-04-07)
+------------------
+
+- Adds the ability to provide a custom cluster name by using the ``cluster_name``
+  parameter when configuring MONs or OSDs.
+
 1.0.2 (2016-03-28)
 ------------------
 
