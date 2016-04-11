@@ -30,12 +30,16 @@ def devices_object(_object, *args):
 
 
 def list_of_monitors(value):
-    msg = "requires format: [{'host': 'mon1.host', 'interface': 'eth1'},{'host': 'mon2.host', 'interface': 'enp0s8'}]"
+    msg = 'requires format: [{"host": "mon1.host", "interface": "eth1"},{"host": "mon2.host", "address": "10.0.0.1"}]'
     assert isinstance(value, list), msg
+    msg = 'address or interface is required for monitor lists: [{"host": "mon1", "interface": "eth1", {"host": "mon2", "address": "10.0.0.1"}]'
     for monitor in value:
         assert isinstance(monitor, dict), msg
         assert "host" in monitor, msg
-        assert "interface" in monitor, msg
+        try:
+            assert "interface" in monitor, msg
+        except AssertionError:
+            assert "address" in monitor, msg
 
 
 conf = (
