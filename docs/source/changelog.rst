@@ -2,6 +2,12 @@
 changelog
 =========
 
+1.0.4 (2016-04-12)
+------------------
+
+- Fixes a bug that did not allow the use of the monitor ``address`` when
+  configuring MONS or OSDs.
+
 1.0.3 (2016-04-07)
 ------------------
 
