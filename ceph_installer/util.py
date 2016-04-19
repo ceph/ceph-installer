@@ -48,7 +48,8 @@ def validate_monitors(monitors, host):
     result = []
     for mon in monitors:
         if mon["host"] == host:
-            logger.info("%s removed from list of monitors", host)
+            logger.warning("When configuring a mon it can not exist in the list of current monitors.")
+            logger.warning("%s removed from monitors.", host)
             continue
         result.append(mon)
     return result
