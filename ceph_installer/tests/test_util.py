@@ -201,3 +201,36 @@ class TestParseMonitors(object):
         ]
         results = util.parse_monitors(data)
         assert "mon1.host" == results[0]
+
+
+class TestValidateMonitors(object):
+
+    def test_host_given_as_monitor(self):
+        data = [
+            {"host": "mon1.host", "foo": "bar"},
+        ]
+        results = util.validate_monitors(data, "mon1.host")
+        assert not results
+
+    def test_host_not_given_as_monitor(self):
+        data = [
+            {"host": "mon1.host", "foo": "bar"},
+        ]
+        results = util.validate_monitors(data, "mon2.host")
+        assert results == data
+
+    def test_host_not_exact_match_in_monitors(self):
+        data = [
+            {"host": "mon1.host", "foo": "bar"},
+        ]
+        results = util.validate_monitors(data, "mon1")
+        assert results == data
+
+    def test_remove_host_from_monitors_leaving_others(self):
+        data = [
+            {"host": "mon1.host", "foo": "bar"},
+            {"host": "mon2.host", "foo": "bar"},
+        ]
+        results = util.validate_monitors(data, "mon1.host")
+        assert len(results) == 1
+        assert results[0]['host'] == "mon2.host"

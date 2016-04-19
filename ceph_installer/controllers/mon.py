@@ -72,7 +72,8 @@ class MONController(object):
                 pass
         hosts = util.parse_monitors([monitor_mapping])
         verbose_ansible = request.json.get('verbose', False)
-        monitors = request.json.get("monitors")
+        monitors = request.json.get("monitors", [])
+        monitors = util.validate_monitors(monitors, request.json["host"])
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
         extra_vars = util.get_install_extra_vars(request.json)

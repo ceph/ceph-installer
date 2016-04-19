@@ -38,6 +38,22 @@ def generate_inventory_file(inventory, task_uuid, tmp_dir=None):
     return inventory_file.name
 
 
+def validate_monitors(monitors, host):
+    """
+    Ensures that the given host is not included in
+    the monitors list. This fixes an issue with users
+    trying to provide the monitor they are currently
+    configuring in the list of 'monitors'.
+    """
+    result = []
+    for mon in monitors:
+        if mon["host"] == host:
+            logger.info("%s removed from list of monitors", host)
+            continue
+        result.append(mon)
+    return result
+
+
 def parse_monitors(monitors):
     """
     Given a list of dictionaries, returns a list of hosts that
