@@ -2,6 +2,15 @@
 changelog
 =========
 
+1.0.5 (2016-04-19)
+------------------
+
+- Properly handle unicode output from ansible runs before storing them as
+  a task in the database.
+
+- Prevent the same monitor from being duplicated in ceph.conf by removing it
+  from ``monitors`` before calling ceph-ansible.
+
 1.0.4 (2016-04-12)
 ------------------
 
