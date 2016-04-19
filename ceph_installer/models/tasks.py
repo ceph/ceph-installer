@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String,  Boolean, DateTime, Text
+from sqlalchemy import Column, Integer, String,  Boolean, DateTime, UnicodeText
 from sqlalchemy.orm.exc import DetachedInstanceError
 from ceph_installer.models import Base
 
@@ -10,8 +10,8 @@ class Task(Base):
     identifier = Column(String(256), unique=True, nullable=False, index=True)
     endpoint = Column(String(256), index=True)
     command = Column(String(256))
-    stderr = Column(Text)
-    stdout = Column(Text)
+    stderr = Column(UnicodeText)
+    stdout = Column(UnicodeText)
     started = Column(DateTime)
     ended = Column(DateTime)
     succeeded = Column(Boolean(), default=False)

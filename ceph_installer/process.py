@@ -71,4 +71,8 @@ def run(arguments, send_input=None, **kwargs):
         out, err = process.communicate(send_input)
     else:
         out, err = process.communicate()
+
+    # Ensure we are dealing with strings (might get a None) and decode them
+    out = str(out).decode('utf-8', 'replace')
+    err = str(err).decode('utf-8', 'replace')
     return out, err, process.returncode

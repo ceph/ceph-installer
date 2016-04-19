@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 from ceph_installer import models, tasks
 
 
@@ -31,3 +32,29 @@ class TestCallAnsible(object):
         tasks.call_ansible.apply(args=([], 'aaaa')).get()
         task = models.Task.get(1)
         assert task.stderr == 'a severe error'
+
+    def test_handle_unicode_on_stderr(self, session, monkeypatch):
+        monkeypatch.setattr(
+            tasks.process, 'run',
+            lambda *a, **kw: ['stdout', 'ᓆ'.decode('utf-8', 'replace'), 1])
+        monkeypatch.setattr(
+            tasks.process,
+            'make_ansible_command',
+            lambda *a, **kw: ['echo']
+        )
+        tasks.call_ansible.apply(args=([], 'aaaa')).get()
+        task = models.Task.get(1)
+        assert task.stderr == u'\u14c6'
+
+    def test_handle_unicode_on_stdout(self, session, monkeypatch):
+        monkeypatch.setattr(
+            tasks.process, 'run',
+            lambda *a, **kw: ['£'.decode('utf-8', 'replace'), 'stderr', 1])
+        monkeypatch.setattr(
+            tasks.process,
+            'make_ansible_command',
+            lambda *a, **kw: ['echo']
+        )
+        tasks.call_ansible.apply(args=([], 'aaaa')).get()
+        task = models.Task.get(1)
+        assert task.stdout == u'\xa3'
