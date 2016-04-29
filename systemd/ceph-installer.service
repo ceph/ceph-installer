@@ -9,6 +9,8 @@ ExecStart=/usr/bin/gunicorn_pecan -w 10 -t 300 /etc/ceph-installer/config.py
 EnvironmentFile=-/etc/sysconfig/ceph-installer
 User=ceph-installer
 WorkingDirectory=/usr/lib/python2.7/site-packages/ceph_installer/
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

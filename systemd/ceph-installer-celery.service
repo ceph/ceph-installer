@@ -9,6 +9,8 @@ ExecStart=/usr/bin/celery -A async worker --loglevel=info
 EnvironmentFile=-/etc/sysconfig/ceph-installer
 User=ceph-installer
 WorkingDirectory=/usr/lib/python2.7/site-packages/ceph_installer
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
