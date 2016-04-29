@@ -2,6 +2,19 @@
 changelog
 =========
 
+v1.0.6 (2016-04-29)
+-------------------
+
+- When the ``/setup/key/`` controller experiences a failure during the
+  ``ssh-keygen`` operation, it will now return both the STDOUT and STDERR
+  output from the failed key generation operation. Prior to this change, the
+  controller would only return STDERR, and STDOUT was lost. The purpose of
+  this change is to make it easier to debug when ``ssh-keygen`` fails.
+
+- The systemd units now cause the ``ceph-installer`` and
+  ``ceph-installer-celery`` services to log both STDOUT and STDERR to the
+  systemd journal.
+
 1.0.5 (2016-04-19)
 ------------------
 
