@@ -50,7 +50,7 @@ class SetupController(object):
             ]
             out, err, code = process.run(command, send_input='y\n')
             if code != 0:
-                error(500, err)
+                error(500, 'stdout: "%s" stderr: "%s"' % (out, err))
 
         # define the file to download
         response.headers['Content-Disposition'] = 'attachment; filename=id_rsa.pub'
