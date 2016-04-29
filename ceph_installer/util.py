@@ -29,7 +29,7 @@ def generate_inventory_file(inventory, task_uuid, tmp_dir=None):
         if not isinstance(hosts, list):
             hosts = [hosts]
         result.extend(hosts)
-    result_str = "\n".join(result)
+    result_str = "\n".join(result) + "\n"
     # if not None the NamedTemporaryFile will be created in the given directory
     tempfile.tempdir = tmp_dir
     inventory_file = tempfile.NamedTemporaryFile(prefix="{0}_".format(task_uuid), delete=False)
