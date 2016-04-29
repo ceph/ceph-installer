@@ -42,4 +42,4 @@ class TestSetupController(object):
             'run',
             lambda x, send_input: ('', 'no can ssh', 123))
         result = session.app.get('/setup/key/', expect_errors=True)
-        assert result.json['message'] == 'no can ssh'
+        assert result.json['message'] == 'stdout: "" stderr: "no can ssh"'
