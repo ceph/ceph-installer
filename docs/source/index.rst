@@ -23,8 +23,8 @@ It follows these concepts:
 
 Configure operations
 --------------------
-The configuration step for any node type (rgw, mon, osd, etc...) is *required* to
-be per node. It is up to the caller to handle domain logic.
+The configuration step for any node type (rgw, mon, osd, etc...) is *required*
+to be per node. It is up to the caller to handle domain logic.
 
 The ceph-installer API does not implement *any* logic to determine the path to
 cluster creation. It instead provides a granular set of endpoints to allow the
@@ -63,10 +63,11 @@ Application requirements:
 Ceph Versions
 =============
 
-The default for the ``/api/*/install`` endpoints is to install the latest upstream
-stable version of ceph. If you'd like to install the latest Red Hat Ceph Storage ensure
-that the node being provisioned is correctly entitled and that the ``redhat_storage`` option
-is set to ``True`` in the json body you send to the install endpoint.
+The default for the ``/api/*/install`` endpoints is to install the latest
+upstream stable version of ceph. If you'd like to install the latest Red Hat
+Ceph Storage ensure that the node being provisioned is correctly entitled and
+that the ``redhat_storage`` option is set to ``True`` in the JSON body you send
+to the install endpoint.
 
 
 Endpoints
@@ -93,12 +94,14 @@ The top level endpoints are:
   will perform the following actions:
 
   * create an ``ceph-installer`` user
-  * ensure that the ``ceph-installer`` user can use sudo without a password prompt
-  * remove the ``requiretty`` from ``/etc/sudoers.d/ceph-installer``, so that SSH
-    connections allow non-interactive sessions from using ``sudo``
+  * ensure that the ``ceph-installer`` user can use sudo without a password
+    prompt
+  * remove the ``requiretty`` from ``/etc/sudoers.d/ceph-installer``, so that
+    SSH connections allow non-interactive sessions from using ``sudo``
   * retrieve the SSH key that will be used for provisioning (see
     :http:get:`/setup/key/`)
-  * append the provisioning key onto ``$HOME/ceph-installer/.ssh/authorized_keys``
+  * append the provisioning key onto
+    ``$HOME/ceph-installer/.ssh/authorized_keys``
 
    **Response**:
 
@@ -141,10 +144,10 @@ The top level endpoints are:
 
 .. http:get:: /setup/key/
 
-  This endpoint will serve the public SSH key *from the user that is running the
-  service* assuming the location of: ``$HOME/.ssh/id_rsa.pub``. If this file does
-  not exist the service will proceed to create one *while processing the
-  request*.
+  This endpoint will serve the public SSH key *from the user that is running
+  the service* assuming the location of: ``$HOME/.ssh/id_rsa.pub``. If this
+  file does not exist the service will proceed to create one *while processing
+  the request*.
 
    **Response**:
 
@@ -188,25 +191,10 @@ A task is created when an action on a remote node is triggered (for example to
 install packages on a monitor node).  They can be used to track the progress of
 the operation, like installing or configuring a remote node.
 
-Tasks contain metadata for these calls. This metadata includes items like: start
-time, end time, success, stderr, stdout
+Tasks contain metadata for these calls. This metadata includes items like:
+start time, end time, success, stderr, stdout
 
-It provides two ways to consume the status of a given task:
-
-* polling
-* callback
-
-Callback System
----------------
-Each API endpoint will allow an optional "callback" key with a URL value. That
-URL will be triggered when a task has finished (this includes error, success,
-or failure states).
-
-The request for the callback URL will be an HTTP POST with the full JSON
-metadata of the task.
-
-.. warning::
-    The callback system has not been implemented yet.
+You may consume the status of a task by polling the ``/api/tasks/`` endpoint.
 
 Polling
 -------
@@ -215,10 +203,10 @@ a remote node a "task" is created. This means the information is not atomic, it
 is available as soon as the call proceeds to a remote node interaction and
 information gets updated as the task completes.
 
-When a task is not done it will have a ``null`` value for the ``ended`` key, will
-default to ``"succeeded": "false"`` and it will have a ``completed`` key that will
-be ``true`` when the task has finished.  These tasks have an unique identifier.
-The endpoints *will always return a 200 when they are available*.
+When a task is not done it will have a ``null`` value for the ``ended`` key,
+will default to ``"succeeded": "false"`` and it will have a ``completed`` key
+that will be ``true`` when the task has finished.  These tasks have an unique
+identifier.  The endpoints *will always return a 200 when they are available*.
 
 Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
@@ -369,16 +357,21 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "verbose": false,
       }
 
-   :<json boolean calamari: (optional, default: ``false``) include installation of the ``calamari-server`` (a.k.a.
-                                   ``calamari-lite``
+   :<json boolean calamari: (optional, default: ``false``) include installation
+                            of the ``calamari-server`` (a.k.a.
+                            ``calamari-lite``)
    :<json array hosts: (required) The hostname to configure
-   :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of Red Hat Ceph Storage.
-   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat CDN and subscription-manager
-                                  to install Red Hat Ceph Storage. This assumes the node is
-                                  already registered with subscription-manager. If ``false``,
-                                  Red Hat Ceph Storage will be installed by using repos that
-                                  must have already been created on the node.
-   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the
+                                  downstream version of Red Hat Ceph Storage.
+   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat
+                                  CDN and subscription-manager to install Red
+                                  Hat Ceph Storage. This assumes the node is
+                                  already registered with subscription-manager.
+                                  If ``false``, Red Hat Ceph Storage will be
+                                  installed by using repos that must have
+                                  already been created on the node.
+   :<json boolean verbose: (optional, default: ``false``) Increase the
+                           verbosity when calling ansible.
 
 
 .. http:post:: /api/mon/configure/
@@ -408,27 +401,41 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       }
 
 
-   :<json boolean calamari: (optional) include configuration of the ``calamari-server`` (a.k.a.
-                                   ``calamari-lite``. Defaults to ``false``.
+   :<json boolean calamari: (optional) include configuration of the
+                            ``calamari-server`` (a.k.a.  ``calamari-lite``).
+                            Defaults to ``false``.
    :<json object conf: (optional) An object that maps ceph.conf sections (only
-                       global, mon, osd, rgw, mds allowed) to keys and values. Anything defined in
-                       this mapping will override existing settings.
+                       global, mon, osd, rgw, mds allowed) to keys and values.
+                       Anything defined in this mapping will override existing
+                       settings.
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
-   :<json string interface: (required if: ``address`` is not defined) The interface name for the IP used by
-                            the monitor. (e.g. "eth0") Either ``interface`` or ``address`` must be provided.
-   :<json string address: (required if: ``interface`` is not defined) The IP address of the monitor.
-                          Either ``interface`` or ``address`` must be provided.
-   :<json string monitor_secret: (required) A key to use when creating the monitor keyrings.
-   :<json string public_network: (required) The public network subnet for the cluster (in `CIDR`_ notation).
-   :<json string cluster_network: (optional) If not provided, this will default to the ``public_network`` subnet (in `CIDR`_ notation).
-   :<json array monitors: (optional) This is only optional when no other monitors currently exist
-                          in the cluster. If you're configuring a mon for an existing cluster, provide
-                          a list of objects representing the monitor host and its ``interface`` or ``address``.
+   :<json string interface: (required if: ``address`` is not defined) The
+                            interface name for the IP used by the monitor.
+                            (e.g. "eth0") Either ``interface`` or ``address``
+                            must be provided.
+   :<json string address: (required if: ``interface`` is not defined) The IP
+                          address of the monitor.  Either ``interface`` or
+                          ``address`` must be provided.
+   :<json string monitor_secret: (required) A key to use when creating the
+                                 monitor keyrings.
+   :<json string public_network: (required) The public network subnet for the
+                                 cluster (in `CIDR`_ notation).
+   :<json string cluster_network: (optional) If not provided, this will default
+                                  to the ``public_network`` subnet (in `CIDR`_
+                                  notation).
+   :<json array monitors: (optional) This is only optional when no other
+                          monitors currently exist
+                          in the cluster. If you're configuring a mon for an
+                          existing cluster, provide a list of objects
+                          representing the monitor host and its ``interface``
+                          or ``address``.
    :<json boolean redhat_storage: (optional) Use the downstream version of
                                   Red Hat Ceph Storage.
-   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
-   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom name for the ceph cluster.
+   :<json boolean verbose: (optional, default: ``false``) Increase the
+                           verbosity when calling ansible.
+   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom
+                                name for the ceph cluster.
 
 
 ``osd``
@@ -472,14 +479,17 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       }
 
    :<json array hosts: (required) The hostname to configure
-   :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
-                                  Red Hat Ceph Storage.
-   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat CDN and subscription-manager
-                                  to install Red Hat Ceph Storage. This assumes the node is
-                                  already registered with subscription-manager. If ``false``,
-                                  Red Hat Ceph Storage will be installed by using repos that
-                                  must have already been created on the node.
-   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the
+                                  downstream version of Red Hat Ceph Storage.
+   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat
+                                  CDN and subscription-manager to install Red
+                                  Hat Ceph Storage. This assumes the node is
+                                  already registered with subscription-manager.
+                                  If ``false``, Red Hat Ceph Storage will be
+                                  installed by using repos that must have
+                                  already been created on the node.
+   :<json boolean verbose: (optional, default: ``false``) Increase the
+                           verbosity when calling ansible.
 
 .. http:post:: /api/osd/configure/
 
@@ -508,22 +518,30 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
           "verbose": false,
       }
 
-   :<json object conf: (optional, default: ``null``) An object that maps ceph.conf sections (only
-                       global, mon, osd, rgw, mds allowed) to keys and values. Anything defined in
-                       this mapping will override existing settings.
+   :<json object conf: (optional, default: ``null``) An object that maps
+                       ceph.conf sections (only global, mon, osd, rgw, mds
+                       allowed) to keys and values. Anything defined in this
+                       mapping will override existing settings.
    :<json object devices: (required) A mapping of OSD device to Journal
                           like device: {"device": "journal"}.
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
-   :<json string public_network: (required) The public network subnet for the cluster (in `CIDR`_ notation).
-   :<json string cluster_network: (optional, default: ``public_network``) The network subnet exposed to cluster clients (in `CIDR`_ notation).
-   :<json boolean redhat_storage: (optional, default: ``false``) Use the downstream version of
-                                  Red Hat Ceph Storage.
-   :<json array monitors: (required) The monitors for the cluster you want to add this OSD to.
-                          Provide a list of objects representing the monitor host and its ``interface`` or ``address``.
-   :<json boolean verbose: (optional, default: ``false``) Increase the verbosity when calling ansible.
-   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom name for the ceph cluster.
+   :<json string public_network: (required) The public network subnet for the
+                                 cluster (in `CIDR`_ notation).
+   :<json string cluster_network: (optional, default: ``public_network``) The
+                                  network subnet exposed to cluster clients (in
+                                  `CIDR`_ notation).
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the
+                                  downstream version of Red Hat Ceph Storage.
+   :<json array monitors: (required) The monitors for the cluster you want to
+                          add this OSD to.  Provide a list of objects
+                          representing the monitor host and its ``interface``
+                          or ``address``.
+   :<json boolean verbose: (optional, default: ``false``) Increase the
+                           verbosity when calling ansible.
+   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom
+                                name for the ceph cluster.
 
 
 Journals
