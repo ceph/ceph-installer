@@ -50,6 +50,7 @@ class SetupController(object):
             ]
             out, err, code = process.run(command, send_input='y\n')
             if code != 0:
+                logger.error('ssh-keygen failed: %s %s' % (out, err))
                 error(500, 'stdout: "%s" stderr: "%s"' % (out, err))
 
         # define the file to download
