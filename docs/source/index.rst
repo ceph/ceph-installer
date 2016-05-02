@@ -194,22 +194,7 @@ the operation, like installing or configuring a remote node.
 Tasks contain metadata for these calls. This metadata includes items like:
 start time, end time, success, stderr, stdout
 
-It provides two ways to consume the status of a given task:
-
-* polling
-* callback
-
-Callback System
----------------
-Each API endpoint will allow an optional "callback" key with a URL value. That
-URL will be triggered when a task has finished (this includes error, success,
-or failure states).
-
-The request for the callback URL will be an HTTP POST with the full JSON
-metadata of the task.
-
-.. warning::
-    The callback system has not been implemented yet.
+You may consume the status of a task by polling the ``/api/tasks/`` endpoint.
 
 Polling
 -------
