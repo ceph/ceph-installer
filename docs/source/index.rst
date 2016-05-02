@@ -373,7 +373,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
       }
 
    :<json boolean calamari: (optional, default: ``false``) include installation
-                            of the ``calamari-server`` (a.k.a. ``calamari-lite``
+                            of the ``calamari-server`` (a.k.a.
+                            ``calamari-lite``)
    :<json array hosts: (required) The hostname to configure
    :<json boolean redhat_storage: (optional, default: ``false``) Use the
                                   downstream version of Red Hat Ceph Storage.
@@ -416,7 +417,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
 
    :<json boolean calamari: (optional) include configuration of the
-                            ``calamari-server`` (a.k.a.  ``calamari-lite``.
+                            ``calamari-server`` (a.k.a.  ``calamari-lite``).
                             Defaults to ``false``.
    :<json object conf: (optional) An object that maps ceph.conf sections (only
                        global, mon, osd, rgw, mds allowed) to keys and values.
