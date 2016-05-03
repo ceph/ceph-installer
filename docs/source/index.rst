@@ -434,8 +434,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                                   Red Hat Ceph Storage.
    :<json boolean verbose: (optional, default: ``false``) Increase the
                            verbosity when calling ansible.
-   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom
-                                name for the ceph cluster.
+   :<json string cluster_name: (optional, default: ``ceph``) Provide a custom
+                               name for the ceph cluster.
 
 
 ``osd``
@@ -540,8 +540,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                           or ``address``.
    :<json boolean verbose: (optional, default: ``false``) Increase the
                            verbosity when calling ansible.
-   :<json boolean cluster_name: (optional, default: ``ceph``) Provide a custom
-                                name for the ceph cluster.
+   :<json string cluster_name: (optional, default: ``ceph``) Provide a custom
+                               name for the ceph cluster.
 
 
 Journals
