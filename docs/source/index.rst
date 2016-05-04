@@ -93,6 +93,7 @@ The top level endpoints are:
   script should be executed with super user privileges on the remote node as it
   will perform the following actions:
 
+  * Ensure that Python 2 is present on the system
   * create an ``ceph-installer`` user
   * ensure that the ``ceph-installer`` user can use sudo without a password
     prompt

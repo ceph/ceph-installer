@@ -19,6 +19,12 @@ if [ "$ID" != "ubuntu" ] && [ "$ID" != "rhel" ]; then
 fi
 
 
+if [ "$ID" == "ubuntu" ]; then
+    echo "--> Installing Python 2.7 for Ansible"
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get -y install python
+fi
+
 echo "--> creating new user with disabled password: ceph-installer"
 useradd -m ceph-installer
 passwd -d ceph-installer
