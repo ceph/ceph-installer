@@ -9,6 +9,9 @@ class Task(Base):
     id = Column(Integer, primary_key=True)
     identifier = Column(String(256), unique=True, nullable=False, index=True)
     endpoint = Column(String(256), index=True)
+    user_agent = Column(String(512))
+    request = Column(UnicodeText)
+    http_method = Column(String(64))
     command = Column(String(256))
     stderr = Column(UnicodeText)
     stdout = Column(UnicodeText)
@@ -34,4 +37,7 @@ class Task(Base):
             ended = self.ended,
             succeeded = self.succeeded,
             exit_code = self.exit_code,
+            user_agent = self.user_agent,
+            request = self.request,
+            http_method = self.http_method,
         )
