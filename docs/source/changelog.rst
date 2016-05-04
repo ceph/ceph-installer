@@ -2,6 +2,21 @@
 changelog
 =========
 
+v1.0.7 (2016-05-04)
+-------------------
+- The ``/setup/`` shell script now ensure that Python 2 is installed on
+  Ubuntu distros.
+
+- Add additional server-side logging when ``ssh-keygen`` fails during the
+  ``/setup/key/`` API call.
+
+- Several small doc updates: remove references to un-implemented callbacks,
+  correct the type of ``cluster_name`` (it's a string).
+
+- Add trailing newline to the inventory files that ceph-installer passes
+  internally to Ansible. This is not a user-visible change; it just makes it
+  easier for developers to debug the auto-generated inventory files.
+
 v1.0.6 (2016-04-29)
 -------------------
 
