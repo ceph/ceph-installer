@@ -20,6 +20,16 @@ class Task(Base):
     succeeded = Column(Boolean(), default=False)
     exit_code = Column(Integer)
 
+    def __init__(self, request=None, **kw):
+        self._extract_request_metadata(request)
+        for k, v in kw.items():
+            setattr(self, k, v)
+
+    def _extract_request_metadata(self, request):
+        self.http_method = getattr(request, 'method', '')
+        self.request = str(getattr(request, 'body', ''))
+        self.user_agent = getattr(request, 'user_agent', '')
+
     def __repr__(self):
         try:
             return '<Task %r>' % self.identifier
