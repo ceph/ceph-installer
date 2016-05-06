@@ -44,7 +44,7 @@ class TestTasksController(object):
         self.create_task()
         session.commit()
         result = session.app.get("/api/tasks/")
-        assert result.json[0]['command'] =='ansible-playbook -i "rgw.example.com," playbook.yml'
+        assert result.json[0]['command'] == 'ansible-playbook -i "rgw.example.com," playbook.yml'
 
     def test_index_get_single_task_stdout(self, session):
         self.create_task()
@@ -104,3 +104,48 @@ class TestTaskController(object):
         self.create_task(identifier=identifier)
         result = session.app.get('/api/tasks/1234-asdf-1234-asdf/')
         assert result.json['identifier']
+
+
+class TestTaskControllerRequests(object):
+
+    def create_task(self, **kw):
+
+        Task(
+            request=kw.get('request'),
+            identifier=kw.get('identifier', '1234-asdf-1234-asdf'),
+            endpoint='/api/rgw/',
+            command='ansible-playbook -i "rgw.example.com," playbook.yml',
+            stderr='',
+            stdout='',
+            started=kw.get('started', datetime.utcnow()),
+            ended=kw.get('ended', datetime.utcnow()),
+            succeeded=True
+        )
+
+    def test_request_is_none(self, session):
+        self.create_task()
+        result = session.app.get(
+            '/api/tasks/1234-asdf-1234-asdf/',
+            expect_errors=True)
+        print result.json
+        assert result.json['user_agent'] == ''
+        assert result.json['http_method'] == ''
+        assert result.json['request'] == ''
+
+    def test_request_with_valid_method(self, fake, session):
+        fake_request = fake(method='POST')
+        self.create_task(request=fake_request)
+        result = session.app.get('/api/tasks/1234-asdf-1234-asdf/')
+        assert result.json['http_method'] == 'POST'
+
+    def test_request_with_valid_body(self, fake, session):
+        fake_request = fake(body='{"host": "example.com"}')
+        self.create_task(request=fake_request)
+        result = session.app.get('/api/tasks/1234-asdf-1234-asdf/')
+        assert result.json['request'] == '{"host": "example.com"}'
+
+    def test_request_with_valid_user_agent(self, fake, session):
+        fake_request = fake(user_agent='Mozilla/5.0')
+        self.create_task(request=fake_request)
+        result = session.app.get('/api/tasks/1234-asdf-1234-asdf/')
+        assert result.json['user_agent'] == 'Mozilla/5.0'
