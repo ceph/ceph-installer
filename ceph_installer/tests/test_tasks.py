@@ -58,3 +58,15 @@ class TestCallAnsible(object):
         tasks.call_ansible.apply(args=([], 'aaaa')).get()
         task = models.Task.get(1)
         assert task.stdout == u'\xa3'
+
+    def test_process_a_request_that_is_none(self, session, monkeypatch):
+        monkeypatch.setattr(
+            tasks.process,
+            'make_ansible_command',
+            lambda *a, **kw: ['echo']
+        )
+        tasks.call_ansible.apply(args=([], 'aaaa')).get()
+        task = models.Task.get(1)
+        assert task.http_method == ''
+        assert task.user_agent == ''
+        assert task.request == ''
