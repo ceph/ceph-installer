@@ -23,6 +23,15 @@ def config_file():
 
 
 @pytest.fixture
+def fake():
+    class Fake(object):
+        def __init__(self, *a, **kw):
+            for k, v, in kw.items():
+                setattr(self, k, v)
+    return Fake
+
+
+@pytest.fixture
 def argtest():
     """
     Simple helper to use with monkeypatch so that a callable can be inspected

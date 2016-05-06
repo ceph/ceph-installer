@@ -33,6 +33,7 @@ class OSDController(object):
         extra_vars = util.get_install_extra_vars(request.json)
         identifier = str(uuid4())
         task = models.Task(
+            request=request,
             identifier=identifier,
             endpoint=request.path,
         )
@@ -71,6 +72,7 @@ class OSDController(object):
             del extra_vars['conf']
         identifier = str(uuid4())
         task = models.Task(
+            request=request,
             identifier=identifier,
             endpoint=request.path,
         )
