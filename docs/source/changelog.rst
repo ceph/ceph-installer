@@ -2,6 +2,11 @@
 changelog
 =========
 
+v1.0.8 (2016-05-06)
+-------------------
+- Include request information in tasks (available with JSON on ``/api/tasks/``)
+
+
 v1.0.7 (2016-05-04)
 -------------------
 - The ``/setup/`` shell script now ensure that Python 2 is installed on
