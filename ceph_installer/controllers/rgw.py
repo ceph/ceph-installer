@@ -30,6 +30,7 @@ class RGWController(object):
         hosts = request.json.get('hosts')
         identifier = str(uuid4())
         task = models.Task(
+            request=request,
             identifier=identifier,
             endpoint=request.path,
         )
