@@ -36,6 +36,7 @@ class MONController(object):
         extra_vars['calamari'] = install_calamari
         identifier = str(uuid4())
         task = models.Task(
+            request=request,
             identifier=identifier,
             endpoint=request.path,
         )
@@ -98,6 +99,7 @@ class MONController(object):
         extra_vars.pop('address', None)
         identifier = str(uuid4())
         task = models.Task(
+            request=request,
             identifier=identifier,
             endpoint=request.path,
         )
