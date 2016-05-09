@@ -12,34 +12,17 @@ class TestSetupController(object):
         result = session.app.get('/setup/')
         assert 'http://localhost/setup/key/' in result.body
 
-    def test_creates_the_ssh_directory(self, session, tmpdir, monkeypatch):
+    def test_missing_ssh_directory(self, session, tmpdir, monkeypatch):
         rsa_path = os.path.join(str(tmpdir), '.ssh/id_rsa')
         monkeypatch.setattr(setup.os.path, 'expanduser', lambda x: rsa_path)
-        session.app.get('/setup/key/')
-        assert os.path.isdir(os.path.join(str(tmpdir), '.ssh'))
-
-    def test_creates_the_ssh_key(self, session, tmpdir, monkeypatch):
-        rsa_path = os.path.join(str(tmpdir), '.ssh/id_rsa')
-        monkeypatch.setattr(setup.os.path, 'expanduser', lambda x: rsa_path)
-        session.app.get('/setup/key/')
-        assert os.path.isfile(rsa_path)
-
-    def test_errors_when_subprocess_fails(self, session, tmpdir, monkeypatch):
-        rsa_path = os.path.join(str(tmpdir), 'id_rsa')
-        monkeypatch.setattr(setup.os.path, 'expanduser', lambda x: rsa_path)
-        monkeypatch.setattr(
-            setup.process,
-            'run',
-            lambda x, send_input: ('', '', 123))
         result = session.app.get('/setup/key/', expect_errors=True)
         assert result.status_int == 500
+        assert result.json['message'].startswith('.ssh directory not found')
 
-    def test_error_message_from_subprocess_failure(self, session, tmpdir, monkeypatch):
-        rsa_path = os.path.join(str(tmpdir), 'id_rsa')
+    def test_missing_ssh_key(self, session, tmpdir, monkeypatch):
+        tmpdir.mkdir('.ssh')
+        rsa_path = os.path.join(str(tmpdir), '.ssh/id_rsa')
         monkeypatch.setattr(setup.os.path, 'expanduser', lambda x: rsa_path)
-        monkeypatch.setattr(
-            setup.process,
-            'run',
-            lambda x, send_input: ('', 'no can ssh', 123))
         result = session.app.get('/setup/key/', expect_errors=True)
-        assert result.json['message'] == 'stdout: "" stderr: "no can ssh"'
+        assert result.status_int == 500
+        assert result.json['message'].startswith('expected public key not found')
