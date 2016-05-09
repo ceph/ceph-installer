@@ -6,13 +6,10 @@ from ceph_installer.util import mkdir
 
 def ensure_ssh_keys():
     """
-    This helper is mostly duplicated from the ``/setup/key`` controller, it
-    exists here so that ssh keys can be ensure as early as possible to avoid
-    race conditions because ssh-keygen might take a bit too long to complete.
-    It is safe to keep the duplication on ``/setup/key`` so that it can still
-    ensure keys if that ever happens. This version of the helper does not use
-    logging because it is too early in running the application and no logging
-    has been configured yet.
+    Generate ssh keys as early as possible so that they are available to all
+    web server workers immediately when serving ``/setup/key/``. This helper
+    does not use logging because it is too early in running the application
+    and no logging has been configured yet.
     """
     # look for the ssh key of the current user
     private_key_path = os.path.expanduser('~/.ssh/id_rsa')

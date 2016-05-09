@@ -35,23 +35,14 @@ class SetupController(object):
         ssh_dir = os.path.dirname(public_key_path)
 
         if not os.path.isdir(ssh_dir):
-            logger.warning('.ssh directory not found, creating one at: %s', ssh_dir)
-            mkdir(ssh_dir)
+            msg = '.ssh directory not found: %s' % ssh_dir
+            logger.error(msg)
+            error(500, msg)
 
-        # if there isn't one create it
         if not os.path.exists(public_key_path):
-            logger.warning('expected public key not found: %s', public_key_path)
-            logger.warning('will create new ssh key pair')
-            # create one
-            command = [
-                    'ssh-keygen', '-q', '-t', 'rsa',
-                    '-N', '',
-                    '-f', private_key_path,
-            ]
-            out, err, code = process.run(command, send_input='y\n')
-            if code != 0:
-                logger.error('ssh-keygen failed: %s %s' % (out, err))
-                error(500, 'stdout: "%s" stderr: "%s"' % (out, err))
+            msg = 'expected public key not found: %s' % public_key_path
+            logger.error(msg)
+            error(500, msg)
 
         # define the file to download
         response.headers['Content-Disposition'] = 'attachment; filename=id_rsa.pub'
