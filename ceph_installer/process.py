@@ -65,6 +65,7 @@ def run(arguments, send_input=None, **kwargs):
         arguments,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
         env=env,
         **kwargs)
     if send_input:
