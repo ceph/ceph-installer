@@ -47,6 +47,11 @@ class ReleaseCommand(Command):
         print ' '.join(cmd)
         subprocess.check_call(cmd)
 
+        # Push master to the remote
+        cmd = ['git', 'push', 'origin', 'master']
+        print ' '.join(cmd)
+        subprocess.check_call(cmd)
+
 
 setup(
     name='ceph-installer',
