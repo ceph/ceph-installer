@@ -36,6 +36,7 @@ BuildRequires: openssh
 BuildRequires: python2-devel
 BuildRequires: pytest
 BuildRequires: python-celery
+BuildRequires: python-docutils
 BuildRequires: python-pecan >= 1
 BuildRequires: python-pecan-notario
 BuildRequires: python-sqlalchemy
@@ -72,6 +73,11 @@ install -p -D -m 644 config/config.py \
 
 mkdir -p %{buildroot}%{_var}/lib/ceph-installer
 
+mkdir -p %{buildroot}%{_mandir}/man8
+rst2man docs/source/man/index.rst > \
+        %{buildroot}%{_mandir}/man8/ceph-installer.8
+gzip %{buildroot}%{_mandir}/man8/ceph-installer.8
+
 %check
 py.test-%{python2_version} -v ceph_installer/tests
 
@@ -105,6 +111,7 @@ test -f %{_bindir}/firewall-cmd && firewall-cmd --reload --quiet || true
 %license LICENSE
 %{_bindir}/ceph-installer
 %{python2_sitelib}/*
+%{_mandir}/man8/ceph-installer.8*
 %{_unitdir}/ceph-installer.service
 %{_unitdir}/ceph-installer-celery.service
 %{_prefix}/lib/systemd/system-preset/80-ceph-installer.preset
