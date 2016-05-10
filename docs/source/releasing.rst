@@ -22,9 +22,3 @@ When you are ready to cut a new version:
    ::
 
       python setup.py release
-
-#. Push your setup.py change directly to master on GitHub.
-   ::
-
-      git push origin master
-
