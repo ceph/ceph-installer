@@ -1,7 +1,6 @@
 from pecan import expose, request, response
 from webob.static import FileIter
-from ceph_installer.util import make_setup_script, make_agent_script, mkdir
-from ceph_installer import process
+from ceph_installer.util import make_setup_script, make_agent_script
 from ceph_installer.controllers import error
 import os
 from StringIO import StringIO
@@ -30,7 +29,6 @@ class SetupController(object):
         Serves the public SSH key for the user that own the current service
         """
         # look for the ssh key of the current user
-        private_key_path = os.path.expanduser('~/.ssh/id_rsa')
         public_key_path = os.path.expanduser('~/.ssh/id_rsa.pub')
         ssh_dir = os.path.dirname(public_key_path)
 
