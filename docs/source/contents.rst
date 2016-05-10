@@ -24,3 +24,11 @@ Changelog
    :maxdepth: 2
 
    changelog.rst
+
+ceph-installer CLI
+==================
+
+.. toctree::
+   :maxdepth: 2
+
+   man/index.rst
