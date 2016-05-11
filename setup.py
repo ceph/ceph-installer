@@ -9,7 +9,11 @@ except ImportError:
 import re
 
 
-module_file = open("ceph_installer/__init__.py").read()
+def read_module_contents():
+    with open('ceph_installer/__init__.py') as installer_init:
+        return installer_init.read()
+
+module_file = read_module_contents()
 metadata = dict(re.findall("__([a-z]+)__\s*=\s*'([^']+)'", module_file))
 long_description = open('README.rst').read()
 version = metadata['version']
