@@ -2,6 +2,12 @@
 changelog
 =========
 
+v1.0.10 (2016-05-11)
+--------------------
+- Adds a man page for the ``ceph-installer`` cli
+
+- Now requires ceph-ansible >= 1.0.5
+
 v1.0.9 (2016-05-09)
 -------------------
 - Create the necessary SSH keys on app startup.
