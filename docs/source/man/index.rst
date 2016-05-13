@@ -1,8 +1,12 @@
+==============
 ceph-installer
 ==============
 
-A command line utility to install and configure Ceph using an HTTP API as a REST service
-to call Ansible.
+-------------------------------------------------------------------------
+Command line utility to install and configure Ceph using an HTTP REST API
+-------------------------------------------------------------------------
+
+:Manual section: 8
 
 Global Options
 --------------
