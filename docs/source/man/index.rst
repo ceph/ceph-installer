@@ -6,6 +6,8 @@ ceph-installer
 Command line utility to install and configure Ceph using an HTTP REST API
 -------------------------------------------------------------------------
 
+:Manual section: 8
+
 Global Options
 --------------
 
