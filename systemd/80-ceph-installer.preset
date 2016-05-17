@@ -1,3 +1,6 @@
 # ceph-installer web service
+#
+# Ensure that ceph-installer starts automatically when user installs the
+# package. This saves the user a step.
 
 enable ceph-installer.service
