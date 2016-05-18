@@ -22,3 +22,7 @@ def bootstrap_pecan(signal, sender):
 
 
 app = Celery('ceph_installer.async', broker='amqp://guest@localhost//', include=['ceph_installer.tasks'])
+# the default value of CELERYD_CONCURRENCY will be set to the number
+# of CPU/cores on the host. This is a problem because we need to ensure
+# that there is only one celery worker running.
+app.conf.update(CELERYD_CONCURRENCY=1)
