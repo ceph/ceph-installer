@@ -2,6 +2,14 @@
 changelog
 =========
 
+v1.0.11 (2016-05-18)
+--------------------
+
+- Sets CELERYD_CONCURRENCY=1 to ensure there is only one
+  celery worker running. We need this to ensure tasks run
+  sequentially.
+
+
 v1.0.10 (2016-05-11)
 --------------------
 - Adds a man page for the ``ceph-installer`` cli
