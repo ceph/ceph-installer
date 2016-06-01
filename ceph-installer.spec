@@ -91,7 +91,7 @@ exit 0
 
 %post
 if [ $1 -eq 1 ] ; then
-   su - ceph-installer -c "/bin/pecan populate /etc/ceph-installer/config.py"
+   su - ceph-installer -c "/bin/pecan populate /etc/ceph-installer/config.py" &> /dev/null
 fi
 %systemd_post ceph-installer.service
 %systemd_post ceph-installer-celery.service
