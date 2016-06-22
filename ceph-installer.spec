@@ -14,7 +14,7 @@ Source0:        https://github.com/ceph/%{srcname}/archive/%{commit}/%{srcname}-
 
 BuildArch:      noarch
 
-Requires: ansible
+Requires: ansible < 2
 Requires: ceph-ansible >= 1.0.5
 Requires: openssh
 Requires: python-celery
