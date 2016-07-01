@@ -1,5 +1,5 @@
 
-setup_script = """#!/bin/bash -x -e
+setup_script = """#!/bin/bash
 if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user or execute this script with sudo" 2>&1
   exit 1
