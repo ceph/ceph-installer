@@ -5,7 +5,7 @@ Requires=ceph-installer-celery.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/gunicorn_pecan -w 10 -t 300 /etc/ceph-installer/config.py
+ExecStart=/usr/bin/ceph-installer-gunicorn
 EnvironmentFile=-/etc/sysconfig/ceph-installer
 User=ceph-installer
 WorkingDirectory=/usr/lib/python2.7/site-packages/ceph_installer/

@@ -3,7 +3,7 @@
 # we use a non-root user so that the celery workers start up correctly
 
 [watcher:{{ app_name }}]
-cmd = {{ app_home }}/bin/gunicorn_pecan -w 10 -t 300 config/config.py
+cmd = {{ app_home }}/bin/ceph-installer-gunicorn
 working_dir={{ app_home }}/src/{{ app_name }}
 
 stdout_stream.class = FileStream
@@ -13,7 +13,7 @@ stderr_stream.class = FileStream
 stderr_stream.filename=/var/log/circus/{{ app_name }}-stderr.log
 
 [watcher:celery]
-cmd = {{ app_home }}/bin/celery -A async worker --loglevel=info
+cmd = {{ app_home }}/bin/ceph-installer-celery
 working_dir={{ app_home }}/src/{{ app_name }}/ceph_installer
 
 stdout_stream.class = FileStream
