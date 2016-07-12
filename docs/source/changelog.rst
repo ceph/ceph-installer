@@ -2,6 +2,19 @@
 changelog
 =========
 
+v1.0.13 (2016-07-12)
+--------------------
+
+- RPM packaging: Add SELinux policy, and run pecan and celery processes
+  confined.
+
+- Fix setup script shebang to be simply "#!/bin/bash". Prior to this change,
+  executing the script via the shebang would lead to an error.
+
+- RPM packaging: don't allow Ansible 2 or above, since we've only tested with
+  Ansible 1.9.
+
+
 v1.0.12 (2016-06-10)
 --------------------
 
