@@ -1,0 +1,107 @@
+policy_module(ceph_installer, 1.0.0)
+require {
+    type cert_t;
+    type ssh_exec_t;
+    type kernel_t;
+    type ssh_port_t;
+    type fs_t;
+    type unreserved_port_t;
+    type devpts_t;
+    type ceph_installer_t;
+    type krb5_conf_t;
+    type ceph_installer_var_lib_t;
+    type tmp_t;
+    type devlog_t;
+    type passwd_file_t;
+    type ptmx_t;
+    type net_conf_t;
+    type file_context_t;
+    type security_t;
+    class key { write read view };
+    class unix_stream_socket connectto;
+    class chr_file { write ioctl read open getattr };
+    class tcp_socket { name_bind name_connect };
+    class file { write execute read open getattr execute_no_trans };
+    class filesystem getattr;
+    class sock_file { write link create unlink };
+    class security check_context;
+    class unix_dgram_socket { create connect sendto };
+    class dir { search create rmdir };
+}
+
+########################################
+#
+# Declarations
+#
+
+type ceph_installer_t;
+type ceph_installer_exec_t;
+init_daemon_domain(ceph_installer_t, ceph_installer_exec_t)
+
+type ceph_installer_var_lib_t;
+files_type(ceph_installer_var_lib_t)
+
+type ceph_installer_tmp_t;
+files_tmp_file(ceph_installer_tmp_t)
+
+type ceph_installer_unit_file_t;
+systemd_unit_file(ceph_installer_unit_file_t)
+
+########################################
+#
+# ceph_installer local policy
+#
+allow ceph_installer_t self:fifo_file rw_fifo_file_perms;
+allow ceph_installer_t self:unix_stream_socket create_stream_socket_perms;
+allow ceph_installer_t self:tcp_socket create_stream_socket_perms;
+
+manage_dirs_pattern(ceph_installer_t, ceph_installer_var_lib_t, ceph_installer_var_lib_t)
+manage_files_pattern(ceph_installer_t, ceph_installer_var_lib_t, ceph_installer_var_lib_t)
+manage_lnk_files_pattern(ceph_installer_t, ceph_installer_var_lib_t, ceph_installer_var_lib_t)
+files_var_lib_filetrans(ceph_installer_t, ceph_installer_var_lib_t, { dir file lnk_file })
+
+manage_files_pattern(ceph_installer_t, ceph_installer_tmp_t, ceph_installer_tmp_t)
+files_tmp_filetrans(ceph_installer_t, ceph_installer_tmp_t, { file })
+
+kernel_read_system_state(ceph_installer_t)
+
+corecmd_exec_shell(ceph_installer_t)
+corecmd_exec_bin(ceph_installer_t)
+
+corenet_tcp_bind_generic_node(ceph_installer_t)
+corenet_tcp_connect_amqp_port(ceph_installer_t)
+#corenet_tcp_bind_intermapper_port(ceph_installer_t)
+
+libs_exec_ldconfig(ceph_installer_t)
+
+optional_policy(`
+    apache_search_config(ceph_installer_t)
+')
+
+allow ceph_installer_t ceph_installer_var_lib_t:sock_file { write create unlink link };
+allow ceph_installer_t cert_t:file { read getattr open };
+allow ceph_installer_t devlog_t:sock_file write;
+allow ceph_installer_t devpts_t:filesystem getattr;
+allow ceph_installer_t file_context_t:dir search;
+allow ceph_installer_t file_context_t:file { read getattr open };
+allow ceph_installer_t fs_t:filesystem getattr;
+allow ceph_installer_t kernel_t:unix_dgram_socket sendto;
+allow ceph_installer_t krb5_conf_t:file { read getattr open };
+allow ceph_installer_t net_conf_t:file { read getattr open };
+allow ceph_installer_t passwd_file_t:file { read getattr open };
+allow ceph_installer_t ptmx_t:chr_file { read write ioctl open getattr };
+allow ceph_installer_t security_t:file write;
+allow ceph_installer_t security_t:security check_context;
+allow ceph_installer_t self:key { write read view };
+allow ceph_installer_t self:unix_dgram_socket { create connect };
+allow ceph_installer_t ssh_exec_t:file { read execute open execute_no_trans };
+allow ceph_installer_t ssh_port_t:tcp_socket name_connect;
+allow ceph_installer_t tmp_t:dir { create rmdir };
+allow ceph_installer_t tmp_t:sock_file { write create unlink };
+allow ceph_installer_t unreserved_port_t:tcp_socket name_bind;
+
+##!!!! This avc can be allowed using the boolean 'daemons_use_tty'
+allow ceph_installer_t devpts_t:chr_file open;
+
+##!!!! This avc can be allowed using the boolean 'daemons_enable_cluster_mode'
+allow ceph_installer_t self:unix_stream_socket connectto;

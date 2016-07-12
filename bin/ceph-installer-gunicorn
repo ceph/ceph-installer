@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+
+/usr/bin/gunicorn_pecan -w 10 -t 300 /etc/ceph-installer/config.py

@@ -1,0 +1,165 @@
+
+## <summary>policy for ceph_installer</summary>
+
+########################################
+## <summary>
+##	Execute TEMPLATE in the ceph_installer domin.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`ceph_installer_domtrans',`
+	gen_require(`
+		type ceph_installer_t, ceph_installer_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, ceph_installer_exec_t, ceph_installer_t)
+')
+
+########################################
+## <summary>
+##	Search ceph_installer lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`ceph_installer_search_lib',`
+	gen_require(`
+		type ceph_installer_var_lib_t;
+	')
+
+	allow $1 ceph_installer_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read ceph_installer lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`ceph_installer_read_lib_files',`
+	gen_require(`
+		type ceph_installer_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, ceph_installer_var_lib_t, ceph_installer_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage ceph_installer lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`ceph_installer_manage_lib_files',`
+	gen_require(`
+		type ceph_installer_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, ceph_installer_var_lib_t, ceph_installer_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage ceph_installer lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`ceph_installer_manage_lib_dirs',`
+	gen_require(`
+		type ceph_installer_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, ceph_installer_var_lib_t, ceph_installer_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Execute ceph_installer server in the ceph_installer domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition.
+##	</summary>
+## </param>
+#
+interface(`ceph_installer_systemctl',`
+	gen_require(`
+		type ceph_installer_t;
+		type ceph_installer_unit_file_t;
+	')
+
+	systemd_exec_systemctl($1)
+        systemd_read_fifo_file_passwd_run($1)
+	allow $1 ceph_installer_unit_file_t:file read_file_perms;
+	allow $1 ceph_installer_unit_file_t:service manage_service_perms;
+
+	ps_process_pattern($1, ceph_installer_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an ceph_installer environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`ceph_installer_admin',`
+	gen_require(`
+		type ceph_installer_t;
+		type ceph_installer_var_lib_t;
+	type ceph_installer_unit_file_t;
+	')
+
+	allow $1 ceph_installer_t:process { signal_perms };
+	ps_process_pattern($1, ceph_installer_t)
+
+    tunable_policy(`deny_ptrace',`',`
+        allow $1 ceph_installer_t:process ptrace;
+    ')
+
+	files_search_var_lib($1)
+	admin_pattern($1, ceph_installer_var_lib_t)
+
+	ceph_installer_systemctl($1)
+	admin_pattern($1, ceph_installer_unit_file_t)
+	allow $1 ceph_installer_unit_file_t:service all_service_perms;
+	optional_policy(`
+		systemd_passwd_agent_exec($1)
+		systemd_read_fifo_file_passwd_run($1)
+	')
+')

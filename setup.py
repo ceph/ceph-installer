@@ -99,7 +99,7 @@ setup(
     long_description=long_description,
     author='',
     author_email='',
-    scripts=['bin/ceph-installer'],
+    scripts=['bin/ceph-installer', 'bin/ceph-installer-celery', 'bin/ceph-installer-gunicorn'],
     install_requires=[
         'celery',
         'gunicorn',

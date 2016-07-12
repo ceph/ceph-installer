@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+
+/usr/bin/celery -A async worker --loglevel=info
