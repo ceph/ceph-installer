@@ -2,6 +2,14 @@
 changelog
 =========
 
+v1.0.12 (2016-06-10)
+--------------------
+
+- RPM packaging: silence output from the "yum install ceph-installer" command.
+
+- Build cleanups.
+
+
 v1.0.11 (2016-05-18)
 --------------------
 
