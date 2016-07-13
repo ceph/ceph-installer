@@ -79,6 +79,7 @@ optional_policy(`
 ')
 
 allow ceph_installer_t ceph_installer_var_lib_t:sock_file { write create unlink link };
+allow ceph_installer_t cert_t:dir search;
 allow ceph_installer_t cert_t:file { read getattr open };
 allow ceph_installer_t devlog_t:sock_file write;
 allow ceph_installer_t devpts_t:filesystem getattr;
