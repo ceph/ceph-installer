@@ -2,6 +2,13 @@
 changelog
 =========
 
+v1.0.14 (2016-07-13)
+--------------------
+
+- RPM packaging: Fix SELinux AVC denial when setting up a cluster and SELinux
+  is in enforcing mode.
+
+
 v1.0.13 (2016-07-12)
 --------------------
 
