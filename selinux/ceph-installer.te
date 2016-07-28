@@ -17,6 +17,7 @@ require {
     type net_conf_t;
     type file_context_t;
     type security_t;
+    type syslogd_var_run_t;
     class key { write read view };
     class unix_stream_socket connectto;
     class chr_file { write ioctl read open getattr };
@@ -25,8 +26,9 @@ require {
     class filesystem getattr;
     class sock_file { write link create unlink };
     class security check_context;
-    class unix_dgram_socket { create connect sendto };
+    class unix_dgram_socket { create connect getopt sendto setopt };
     class dir { search create rmdir };
+    class udp_socket { create connect getattr };
 }
 
 ########################################
@@ -94,12 +96,14 @@ allow ceph_installer_t ptmx_t:chr_file { read write ioctl open getattr };
 allow ceph_installer_t security_t:file write;
 allow ceph_installer_t security_t:security check_context;
 allow ceph_installer_t self:key { write read view };
-allow ceph_installer_t self:unix_dgram_socket { create connect };
+allow ceph_installer_t self:unix_dgram_socket { create connect getopt setopt };
 allow ceph_installer_t ssh_exec_t:file { read execute open execute_no_trans };
 allow ceph_installer_t ssh_port_t:tcp_socket name_connect;
 allow ceph_installer_t tmp_t:dir { create rmdir };
 allow ceph_installer_t tmp_t:sock_file { write create unlink };
 allow ceph_installer_t unreserved_port_t:tcp_socket name_bind;
+allow ceph_installer_t self:udp_socket { create connect getattr };
+allow ceph_installer_t syslogd_var_run_t:sock_file write;
 
 ##!!!! This avc can be allowed using the boolean 'daemons_use_tty'
 allow ceph_installer_t devpts_t:chr_file open;
