@@ -2,6 +2,24 @@
 changelog
 =========
 
+v1.0.15 (2016-08-09)
+--------------------
+
+- RPM packaging: Fix more SELinux AVC denials.
+
+- RPM packaging: Set ``ceph_installer_t`` SELinux domain to permissive. We have
+  still found various AVC denials when running Skyring (Tendrl) with SELinux in
+  enforcing mode. To make sure ceph-installer works while we fix the remaining
+  issues with the policies, we are going to set the entire ceph_installer_t
+  domain to permissive.
+
+  With this change, the ceph-installer service still runs confined, but AVC
+  denials will not prevent the service from operating.
+
+  See https://lwn.net/Articles/303216/ for background on permissive SELinux
+  domains.
+
+
 v1.0.14 (2016-07-13)
 --------------------
 
