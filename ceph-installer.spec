@@ -191,7 +191,6 @@ fi
 %exclude %{_sysconfdir}/ceph-installer/config.pyc
 %exclude %{_sysconfdir}/ceph-installer/config.pyo
 %dir %attr (-, ceph-installer, ceph-installer) %{_var}/lib/ceph-installer
-%dir %attr(0750, root, root) %{_prefix}/lib/firewalld/services
 %{_prefix}/lib/firewalld/services/ceph-installer.xml
 %if 0%{?fedora} || 0%{?rhel}
 %doc selinux/*
