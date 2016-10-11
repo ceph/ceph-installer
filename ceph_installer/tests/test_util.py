@@ -91,7 +91,9 @@ class TestGetInstallExtraVars(object):
         data = dict(redhat_storage=True)
         result = util.get_install_extra_vars(data)
         assert "ceph_stable_rh_storage" in result
+        assert "ceph_rhcs" in result
         assert "ceph_stable_rh_storage_cdn_install" in result
+        assert "ceph_rhcs_cdn_install" in result
 
     def test_redhat_storage_is_false(self):
         data = dict(redhat_storage=False)
@@ -107,12 +109,16 @@ class TestGetInstallExtraVars(object):
         result = util.get_install_extra_vars(data)
         assert "ceph_stable_rh_storage" in result
         assert "ceph_stable_rh_storage_cdn_install" in result
+        assert "ceph_rhcs" in result
+        assert "ceph_rhcs_cdn_install" in result
 
     def test_redhat_use_cdn_is_false(self):
         data = dict(redhat_storage=True, redhat_use_cdn=False)
         result = util.get_install_extra_vars(data)
         assert "ceph_stable_rh_storage" in result
+        assert "ceph_rhcs" in result
         assert "ceph_stable_rh_storage_cdn_install" not in result
+        assert "ceph_rhcs_cdn_install" not in result
 
     def test_ceph_origin_exists_when_not_using_the_cdn(self):
         data = dict(redhat_storage=True, redhat_use_cdn=False)
