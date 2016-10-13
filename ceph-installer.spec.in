@@ -1,4 +1,3 @@
-%global commitdate @COMMITDATE@
 %global commit @COMMIT@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
@@ -13,11 +12,11 @@
 
 Name:           ceph-installer
 Version:        @VERSION@
-Release:        1.%{commitdate}git%{shortcommit}%{?dist}
+Release:        @RELEASE@%{?dist}
 Summary:        A service to provision Ceph clusters
 License:        MIT
 URL:            https://github.com/ceph/ceph-installer
-Source0:        https://github.com/ceph/%{srcname}/archive/%{commit}/%{srcname}-%{version}-%{shortcommit}.tar.gz
+Source0:        %{name}-%{version}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 
@@ -63,7 +62,7 @@ BuildRequires: python-sqlalchemy
 An HTTP API to provision and control the deployment process of Ceph clusters.
 
 %prep
-%autosetup -p1 -n %{srcname}-%{commit}
+%autosetup -p1
 
 %build
 %{__python} setup.py build

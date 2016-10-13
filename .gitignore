@@ -34,3 +34,5 @@ celerybeat-schedule
 
 # test db
 marinertest.db
+
+ceph-installer.spec
