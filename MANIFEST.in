@@ -1,0 +1,7 @@
+include LICENSE
+include README.rst
+graft config
+graft docs
+graft firewalld
+graft selinux
+graft systemd
