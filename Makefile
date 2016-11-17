@@ -45,6 +45,6 @@ srpm: dist spec
 	fedpkg --dist epel7 srpm
 
 rpm: dist srpm
-	mock -r ktdreyer-ceph-installer rebuild $(NVR).src.rpm --resultdir=.
+	mock -r rpm/ktdreyer-ceph-installer.cfg rebuild $(NVR).src.rpm --resultdir=.
 
 .PHONY: dist rpm srpm
