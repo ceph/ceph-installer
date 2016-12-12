@@ -71,7 +71,7 @@ cd selinux
 for selinuxvariant in %{selinux_variants}
 do
 make NAME=${selinuxvariant} -f /usr/share/selinux/devel/Makefile
-mv ceph-installer.pp ceph-installer.pp.${selinuxvariant}
+mv ceph_installer.pp ceph_installer.pp.${selinuxvariant}
 make NAME=${selinuxvariant} -f /usr/share/selinux/devel/Makefile clean
 done
 cd -
@@ -109,8 +109,8 @@ gzip %{buildroot}%{_mandir}/man8/ceph-installer.8
 for selinuxvariant in %{selinux_variants}
 do
     install -d %{buildroot}%{_datadir}/selinux/${selinuxvariant}
-    install -p -m 644 selinux/ceph-installer.pp.${selinuxvariant} \
-    %{buildroot}%{_datadir}/selinux/${selinuxvariant}/ceph-installer.pp
+    install -p -m 644 selinux/ceph_installer.pp.${selinuxvariant} \
+    %{buildroot}%{_datadir}/selinux/${selinuxvariant}/ceph_installer.pp
 done
 /usr/sbin/hardlink -cv %{buildroot}%{_datadir}/selinux
 %endif
@@ -138,7 +138,7 @@ ceph_installer_selinux()
     for selinuxvariant in %{selinux_variants}
     do
         /usr/sbin/semodule -s ${selinuxvariant} -i \
-        %{_datadir}/selinux/${selinuxvariant}/ceph-installer.pp &> /dev/null || :
+        %{_datadir}/selinux/${selinuxvariant}/ceph_installer.pp &> /dev/null || :
     done
     # Relabel files
     /sbin/restorecon -Rv \
@@ -193,7 +193,7 @@ fi
 %{_prefix}/lib/firewalld/services/ceph-installer.xml
 %if 0%{?fedora} || 0%{?rhel}
 %doc selinux/*
-%{_datadir}/selinux/*/ceph-installer.pp
+%{_datadir}/selinux/*/ceph_installer.pp
 %endif
 
 %changelog
