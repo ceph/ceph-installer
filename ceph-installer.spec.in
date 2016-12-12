@@ -21,7 +21,7 @@ Source0:        %{name}-%{version}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
 Requires: ansible < 2
-Requires: ceph-ansible >= 1.0.5
+Requires: ceph-ansible
 Requires: openssh
 Requires: python-celery
 Requires: python-gunicorn
