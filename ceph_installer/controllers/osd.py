@@ -82,7 +82,7 @@ class OSDController(object):
         kwargs = dict(
             extra_vars=extra_vars,
             skip_tags="package-install",
-            playbook="osd-configure.yml",
+            playbook="infrastructure-playbooks/osd-configure.yml",
             verbose=verbose_ansible,
         )
         call_ansible.apply_async(
