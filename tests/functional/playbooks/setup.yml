@@ -1,6 +1,15 @@
 ---
 - hosts: all
   gather_facts: True
+  tasks:
+    - name: write all nodes to /etc/hosts
+      sudo: yes
+      blockinfile:
+        dest: /etc/hosts
+        block: |
+          {{ hostvars[item]["address"] }} {{ item }}
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+      with_inventory_hostnames: all
 
 - hosts: installer
   gather_facts: False
