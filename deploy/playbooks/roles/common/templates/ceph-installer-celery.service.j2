@@ -1,0 +1,16 @@
+[Unit]
+Description=ceph installer celery service
+After=network.target rabbitmq-server.service
+Requires=rabbitmq-server.service
+
+[Service]
+Type=simple
+ExecStart={{ app_home }}/bin/celery -A async worker --loglevel=debug
+EnvironmentFile=/etc/sysconfig/ceph-installer
+User={{ ansible_ssh_user }}
+WorkingDirectory={{ app_home }}/src/ceph-installer/ceph_installer
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,19 +1,18 @@
 ---
 
 system_packages:
-  - python-dev
+  - python-devel
   - git
   - python-virtualenv
-  - g++
   - gcc
-  - libpq-dev
+  - python-pip
   - vim
-  # needed for the ansible apt_repository module
-  - python-apt
-#  - libsemanage-python
+  - rabbitmq-server
+  - libsemanage-python
+  - libffi-devel
+  - openssl-devel
+  - rabbitmq-server
+  # Latest as of this writing is 2.2.0.0 in EPEL
+  - ansible
 
 ssl_requirements: []
-
-circus_system_packages:
-  - libzmq-dev
-  - libevent-dev
