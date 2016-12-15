@@ -1,11 +1,11 @@
 [installer]
-client0
+client0 address=192.168.3.40
 
 [mons]
-mon0
+mon0 address=192.168.3.10
 
 [osds]
-osd0
+osd0 address=192.168.3.100
 
 [test_nodes:children]
 mons
