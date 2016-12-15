@@ -21,5 +21,22 @@
       debug:
         msg: "{{ mon_install.json }}"
 
-    - name: wait for install to finish
+    - name: wait for mon install to finish
       command: "ceph-installer task --poll {{ mon_install.json['identifier'] }}"
+
+    - name: install ceph on all osds
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/osd/install"
+        return_content: true
+        body:
+          hosts: "{{ groups['osds'] }}"
+      register: osd_install
+
+    - name: print output of osd install command
+      debug:
+        msg: "{{ osd_install.json }}"
+
+    - name: wait for osd install to finish
+      command: "ceph-installer task --poll {{ osd_install.json['identifier'] }}"
