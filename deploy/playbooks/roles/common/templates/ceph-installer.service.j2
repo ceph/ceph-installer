@@ -1,0 +1,16 @@
+[Unit]
+Description=ceph installer gunicorn service
+After=network.target ceph-installer-celery.service
+Requires=ceph-installer-celery.service
+
+[Service]
+Type=simple
+ExecStart={{ app_home }}/bin/gunicorn_pecan -w 10 -t 300  {{ app_home }}/src/{{ app_name }}/config/config.py
+EnvironmentFile=/etc/sysconfig/ceph-installer
+User={{ ansible_ssh_user }}
+WorkingDirectory={{ app_home }}/src/ceph-installer/ceph_installer/
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
