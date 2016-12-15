@@ -1,0 +1,6 @@
+---
+
+installer_dev_branch: master
+installer_dev_commit: latest
+ceph_ansible_dev_branch: master
+ceph_ansible_dev_commit: latest

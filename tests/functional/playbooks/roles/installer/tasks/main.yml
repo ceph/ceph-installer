@@ -1,0 +1,93 @@
+---
+
+- name: install epel
+  sudo: yes
+  yum:
+    name: epel-release
+    state: present
+    update_cache: yes
+
+- name: Install RPM requirements
+  sudo: yes
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - git
+    - python-devel
+    - python-pip
+    - python-virtualenv
+    - redhat-lsb-core
+    - gcc
+    - gcc-c++
+    - openssl-devel
+    - libffi-devel
+  when: ansible_pkg_mgr  == "yum"
+
+# we must use curl instead of ansible's uri module because SNI support in
+# Python is only available in 2.7.9 and later, and most supported distributions
+# don't have that version, so a request to https fails.
+- name: fetch ceph-installer development repo file
+  command: 'curl -L https://shaman.ceph.com/api/repos/ceph-installer/{{ installer_dev_branch }}/{{ installer_dev_commit }}/{{ ansible_distribution | lower }}/{{ ansible_distribution_major_version }}/repo?arch=noarch'
+  register: installer_yum_repo
+
+- name: add ceph-installer development repository
+  sudo: yes
+  copy:
+    content: "{{ installer_yum_repo.stdout }}"
+    dest: /etc/yum.repos.d/installer.repo
+    owner: root
+    group: root
+    backup: yes
+
+# we must use curl instead of ansible's uri module because SNI support in
+# Python is only available in 2.7.9 and later, and most supported distributions
+# don't have that version, so a request to https fails.
+- name: fetch ceph-ansible development repo file
+  command: 'curl -L https://shaman.ceph.com/api/repos/ceph-ansible/{{ ceph_ansible_dev_branch }}/{{ ceph_ansible_dev_commit }}/{{ ansible_distribution | lower }}/{{ ansible_distribution_major_version }}/repo?arch=noarch'
+  register: ceph_ansible_yum_repo
+
+- name: add ceph-installer development repository
+  sudo: yes
+  copy:
+    content: "{{ ceph_ansible_yum_repo.stdout }}"
+    dest: /etc/yum.repos.d/ceph-ansible.repo
+    owner: root
+    group: root
+    backup: yes
+
+- name: install a dev packages repo
+  sudo: yes
+  template:
+    src: "templates/dev_repos.j2"
+    dest: "/etc/yum.repos.d/dev.repo"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install latest pip globally.
+  sudo: yes
+  pip:
+    name: pip
+    state: latest
+
+- name: install ansible globally.
+  sudo: yes
+  pip:
+    name: ansible 
+    state: present 
+    version: 2.2.0.0
+
+- name: install ceph-installer
+  sudo: yes
+  yum:
+    name: ceph-installer
+    state: present
+    disable_gpg_check: true
+
+- name: ensure ceph-installer is running
+  sudo: yes
+  service:
+    name: ceph-installer
+    state: running
+    enabled: true
