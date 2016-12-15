@@ -1,0 +1,25 @@
+---
+- hosts: all
+  gather_facts: true
+
+- hosts: installer
+  gather_facts: false
+  vars:
+    api_address: "http://localhost:8181/api"
+  tasks:
+    - name: install ceph on all mons
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/mon/install"
+        return_content: true
+        body:
+          hosts: "{{ groups['mons'] }}"
+      register: mon_install
+
+    - name: print output of mon install command
+      debug:
+        msg: "{{ mon_install.json }}"
+
+    - name: wait for install to finish
+      command: "ceph-installer task --poll {{ mon_install.json['identifier'] }}"
