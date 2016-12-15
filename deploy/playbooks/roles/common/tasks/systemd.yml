@@ -1,0 +1,51 @@
+---
+
+- name: ensure {{ app_home }}/log exists
+  file:
+    path: "{{ app_home }}/log"
+    state: directory
+
+- name: ensure /etc/sysconfig/ dir exists
+  sudo: true
+  file: path=/etc/sysconfig state=directory
+
+# prevents issues when updating systemd files
+- name: reload systemd
+  sudo: yes
+  command: systemctl daemon-reload
+
+- name: install the systemd configuration file for celery
+  template:
+    src: ceph-installer.sysconfig.j2
+    dest: /etc/sysconfig/ceph-installer
+  sudo: true
+  notify:
+     - reload systemd
+
+- name: install the systemd unit file for ceph-installer
+  template:
+    src: ceph-installer.service.j2
+    dest: /etc/systemd/system/ceph-installer.service
+  sudo: true
+  notify:
+     - reload systemd
+
+- name: install the systemd unit file for celery
+  template:
+    src: ceph-installer-celery.service.j2
+    dest: /etc/systemd/system/ceph-installer-celery.service
+  sudo: true
+  notify:
+     - reload systemd
+
+- name: ensure ceph-installer-celery is enabled and running
+  sudo: true
+  service:
+    name: ceph-installer-celery
+    state: running enabled=yes
+
+- name: ensure ceph-installer is enabled and running
+  sudo: true
+  service:
+    name: ceph-installer
+    state: running enabled=yes
