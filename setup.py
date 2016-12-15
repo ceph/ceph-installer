@@ -101,7 +101,7 @@ setup(
     author_email='',
     scripts=['bin/ceph-installer', 'bin/ceph-installer-celery', 'bin/ceph-installer-gunicorn'],
     install_requires=[
-        'celery',
+        'celery<4.0.0',
         'gunicorn',
         'notario>=0.0.11',
         'pecan>=1',
