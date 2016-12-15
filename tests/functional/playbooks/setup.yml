@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: True
+
+- hosts: installer
+  gather_facts: False
+  roles:
+    - installer
