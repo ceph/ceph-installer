@@ -24,6 +24,17 @@
     - name: wait for mon install to finish
       command: "ceph-installer task --poll {{ mon_install.json['identifier'] }}"
 
+    - name: get mon install status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ mon_install.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The mon install failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
     - name: install ceph on all osds
       uri:
         body_format: json
@@ -40,6 +51,17 @@
 
     - name: wait for osd install to finish
       command: "ceph-installer task --poll {{ osd_install.json['identifier'] }}"
+
+    - name: get osd install status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ osd_install.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The osd install failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
 
     - name: configure ceph on all mons
       uri:
@@ -62,6 +84,17 @@
     - name: wait for mon configure to finish
       command: "ceph-installer task --poll {{ mon_configure.json['identifier'] }}"
 
+    - name: get mon configure status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ mon_configure.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The mon configure failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
     - name: configure ceph on all osds
       uri:
         body_format: json
@@ -83,3 +116,14 @@
 
     - name: wait for osd configure to finish
       command: "ceph-installer task --poll {{ osd_configure.json['identifier'] }}"
+
+    - name: get osd configure status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ osd_configure.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The osd configure failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
