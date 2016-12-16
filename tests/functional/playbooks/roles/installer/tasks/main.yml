@@ -17,6 +17,7 @@
     - python-devel
     - python-pip
     - python-virtualenv
+    - ansible
     - redhat-lsb-core
     - gcc
     - gcc-c++
@@ -35,10 +36,10 @@
   sudo: yes
   copy:
     content: "{{ installer_yum_repo.stdout }}"
-    dest: /etc/yum.repos.d/installer.repo
+    dest: /etc/yum.repos.d/ceph-installer.repo
     owner: root
     group: root
-    backup: yes
+    mode: 0644
 
 # we must use curl instead of ansible's uri module because SNI support in
 # Python is only available in 2.7.9 and later, and most supported distributions
@@ -54,7 +55,7 @@
     dest: /etc/yum.repos.d/ceph-ansible.repo
     owner: root
     group: root
-    backup: yes
+    mode: 0644
 
 - name: install a dev packages repo
   sudo: yes
@@ -71,12 +72,9 @@
     name: pip
     state: latest
 
-- name: install ansible globally.
+- name: purge yum cache
   sudo: yes
-  pip:
-    name: ansible 
-    state: present 
-    version: 2.2.0.0
+  command: yum clean all
 
 - name: install ceph-installer
   sudo: yes
