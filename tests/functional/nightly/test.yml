@@ -40,3 +40,24 @@
 
     - name: wait for osd install to finish
       command: "ceph-installer task --poll {{ osd_install.json['identifier'] }}"
+
+    - name: configure ceph on all mons
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/mon/configure"
+        return_content: true
+        body:
+          host: "{{ groups['mons'][0] }}"
+          interface: "{{ monitor_interface }}"
+          fsid: "{{ fsid }}"
+          monitor_secret: "{{ monitor_secret }}"
+          public_network: "{{ public_network }}"
+      register: mon_configure
+
+    - name: print output of mon configure command
+      debug:
+        msg: "{{ mon_configure.json }}"
+
+    - name: wait for mon configure to finish
+      command: "ceph-installer task --poll {{ mon_configure.json['identifier'] }}"
