@@ -61,3 +61,25 @@
 
     - name: wait for mon configure to finish
       command: "ceph-installer task --poll {{ mon_configure.json['identifier'] }}"
+
+    - name: configure ceph on all osds
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/osd/configure"
+        return_content: true
+        body:
+          host: "{{ groups['osds'][0] }}"
+          fsid: "{{ fsid }}"
+          public_network: "{{ public_network }}"
+          monitors: "{{ monitors }}"
+          journal_size: "{{ journal_size }}"
+          devices: "{{ devices }}"
+      register: osd_configure
+
+    - name: print output of osd configure command
+      debug:
+        msg: "{{ osd_configure.json }}"
+
+    - name: wait for osd configure to finish
+      command: "ceph-installer task --poll {{ osd_configure.json['identifier'] }}"

@@ -1,6 +1,15 @@
 ---
+# these will change to master once we have stable
+# master branches built
+installer_dev_branch: testing-rpm
+ceph_ansible_dev_branch: testing-rpm
 
-fsid: deedcb4c-a67a-4997-93a6-92149ad2622a
-monitor_secret: AQA7P8dWAAAAABAAH/tbiZQn/40Z8pr959UmEA==
+fsid: "deedcb4c-a67a-4997-93a6-92149ad2622a"
+monitor_secret: "AQA7P8dWAAAAABAAH/tbiZQn/40Z8pr959UmEA=="
 public_network: "192.168.3.0/24"
 monitor_interface: "eth1"
+monitors:
+  - host: "mon0"
+    interface: "eth1"
+devices: {"/dev/sdb": "/dev/sdc"}
+journal_size: 100
