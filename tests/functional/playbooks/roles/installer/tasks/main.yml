@@ -66,12 +66,6 @@
     group: root
     mode: 0644
 
-- name: install latest pip globally.
-  sudo: yes
-  pip:
-    name: pip
-    state: latest
-
 - name: purge yum cache
   sudo: yes
   command: yum clean all
