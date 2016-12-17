@@ -60,6 +60,8 @@ def run(arguments, send_input=None, **kwargs):
     """
     env = os.environ.copy()
     env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
+    # preserves newlines in ansible output
+    env["ANSIBLE_STDOUT_CALLBACK"] = "debug"
     logger.info('Running command: %s' % ' '.join(arguments))
     process = subprocess.Popen(
         arguments,
