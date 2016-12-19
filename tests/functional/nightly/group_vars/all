@@ -1,7 +1,4 @@
 ---
-# this will change to master once we have stable
-# master branch built
-installer_dev_branch: functional-tests
 
 fsid: "deedcb4c-a67a-4997-93a6-92149ad2622a"
 monitor_secret: "AQA7P8dWAAAAABAAH/tbiZQn/40Z8pr959UmEA=="
