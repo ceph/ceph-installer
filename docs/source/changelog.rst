@@ -2,6 +2,17 @@
 changelog
 =========
 
+v1.1.0 (2016-12-19)
+-------------------
+
+- Support for v2.1.0 of ceph-ansible.
+
+- Many RPM packaging improvements.
+
+- Support for using systemd for dev deployments instead of circus.
+
+- Includes a functional testing scenario.
+
 v1.0.15 (2016-08-09)
 --------------------
 
