@@ -1,0 +1,15 @@
+[installer]
+client0 address=192.168.3.40
+
+[mons]
+mon0 address=192.168.3.10
+
+[osds]
+osd0 address=192.168.3.100
+
+# This group is needed because we
+# need to register all these nodes
+# with the ceph-installer
+[test_nodes:children]
+mons
+osds

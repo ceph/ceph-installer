@@ -1,0 +1,25 @@
+---
+- hosts: all
+  gather_facts: True
+  tasks:
+    - name: write all nodes to /etc/hosts
+      sudo: yes
+      blockinfile:
+        dest: /etc/hosts
+        block: |
+          {{ hostvars[item]["address"] }} {{ item }}
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+      with_inventory_hostnames: all
+
+- hosts: installer
+  gather_facts: False
+  roles:
+    - installer
+
+- hosts: test_nodes
+  gather_facts: False
+  vars:
+    installer_address: "http://192.168.3.40:8181"
+  tasks:
+    - name: register the node with ceph-installer
+      shell: "curl {{ installer_address}}/setup/ | sudo bash"

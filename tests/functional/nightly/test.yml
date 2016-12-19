@@ -1,0 +1,129 @@
+---
+- hosts: all
+  gather_facts: true
+
+- hosts: installer
+  gather_facts: false
+  vars:
+    api_address: "http://localhost:8181/api"
+  tasks:
+    - name: install ceph on all mons
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/mon/install"
+        return_content: true
+        body:
+          hosts: "{{ groups['mons'] }}"
+      register: mon_install
+
+    - name: print output of mon install command
+      debug:
+        msg: "{{ mon_install.json }}"
+
+    - name: wait for mon install to finish
+      command: "ceph-installer task --poll {{ mon_install.json['identifier'] }}"
+
+    - name: get mon install status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ mon_install.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The mon install failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
+    - name: install ceph on all osds
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/osd/install"
+        return_content: true
+        body:
+          hosts: "{{ groups['osds'] }}"
+      register: osd_install
+
+    - name: print output of osd install command
+      debug:
+        msg: "{{ osd_install.json }}"
+
+    - name: wait for osd install to finish
+      command: "ceph-installer task --poll {{ osd_install.json['identifier'] }}"
+
+    - name: get osd install status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ osd_install.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The osd install failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
+    - name: configure ceph on all mons
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/mon/configure"
+        return_content: true
+        body:
+          host: "{{ groups['mons'][0] }}"
+          interface: "{{ monitor_interface }}"
+          fsid: "{{ fsid }}"
+          monitor_secret: "{{ monitor_secret }}"
+          public_network: "{{ public_network }}"
+      register: mon_configure
+
+    - name: print output of mon configure command
+      debug:
+        msg: "{{ mon_configure.json }}"
+
+    - name: wait for mon configure to finish
+      command: "ceph-installer task --poll {{ mon_configure.json['identifier'] }}"
+
+    - name: get mon configure status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ mon_configure.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The mon configure failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
+    - name: configure ceph on all osds
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/osd/configure"
+        return_content: true
+        body:
+          host: "{{ groups['osds'][0] }}"
+          fsid: "{{ fsid }}"
+          public_network: "{{ public_network }}"
+          monitors: "{{ monitors }}"
+          journal_size: "{{ journal_size }}"
+          devices: "{{ devices }}"
+      register: osd_configure
+
+    - name: print output of osd configure command
+      debug:
+        msg: "{{ osd_configure.json }}"
+
+    - name: wait for osd configure to finish
+      command: "ceph-installer task --poll {{ osd_configure.json['identifier'] }}"
+
+    - name: get osd configure status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ osd_configure.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The osd configure failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
