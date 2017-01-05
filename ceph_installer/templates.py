@@ -12,7 +12,7 @@ if [ ! -f /etc/os-release ]; then
 fi
 
 source /etc/os-release
-if [ "$ID" != "ubuntu" ] && [ "$ID" != "rhel" ]; then
+if [ "$ID" != "ubuntu" ] && [ "$ID" != "rhel" ] && [ "$ID" != "centos" ]; then
     echo "Unsupported system detected: $ID"
     echo "will not proceed with installation"
     exit 3
