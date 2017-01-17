@@ -166,6 +166,46 @@ class TestGetOSDConfigureExtraVars(object):
         assert result['monitor_name'] == "mon1.host"
 
 
+class TestGetOSDCollocatedConfigureExtraVars(object):
+
+    def setup(self):
+        self.data = dict(
+            host="node1",
+            fsid="1720107309134",
+            devices=['/dev/sdb', '/dev/sdc'],
+            monitors=[{"host": "mon1.host", "interface": "eth1"}],
+            journal_size=100,
+            public_network="0.0.0.0/24",
+        )
+
+    def test_raw_multi_journal_is_not_set(self):
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert "raw_multi_journal" not in result
+
+    def test_journal_collocation_is_set(self):
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert "journal_collocation" in result
+
+    def test_collocated_devices(self):
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert result["devices"] == ["/dev/sdb", "/dev/sdc"]
+        assert 'raw_journal_devices' not in result
+
+    def test_redhat_storage_not_present(self):
+        data = self.data.copy()
+        data["redhat_storage"] = True
+        result = util.get_osd_configure_extra_vars(self.data)
+        assert "redhat_storage" not in result
+
+    def test_monitor_name_is_set(self):
+        # simulates the scenario where this host is a mon and an osd
+        data = self.data.copy()
+        data['host'] = "mon1.host"
+        result = util.get_osd_configure_extra_vars(data)
+        assert "monitor_name" in result
+        assert result['monitor_name'] == "mon1.host"
+
+
 class TestParseMonitors(object):
 
     def test_with_interface(self):
