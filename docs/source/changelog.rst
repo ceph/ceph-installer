@@ -2,6 +2,11 @@
 changelog
 =========
 
+v1.2.0 (2017-01-17)
+-------------------
+
+- Support for collocated journals when configuring OSDs
+
 v1.1.0 (2016-12-19)
 -------------------
 
