@@ -14,19 +14,22 @@ def list_of_devices(value):
 
 @forced_leaf_validator
 def devices_object(_object, *args):
-    error_msg = 'not of type dictionary'
+    error_msg = 'not of type dictionary or list'
+    if isinstance(_object, dict):
+        v = recursive.AllObjects((types.string, types.string))
+        # this is truly unfortunate but we don't have access to the 'tree' here
+        # (the tree is the path to get to the failing key. We settle by just being
+        # able to report nicely.
+        v(_object, [])
+        return
+
     try:
-        assert isinstance(_object, dict)
+        assert isinstance(_object, list)
     except AssertionError:
         if args:
             raise Invalid('dict type', pair='value', msg=None, reason=error_msg, *args)
         raise
 
-    v = recursive.AllObjects((types.string, types.string))
-    # this is truly unfortunate but we don't have access to the 'tree' here
-    # (the tree is the path to get to the failing key. We settle by just being
-    # able to report nicely.
-    v(_object, [])
 
 
 def list_of_monitors(value):
