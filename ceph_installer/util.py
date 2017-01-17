@@ -296,21 +296,24 @@ def get_osd_configure_extra_vars(json):
     # json* so any modifications must happen after this is performed to ensure
     # that changes are not overwritten.
     extra_vars.update(json)
-
-    # enforce this option, which is the only "scenario" supported
-    extra_vars['raw_multi_journal'] = True
-
     device_map = json["devices"]
-    devices = []
-    journal_devices = []
 
-    for device, journal in device_map.items():
-        devices.append(device)
-        journal_devices.append(journal)
+    if isinstance(device_map, dict):
+        extra_vars['raw_multi_journal'] = True
+        devices = []
+        journal_devices = []
 
-    # add the corresponding device and journal to what ceph-ansible expects
-    extra_vars['devices'] = devices
-    extra_vars['raw_journal_devices'] = journal_devices
+        for device, journal in device_map.items():
+            devices.append(device)
+            journal_devices.append(journal)
+
+        # add the corresponding device and journal to what ceph-ansible expects
+        extra_vars['devices'] = devices
+        extra_vars['raw_journal_devices'] = journal_devices
+
+    else:
+        extra_vars['journal_collocation'] = True
+        extra_vars['devices'] = device_map
 
     monitor_hosts = [mon['host'] for mon in json["monitors"]]
     host = json['host']
