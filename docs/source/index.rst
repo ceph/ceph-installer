@@ -494,9 +494,8 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
 
 .. http:post:: /api/osd/configure/
 
-   The only osd provisioning scenario that this API supports is where a raw
-   device is used as a journal. No journal collocation or OSD directory is
-   allowed.
+   This endpoint supports both collocated journals (a journal in the same
+   device as an OSD) and using a raw (separate) journal device for OSDs.
 
    **Request**:
 
@@ -523,8 +522,10 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                        ceph.conf sections (only global, mon, osd, rgw, mds
                        allowed) to keys and values. Anything defined in this
                        mapping will override existing settings.
-   :<json object devices: (required) A mapping of OSD device to Journal
-                          like device: {"device": "journal"}.
+   :<json object or array devices: (required) A mapping of OSD device to Journal
+                          like device: {"device": "journal"} (when the journal
+                          is separate from the OSD) or ["/dev/sdb", "/dev/sdc"]
+                          for collocated OSDs and Journals.
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json int journal_size: (required) The size to use for the journal
@@ -543,6 +544,29 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                            verbosity when calling ansible.
    :<json string cluster_name: (optional, default: ``ceph``) Provide a custom
                                name for the ceph cluster.
+
+For collocated journals:
+
+   **Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "conf": {"global": {"auth supported": "cephx"}},
+          "devices": ["/dev/sdb", "/dev/sdc"],
+          "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
+          "host": "osd1.example.com",
+          "journal_size": 0,
+          "cluster_name": "my-ceph-cluster",
+          "cluster_network": "192.0.2.0/24",
+          "public_network": "198.51.100.0/24",
+          "redhat_storage": false,
+          "monitors": [{"host": "mon0.host", "interface": "eth1"}, {"host": "mon1.host", "address": "10.0.0.1"}],
+          "verbose": false,
+      }
 
 
 Journals
