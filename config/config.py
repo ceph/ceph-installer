@@ -11,7 +11,7 @@ app = {
     'root': 'ceph_installer.controllers.root.RootController',
     'modules': ['ceph_installer'],
     'debug': False,
-    'hooks': [hooks.CustomErrorHook()]
+    'hooks': [hooks.CustomErrorHook(), hooks.LocalHostWritesHook()]
 }
 
 logging = {
