@@ -1,3 +1,4 @@
+from ceph_installer.hooks import LocalHostWritesHook
 # Server Specific Configurations
 server = {
     'port': '8181',
@@ -9,6 +10,7 @@ app = {
     'root': 'ceph_installer.controllers.root.RootController',
     'modules': ['ceph_installer'],
     'debug': False,
+    'hooks': [LocalHostWritesHook()],
 }
 
 logging = {
