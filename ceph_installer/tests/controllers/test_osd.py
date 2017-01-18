@@ -178,6 +178,17 @@ class TestOSDCollocatedController(object):
         assert result.json['endpoint'] == '/api/osd/configure/'
         assert result.json['identifier'] is not None
 
+    def test_configure_denied(self, session, monkeypatch):
+        monkeypatch.setattr(osd.call_ansible, 'apply_async', lambda args, kwargs: None)
+        response = session.app.post_json(
+            "/api/osd/configure/",
+            params=self.configure_data,
+            expect_errors=True,
+            extra_environ=dict(REMOTE_ADDR='192.168.1.1')
+        )
+        assert response.status_int == 403
+        assert response.json['message'] == 'this resource does not allow non-local requests'
+
     def test_configure_playbook(self, session, monkeypatch):
         def check(args, kwargs):
             assert "osd-configure.yml" in kwargs["playbook"]
@@ -226,6 +237,7 @@ class TestOSDCollocatedController(object):
         assert "cluster_name" not in extra_vars
         assert extra_vars["cluster"] == "lol"
 
+
 class TestOsdVerbose(object):
 
     def setup(self):
@@ -246,6 +258,19 @@ class TestOsdVerbose(object):
         session.app.post_json("/api/osd/install/", params=data)
         kwargs = argtest.kwargs['kwargs']
         assert kwargs['verbose'] is True
+
+    def test_install_verbose_denied(self, session, monkeypatch, argtest):
+        monkeypatch.setattr(
+            osd.call_ansible, 'apply_async', argtest)
+        data = {"hosts": ["node1"], "verbose": True}
+        response = session.app.post_json(
+            "/api/osd/install/",
+            params=data,
+            expect_errors=True,
+            extra_environ=dict(REMOTE_ADDR='192.168.1.1')
+        )
+        assert response.status_int == 403
+        assert response.json['message'] == 'this resource does not allow non-local requests'
 
     def test_install_non_verbose(self, session, monkeypatch, argtest):
         monkeypatch.setattr(
