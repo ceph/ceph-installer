@@ -20,6 +20,18 @@ class TestAgentController(object):
         assert result.json['endpoint'] == '/api/agent/'
         assert result.json['identifier'] is not None
 
+    def test_index_post_is_denied(self, session, monkeypatch):
+        monkeypatch.setattr(agent.call_ansible, 'apply_async', lambda args, kwargs: None)
+        data = dict(hosts=["node1"])
+        result = session.app.post_json(
+            "/api/agent/",
+            params=data,
+            expect_errors=True,
+            extra_environ=dict(REMOTE_ADDR='192.168.1.1')
+        )
+        assert result.status_int == 403
+        assert result.json['message'] == 'this resource does not allow non-local requests'
+
     def test_invalid_master_value_is_detected(self, session, monkeypatch):
         data = dict(hosts=["google.com"], master=1)
         result = session.app.post_json("/api/agent/", params=data,
