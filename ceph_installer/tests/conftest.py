@@ -168,6 +168,8 @@ class TestApp(object):
         @param (string) url - The URL to emulate a POST request to
         @returns (paste.fixture.TestResponse)
         """
+        if 'extra_environ' not in kwargs:
+            kwargs['extra_environ'] = dict(REMOTE_ADDR='127.0.0.1')
         return self._do_request(url, 'POSTJ', **kwargs)
 
     def post(self, url, **kwargs):
@@ -175,6 +177,8 @@ class TestApp(object):
         @param (string) url - The URL to emulate a POST request to
         @returns (paste.fixture.TestResponse)
         """
+        if 'extra_environ' not in kwargs:
+            kwargs['extra_environ'] = dict(REMOTE_ADDR='127.0.0.1')
         return self._do_request(url, 'POST', **kwargs)
 
     def get(self, url, **kwargs):
@@ -189,6 +193,8 @@ class TestApp(object):
         @param (string) url - The URL to emulate a PUT request to
         @returns (paste.fixture.TestResponse)
         """
+        if 'extra_environ' not in kwargs:
+            kwargs['extra_environ'] = dict(REMOTE_ADDR='127.0.0.1')
         return self._do_request(url, 'PUT', **kwargs)
 
     def delete(self, url, **kwargs):
@@ -196,6 +202,8 @@ class TestApp(object):
         @param (string) url - The URL to emulate a DELETE request to
         @returns (paste.fixture.TestResponse)
         """
+        if 'extra_environ' not in kwargs:
+            kwargs['extra_environ'] = dict(REMOTE_ADDR='127.0.0.1')
         return self._do_request(url, 'DELETE', **kwargs)
 
 

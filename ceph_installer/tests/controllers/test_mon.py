@@ -36,10 +36,21 @@ class TestMonController(object):
     def test_install_hosts(self, session, monkeypatch):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
         data = dict(hosts=["node1"])
-        result = session.app.post_json("/api/mon/install/", params=data,
-                                       expect_errors=True)
+        result = session.app.post_json("/api/mon/install/", params=data)
         assert result.json['endpoint'] == '/api/mon/install/'
         assert result.json['identifier'] is not None
+
+    def test_install_hosts_is_denied(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        data = dict(hosts=["node1"])
+        result = session.app.post_json(
+            "/api/mon/install/",
+            params=data,
+            expect_errors=True,
+            extra_environ=dict(REMOTE_ADDR='192.168.1.1')
+        )
+        assert result.status_int == 403
+        assert result.json['message'] == 'this resource does not allow non-local requests'
 
     def test_configure_missing_fields(self, session):
         data = dict()
@@ -52,6 +63,17 @@ class TestMonController(object):
         result = session.app.post_json("/api/mon/configure/", params=self.configure_data)
         assert result.json['endpoint'] == '/api/mon/configure/'
         assert result.json['identifier'] is not None
+
+    def test_configure_is_denied(self, session, monkeypatch):
+        monkeypatch.setattr(mon.call_ansible, 'apply_async', lambda args, kwargs: None)
+        result = session.app.post_json(
+            "/api/mon/configure/",
+            params=self.configure_data,
+            expect_errors=True,
+            extra_environ=dict(REMOTE_ADDR='192.168.1.1')
+        )
+        assert result.status_int == 403
+        assert result.json['message'] == 'this resource does not allow non-local requests'
 
     def test_configure_with_cluster_name(self, session, monkeypatch, argtest):
         monkeypatch.setattr(mon.call_ansible, 'apply_async', argtest)

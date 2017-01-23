@@ -5,6 +5,13 @@ from ceph_installer.controllers import setup
 class TestSetupController(object):
 
     def test_index_generates_a_script(self, session):
+        result = session.app.get(
+                '/setup/',
+                extra_environ=dict(REMOTE_ADDR='192.168.1.1')
+        )
+        assert '#!/bin/bash' in result.body
+
+    def test_index_works_for_remote_requests(self, session):
         result = session.app.get('/setup/')
         assert '#!/bin/bash' in result.body
 

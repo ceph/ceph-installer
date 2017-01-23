@@ -5,6 +5,7 @@ from ceph_installer.util import which
 from pecan.hooks import PecanHook
 from sqlalchemy.exc import OperationalError
 from webob.exc import WSGIHTTPException
+from webob.response import Response
 import logging
 
 
@@ -101,3 +102,49 @@ class CustomErrorHook(PecanHook):
                 state.response.status = 500
                 state.response.content_type = 'application/json'
                 return state.response
+
+
+class JSONNonLocalRequest(WSGIHTTPException):
+    """
+    WebOb doesn't allow setting the explicit content type
+    when raising an HTTP exception. It forces the server to use plain text
+    or HTML. We require a JSON response because we are validating JSON.
+
+    We subclass form the base HTTP WebOb exception and force the response
+    to be JSON.
+
+    This class does not allow custom errors because its only purpose is to be
+    used for the LocalHostWritesHook hook.
+    """
+
+    code = 403
+    title = 'Forbidden Request'
+    explanation = 'Resource does not allow non-local requests'
+
+    def generate_response(self, environ, start_response):
+        if self.content_length is not None:
+            del self.content_length
+        headerlist = list(self.headerlist)
+        content_type = 'application/json'
+        body = '{"message": "this resource does not allow non-local requests"}'
+        resp = Response(
+            body,
+            status=self.status,
+            headerlist=headerlist,
+            content_type=content_type
+        )
+        resp.content_type = content_type
+        return resp(environ, start_response)
+
+
+class LocalHostWritesHook(PecanHook):
+    """
+    Allows all requests to go through that are HTTP GET, disallows all POST or
+    DELETE requests that do not come from ``localhost``
+    """
+
+    def before(self, state):
+        local_addresses = ['127.0.0.1', '127.1.1.0', 'localhost']
+        if state.request.method in ['POST', 'DELETE', 'PUT']:
+            if state.request.remote_addr not in local_addresses:
+                raise JSONNonLocalRequest()
