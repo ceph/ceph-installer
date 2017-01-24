@@ -2,6 +2,11 @@
 changelog
 =========
 
+v1.2.1 (2017-01-24)
+-------------------
+
+- Restricts POST, PUT and DELETE requests to local requests only.
+
 v1.2.0 (2017-01-17)
 -------------------
 
