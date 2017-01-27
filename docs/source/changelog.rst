@@ -2,6 +2,11 @@
 changelog
 =========
 
+v1.2.2 (2017-01-27)
+-------------------
+
+- Allows remote request to the /api/agent/ endpoint
+
 v1.2.1 (2017-01-24)
 -------------------
 
