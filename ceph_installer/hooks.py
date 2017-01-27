@@ -145,6 +145,8 @@ class LocalHostWritesHook(PecanHook):
 
     def before(self, state):
         local_addresses = ['127.0.0.1', '127.1.1.0', 'localhost']
+        path_whitelist = ["/api/agent/"]
         if state.request.method in ['POST', 'DELETE', 'PUT']:
             if state.request.remote_addr not in local_addresses:
-                raise JSONNonLocalRequest()
+                if state.request.path not in path_whitelist:
+                    raise JSONNonLocalRequest()
