@@ -522,7 +522,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                        ceph.conf sections (only global, mon, osd, rgw, mds
                        allowed) to keys and values. Anything defined in this
                        mapping will override existing settings.
-   :<json object or array devices: (required) A mapping of OSD device to Journal
+   :<json object|array devices: (required) A mapping of OSD device to Journal
                           like device: {"device": "journal"} (when the journal
                           is separate from the OSD) or ["/dev/sdb", "/dev/sdc"]
                           for collocated OSDs and Journals.
