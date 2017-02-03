@@ -95,7 +95,7 @@
         msg: "The mon configure failed, see stdout: {{ task_result.json['stdout'] }}"
       when: not task_result.json["succeeded"]
 
-    - name: configure ceph on all osds
+    - name: configure an OSD using a dedicated journal
       uri:
         body_format: json
         method: POST
@@ -107,10 +107,43 @@
           public_network: "{{ public_network }}"
           monitors: "{{ monitors }}"
           journal_size: "{{ journal_size }}"
-          devices: "{{ devices }}"
+          devices: "{{ devices_dedicated_journal }}"
       register: osd_configure
 
-    - name: print output of osd configure command
+    - name: print output of osd dedicated journal configure command
+      debug:
+        msg: "{{ osd_configure.json }}"
+
+    - name: wait for osd configure to finish
+      command: "ceph-installer task --poll {{ osd_configure.json['identifier'] }}"
+
+    - name: get osd configure status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ osd_configure.json['identifier'] }}"
+        return_content: true
+      register: task_result
+
+    - fail:
+        msg: "The osd configure failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
+    - name: configure an OSD using a collocated journal
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/osd/configure"
+        return_content: true
+        body:
+          host: "{{ groups['osds'][0] }}"
+          fsid: "{{ fsid }}"
+          public_network: "{{ public_network }}"
+          monitors: "{{ monitors }}"
+          journal_size: "{{ journal_size }}"
+          devices: "{{ devices_collocated_journal }}"
+      register: osd_configure
+
+    - name: print output of osd collocated journal configure command
       debug:
         msg: "{{ osd_configure.json }}"
 
