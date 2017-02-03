@@ -522,7 +522,7 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                        ceph.conf sections (only global, mon, osd, rgw, mds
                        allowed) to keys and values. Anything defined in this
                        mapping will override existing settings.
-   :<json object or array devices: (required) A mapping of OSD device to Journal
+   :<json object|array devices: (required) A mapping of OSD device to Journal
                           like device: {"device": "journal"} (when the journal
                           is separate from the OSD) or ["/dev/sdb", "/dev/sdc"]
                           for collocated OSDs and Journals.
@@ -571,16 +571,27 @@ For collocated journals:
 
 Journals
 --------
-Journals are defined as devices and are "mapped" in a JSON object. The object
-maps a device to a journal. Any one journal can be used for more than one
-device. For example, for a ``/dev/sdx`` journal device one can do::
+Journals can be collocated on the same device as the data or created
+on a dedicated device.
+
+If you wish to use a dedicated journal device then the journals are defined as
+devices and are "mapped" in a JSON object. The object maps a device to a journal.
+Any one journal can be used for more than one device. For example, for
+a ``/dev/sdx`` journal device one can do::
 
     ...
     "devices": {"/dev/sdb": "/dev/sdx", "/dev/sdc": "/dev/sdx"}
     ...
 
- That example would use the journal "/dev/sdx" for both "/dev/sdb" and
- "/dev/sdc"
+That example would use the journal ``/dev/sdx`` for both ``/dev/sdb`` and
+``/dev/sdc``
+
+If you wish to collocate your journals with the data then the journals are defined
+as devices and given in an array. For example::
+
+    ...
+    "devices": ["/dev/sdb", "/dev/sdc"]
+    ...
 
 
 ``status``
