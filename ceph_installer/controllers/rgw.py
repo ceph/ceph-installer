@@ -8,6 +8,7 @@ from ceph_installer.controllers import error
 from ceph_installer.tasks import call_ansible
 from ceph_installer import schemas
 from ceph_installer import models
+from ceph_installer import util
 
 logger = logging.getLogger(__name__)
 
@@ -52,8 +53,10 @@ class RGWController(object):
     @configure.when(method='POST', template='json')
     @validate(schemas.rgw_configure_schema, handler="/errors/schema")
     def configure_post(self):
+        hosts = [request.json['host']]
         # even with configuring we need to tell ceph-ansible
         # if we're working with upstream ceph or red hat ceph storage
+        verbose_ansible = request.json.get('verbose', False)
         extra_vars = util.get_install_extra_vars(request.json)
         # this update will take everything in the ``request.json`` body and
         # just pass it in as extra-vars. That is the reason why optional values
