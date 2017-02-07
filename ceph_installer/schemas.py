@@ -112,6 +112,7 @@ rgw_configure_schema = (
     (optional("email_address"), types.string),
     ("fsid", types.string),
     ("host", types.string),
+    ("monitors", list_of_monitors),
     ("public_network", types.string),
     (optional("radosgw_civetweb_bind_ip"), types.string),
     (optional("radosgw_civetweb_num_threads"), types.integer),

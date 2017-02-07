@@ -64,6 +64,7 @@ class RGWController(object):
         # if we're working with upstream ceph or red hat ceph storage
         verbose_ansible = request.json.get('verbose', False)
         extra_vars = util.get_install_extra_vars(request.json)
+        monitor_hosts = util.parse_monitors(request.json["monitors"])
         # this update will take everything in the ``request.json`` body and
         # just pass it in as extra-vars. That is the reason why optional values
         # like "calamari" are not looked up explicitly. If they are passed in
@@ -84,6 +85,7 @@ class RGWController(object):
         task = models.Task(
             request=request,
             identifier=identifier,
+            playbook="infrastructure-playbooks/rgw-standalone.yml",
             endpoint=request.path,
         )
         # we need an explicit commit here because the command may finish before
@@ -95,7 +97,7 @@ class RGWController(object):
             verbose=verbose_ansible,
         )
         call_ansible.apply_async(
-            args=([('rgws', hosts)], identifier),
+            args=([('rgws', hosts), ('mons', monitor_hosts)], identifier),
             kwargs=kwargs,
         )
 
