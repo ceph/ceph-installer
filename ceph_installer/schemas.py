@@ -109,37 +109,37 @@ rgw_configure_schema = (
     (optional("cluster_name"), types.string),
     (optional("cluster_network"), types.string),
     (optional("conf"), conf),
-    (optional("email_address"), types.string)
+    (optional("email_address"), types.string),
     ("fsid", types.string),
     ("host", types.string),
     ("public_network", types.string),
-    (optional("radosgw_civetweb_bind_ip"), types.string)
-    (optional("radosgw_civetweb_num_threads"), types.integer)
-    (optional("radosgw_civetweb_port"), types.integer)
-    (optional("radosgw_dns_name"), types.string)
-    (optional("radosgw_dns_s3website_name"), types.string)
-    (optional("radosgw_keystone"), types.boolean)
-    (optional("radosgw_keystone_accepted_roles"), types.array)
-    (optional("radosgw_keystone_admin_domain"), types.string)
-    (optional("radosgw_keystone_admin_password"), types.string)
-    (optional("radosgw_keystone_admin_tenant"), types.string)
-    (optional("radosgw_keystone_admin_token"), types.string)
-    (optional("radosgw_keystone_admin_user"), types.string)
-    (optional("radosgw_keystone_api_version"), types.integer)
-    (optional("radosgw_keystone_auth_method"), types.string)
-    (optional("radosgw_keystone_revocation_internal"), types.integer)
-    (optional("radosgw_keystone_ssl"), types.boolean)
-    (optional("radosgw_keystone_token_cache_size"), types.integer)
-    (optional("radosgw_keystone_url"), types.string)
-    (optional("radosgw_nss_db_path"), types.string)
-    (optional("radosgw_resolve_cname"), types.boolean)
-    (optional("radosgw_s3_auth_use_keystone"), types.boolean)
-    (optional("radosgw_static_website"), types.boolean)
-    (optional("radosgw_usage_log"), types.boolean)
-    (optional("radosgw_usage_log_flush_threshold"), types.integer)
-    (optional("radosgw_usage_log_tick_interval"), types.integer)
-    (optional("radosgw_usage_max_shards"), types.integer)
-    (optional("radosgw_usage_max_user_shards"), types.integer)
+    (optional("radosgw_civetweb_bind_ip"), types.string),
+    (optional("radosgw_civetweb_num_threads"), types.integer),
+    (optional("radosgw_civetweb_port"), types.integer),
+    (optional("radosgw_dns_name"), types.string),
+    (optional("radosgw_dns_s3website_name"), types.string),
+    (optional("radosgw_keystone"), types.boolean),
+    (optional("radosgw_keystone_accepted_roles"), types.array),
+    (optional("radosgw_keystone_admin_domain"), types.string),
+    (optional("radosgw_keystone_admin_password"), types.string),
+    (optional("radosgw_keystone_admin_tenant"), types.string),
+    (optional("radosgw_keystone_admin_token"), types.string),
+    (optional("radosgw_keystone_admin_user"), types.string),
+    (optional("radosgw_keystone_api_version"), types.integer),
+    (optional("radosgw_keystone_auth_method"), types.string),
+    (optional("radosgw_keystone_revocation_internal"), types.integer),
+    (optional("radosgw_keystone_ssl"), types.boolean),
+    (optional("radosgw_keystone_token_cache_size"), types.integer),
+    (optional("radosgw_keystone_url"), types.string),
+    (optional("radosgw_nss_db_path"), types.string),
+    (optional("radosgw_resolve_cname"), types.boolean),
+    (optional("radosgw_s3_auth_use_keystone"), types.boolean),
+    (optional("radosgw_static_website"), types.boolean),
+    (optional("radosgw_usage_log"), types.boolean),
+    (optional("radosgw_usage_log_flush_threshold"), types.integer),
+    (optional("radosgw_usage_log_tick_interval"), types.integer),
+    (optional("radosgw_usage_max_shards"), types.integer),
+    (optional("radosgw_usage_max_user_shards"), types.integer),
     (optional("redhat_storage"), types.boolean),
     (optional("redhat_use_cdn"), types.boolean),
     (optional("verbose"), types.boolean),
