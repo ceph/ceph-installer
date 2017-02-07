@@ -30,6 +30,8 @@ class RGWController(object):
     def install_post(self):
         hosts = request.json.get('hosts')
         identifier = str(uuid4())
+        extra_vars = util.get_install_extra_vars(request.json)
+        verbose_ansible = request.json.get('verbose', False)
         task = models.Task(
             request=request,
             identifier=identifier,
@@ -38,7 +40,11 @@ class RGWController(object):
         # we need an explicit commit here because the command may finish before
         # we conclude this request
         models.commit()
-        kwargs = dict(tags="package-install")
+        kwargs = dict(
+            extra_vars=extra_vars,
+            tags="package-install",
+            verbose=verbose_ansible,
+        )
         call_ansible.apply_async(
             args=([('rgws', hosts)], identifier),
             kwargs=kwargs,
