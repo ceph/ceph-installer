@@ -664,10 +664,10 @@ as devices and given in an array. For example::
         "cluster_name": "ceph",
         "cluster_network": "192.0.2.0/24",
         "conf": {"global": {"auth supported": "cephx"}},
-        "email_address": "admin@example.com",
         "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
         "host": "rgw1.example.com",
         "public_network": "198.51.100.0/24",
+        "monitors": [{"host": "mon0.host", "interface": "eth1"}, {"host": "mon1.host", "address": "10.0.0.1"}],
         "radosgw_civetweb_bind_ip": "10.0.1.1",
         "radosgw_civetweb_num_threads": 50,
         "radosgw_civetweb_port": 80,
@@ -709,11 +709,14 @@ as devices and given in an array. For example::
                        ceph.conf sections (only global, mon, osd, rgw, mds
                        allowed) to keys and values. Anything defined in this
                        mapping will override existing settings.
-   :<json string email_address: (optional) Email address
    :<json string fsid: (required) The ``fsid`` for the cluster
    :<json string host: (required) The hostname to configure
    :<json string public_network: (required) The public network subnet for the
                                 cluster (in `CIDR`_ notation).
+   :<json array monitors: (required) The monitors for the cluster you want to
+                          add this RGW server to.  Provide a list of objects
+                          representing the monitor host and its ``interface``
+                          or ``address``.
    :<json string radosgw_civetweb_bind_ip: (optional) The address to bind to. Defaults to
                                            the default IPV4 system address
    :<json integer radosgw_civetweb_num_threads: (optional, default: 50)
