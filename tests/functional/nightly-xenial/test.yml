@@ -65,6 +65,35 @@
         msg: "The osd install failed, see stdout: {{ task_result.json['stdout'] }}"
       when: not task_result.json["succeeded"]
 
+    - name: install ceph on all rgws
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/rgw/install"
+        return_content: true
+        body:
+          hosts: "{{ groups['rgws'] }}"
+      register: rgw_install
+
+    - name: print output of rgw_install command
+      debug:
+        msg: "{{ rgw_install.json }}"
+
+    - name: wait for rgw install to finish
+      command: "ceph-installer task --poll {{ rgw_install.json['identifier'] }}"
+
+    - name: get rgw install status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ rgw_install.json['identifier'] }}"
+        return_content: true
+      register: task_result
+      no_log: true
+
+    - fail:
+        msg: "The rgw install failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
     - name: configure ceph on all mons
       uri:
         body_format: json
@@ -164,4 +193,36 @@
 
     - fail:
         msg: "The osd configure failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
+    - name: configure ceph on all rgws
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/rgw/configure"
+        return_content: true
+        body:
+          host: "{{ groups['rgws'][0] }}"
+          fsid: "{{ fsid }}"
+          public_network: "{{ public_network }}"
+          monitors: "{{ monitors }}"
+      register: rgw_configure
+
+    - name: print output of rgw configure command
+      debug:
+        msg: "{{ rgw_configure.json }}"
+
+    - name: wait for rgw configure to finish
+      command: "ceph-installer task --poll {{ rgw_configure.json['identifier'] }}"
+
+    - name: get rgw configure status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ rgw_configure.json['identifier'] }}"
+        return_content: true
+      register: task_result
+      no_log: true
+
+    - fail:
+        msg: "The mon configure failed, see stdout: {{ task_result.json['stdout'] }}"
       when: not task_result.json["succeeded"]

@@ -594,6 +594,171 @@ as devices and given in an array. For example::
     ...
 
 
+
+``rgw``
+=======
+
+.. http:post:: /api/rgw/install/
+
+   Start the installation process for RGW host(s)
+
+   **Response**:
+
+   .. sourcecode:: http
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+         "endpoint": "/api/rgw/install/",
+         "succeeded": false,
+         "stdout": null,
+         "started": null,
+         "exit_code": null,
+         "ended": null,
+         "command": null,
+         "stderr": null,
+         "identifier": "47f68862-a96b-4ac6-be07-71726b595793"
+     }
+
+   **Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "host": "rgw1.example.com",
+          "redhat_storage": false,
+          "redhat_use_cdn": true,
+          "verbose": false,
+      }
+
+   :<json string hosts: (required) The hostname to install
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the
+                                  downstream version of Red Hat Ceph Storage.
+   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat
+                                  CDN and subscription-manager to install Red
+                                  Hat Ceph Storage. This assumes the node is
+                                  already registered with subscription-manager.
+                                  If ``false``, Red Hat Ceph Storage will be
+                                  installed by using repos that must have
+                                  already been created on the node.
+   :<json boolean verbose: (optional, default: ``false``) Increase the
+                           verbosity when calling ansible.
+
+
+.. http:post:: /api/rgw/configure/
+
+   This endpoint configures a Rados Gateway node.
+
+   **Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "cluster_name": "ceph",
+        "cluster_network": "192.0.2.0/24",
+        "conf": {"global": {"auth supported": "cephx"}},
+        "fsid": "deedcb4c-a67a-4997-93a6-92149ad2622a",
+        "host": "rgw1.example.com",
+        "public_network": "198.51.100.0/24",
+        "monitors": [{"host": "mon0.host", "interface": "eth1"}, {"host": "mon1.host", "address": "10.0.0.1"}],
+        "radosgw_civetweb_bind_ip": "10.0.1.1",
+        "radosgw_civetweb_num_threads": 50,
+        "radosgw_civetweb_port": 80,
+        "radosgw_civetweb_port": 8080,
+        "radosgw_dns_name": "rgw1.example.com",
+        "radosgw_dns_s3website_name": "rgw1.example.com",
+        "radosgw_keystone": false,
+        "radosgw_keystone_accepted_roles": ["Member", "_member_",  "admin"],
+        "radosgw_keystone_admin_domain": "default",
+        "radosgw_keystone_admin_password": "admin-secret",
+        "radosgw_keystone_admin_tenant": "tenant",
+        "radosgw_keystone_admin_token": "secret",
+        "radosgw_keystone_admin_user": "admin",
+        "radosgw_keystone_api_version": 3,
+        "radosgw_keystone_auth_method": "admin_token",
+        "radosgw_keystone_revocation_internal": 900,
+        "radosgw_keystone_ssl": true,
+        "radosgw_keystone_token_cache_size": 10000,
+        "radosgw_keystone_url": "http://192.168.0.1:35357",
+        "radosgw_nss_db_path": "/var/lib/ceph/radosgw/ceph-radosgw.rgw1/nss",
+        "radosgw_resolve_cname": false,
+        "radosgw_s3_auth_use_keystone": "true",
+        "radosgw_static_website": false,
+        "radosgw_usage_log": false,
+        "radosgw_usage_log_flush_threshold": 1024,
+        "radosgw_usage_log_tick_interval": 30,
+        "radosgw_usage_max_shards": 32,
+        "radosgw_usage_max_user_shards": 1,
+        "redhat_storage": false,
+        "verbose": false,
+      }
+
+   :<json string cluster_name: (optional, default: ``ceph``) Provide a custom
+                               name for the ceph cluster.
+   :<json string cluster_network: (optional, default: ``public_network``) The
+                                  network subnet exposed to cluster clients (in
+                                  `CIDR`_ notation).
+   :<json object conf: (optional, default: ``null``) An object that maps
+                       ceph.conf sections (only global, mon, osd, rgw, mds
+                       allowed) to keys and values. Anything defined in this
+                       mapping will override existing settings.
+   :<json string fsid: (required) The ``fsid`` for the cluster
+   :<json string host: (required) The hostname to configure
+   :<json string public_network: (required) The public network subnet for the
+                                cluster (in `CIDR`_ notation).
+   :<json array monitors: (required) The monitors for the cluster you want to
+                          add this RGW server to.  Provide a list of objects
+                          representing the monitor host and its ``interface``
+                          or ``address``.
+   :<json string radosgw_civetweb_bind_ip: (optional) The address to bind to. Defaults to
+                                           the default IPV4 system address
+   :<json integer radosgw_civetweb_num_threads: (optional, default: 50)
+   :<json integer radosgw_civetweb_port: (optional, default: 8080)
+   :<json string radosgw_dns_name: (optional) Subdomains used by RGW. See
+                                   http://ceph.com/docs/master/radosgw/config/#enabling-subdomain-s3-calls
+   :<json string radosgw_dns_s3website_name: Subdomain used by radosgw for website bucket hosting.
+   :<json boolean radosgw_keystone: (optional, default: false)
+   :<json array radosgw_keystone_accepted_roles: (optional)
+   :<json string radosgw_keystone_admin_domain: (optional)
+   :<json string radosgw_keystone_admin_password: (optional)
+   :<json string radosgw_keystone_admin_tenant: (optional)
+   :<json string radosgw_keystone_admin_token: (optional)
+   :<json string radosgw_keystone_admin_user: (optional)
+   :<json integer radosgw_keystone_api_version: (optional)
+   :<json string radosgw_keystone_auth_method: (optional)
+   :<json integer radosgw_keystone_revocation_internal: (optional)
+   :<json boolean radosgw_keystone_ssl: (optional)
+   :<json integer radosgw_keystone_token_cache_size: (optional)
+   :<json string radosgw_keystone_url: (optional)
+   :<json string radosgw_nss_db_path: (optional)
+   :<json boolean radosgw_resolve_cname: (optional)
+   :<json boolean radosgw_s3_auth_use_keystone: (optional)
+   :<json boolean radosgw_static_website: (optional)
+   :<json boolean radosgw_usage_log: (optional)
+   :<json string radosgw_usage_log_flush_threshold: (optional)
+   :<json integer radosgw_usage_log_tick_interval: (optional)
+   :<json integer radosgw_usage_max_shards: (optional)
+   :<json integer radosgw_usage_max_user_shards: (optional)
+   :<json boolean redhat_storage: (optional, default: ``false``) Use the
+                                  downstream version of Red Hat Ceph Storage.
+   :<json boolean redhat_use_cdn: (optional, default: ``true``) Use the Red Hat
+                                  CDN and subscription-manager to install Red
+                                  Hat Ceph Storage. This assumes the node is
+                                  already registered with subscription-manager.
+                                  If ``false``, Red Hat Ceph Storage will be
+                                  installed by using repos that must have
+                                  already been created on the node.
+   :<json boolean verbose: (optional, default: ``false``) Increase the
+                           verbosity when calling ansible.
+
+
 ``status``
 ==========
 
