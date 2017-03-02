@@ -6,7 +6,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 if [ ! -f /etc/os-release ]; then
-    echo "Unable to determine a supported system"
+    echo "/etc/os-release is not found. This system is not supported."
     echo "will not proceed with installation"
     exit 2
 fi
