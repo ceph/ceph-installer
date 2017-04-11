@@ -2,6 +2,21 @@
 changelog
 =========
 
+v1.3.0 (2017-04-11)
+-------------------
+
+- Add RGW support.
+
+- Improve error message for missing /etc/os-release.
+
+- Avoid unicode errors when using the cli.
+
+- Improve tests to cover more scenarios.
+
+- Docs: further explaination of journal configurations.
+
+- Docs: fix rendering issue in /api/osd/configure docs.
+
 v1.2.2 (2017-01-27)
 -------------------
 
