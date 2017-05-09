@@ -23,6 +23,7 @@
 
     - name: wait for mon install to finish
       command: "ceph-installer task --poll {{ mon_install.json['identifier'] }}"
+      no_log: true
 
     - name: get mon install status
       uri:
@@ -52,6 +53,7 @@
 
     - name: wait for osd install to finish
       command: "ceph-installer task --poll {{ osd_install.json['identifier'] }}"
+      no_log: true
 
     - name: get osd install status
       uri:
@@ -81,6 +83,7 @@
 
     - name: wait for rgw install to finish
       command: "ceph-installer task --poll {{ rgw_install.json['identifier'] }}"
+      no_log: true
 
     - name: get rgw install status
       uri:
@@ -94,7 +97,7 @@
         msg: "The rgw install failed, see stdout: {{ task_result.json['stdout'] }}"
       when: not task_result.json["succeeded"]
 
-    - name: configure ceph on all mons
+    - name: configure ceph on first mon
       uri:
         body_format: json
         method: POST
@@ -114,6 +117,44 @@
 
     - name: wait for mon configure to finish
       command: "ceph-installer task --poll {{ mon_configure.json['identifier'] }}"
+      no_log: true
+
+    - name: get mon configure status
+      uri:
+        method: GET
+        url: "{{ api_address }}/tasks/{{ mon_configure.json['identifier'] }}"
+        return_content: true
+      register: task_result
+      no_log: true
+
+    - fail:
+        msg: "The mon configure failed, see stdout: {{ task_result.json['stdout'] }}"
+      when: not task_result.json["succeeded"]
+
+    - name: configure ceph on second mon
+      uri:
+        body_format: json
+        method: POST
+        url: "{{ api_address }}/mon/configure"
+        return_content: true
+        body:
+          host: "{{ groups['mons'][1] }}"
+          interface: "{{ monitor_interface }}"
+          fsid: "{{ fsid }}"
+          monitor_secret: "{{ monitor_secret }}"
+          public_network: "{{ public_network }}"
+          monitors:
+            - host: "{{ groups['mons'][0] }}"
+              interface: "{{ monitor_interface }}"
+      register: mon_configure
+
+    - name: print output of mon configure command
+      debug:
+        msg: "{{ mon_configure.json }}"
+
+    - name: wait for mon configure to finish
+      command: "ceph-installer task --poll {{ mon_configure.json['identifier'] }}"
+      no_log: true
 
     - name: get mon configure status
       uri:
@@ -148,6 +189,7 @@
 
     - name: wait for osd configure to finish
       command: "ceph-installer task --poll {{ osd_configure.json['identifier'] }}"
+      no_log: true
 
     - name: get osd configure status
       uri:
@@ -182,6 +224,7 @@
 
     - name: wait for osd configure to finish
       command: "ceph-installer task --poll {{ osd_configure.json['identifier'] }}"
+      no_log: true
 
     - name: get osd configure status
       uri:
@@ -214,6 +257,7 @@
 
     - name: wait for rgw configure to finish
       command: "ceph-installer task --poll {{ rgw_configure.json['identifier'] }}"
+      no_log: true
 
     - name: get rgw configure status
       uri:

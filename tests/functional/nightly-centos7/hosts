@@ -3,6 +3,7 @@ client0 address=192.168.3.40
 
 [mons]
 mon0 address=192.168.3.10
+mon1 address=192.168.3.11
 
 [osds]
 osd0 address=192.168.3.100
