@@ -419,7 +419,9 @@ Polling is not subject to handle state with HTTP status codes (e.g. 304)
                           address of the monitor.  Either ``interface`` or
                           ``address`` must be provided.
    :<json string monitor_secret: (required) A key to use when creating the
-                                 monitor keyrings.
+                                 monitor keyrings. If adding a monitor to an existing
+                                 cluster this value **must** be the same for all
+                                 monitors.
    :<json string public_network: (required) The public network subnet for the
                                  cluster (in `CIDR`_ notation).
    :<json string cluster_network: (optional) If not provided, this will default
