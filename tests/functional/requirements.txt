@@ -1,2 +1,4 @@
-testinfra
+# 1.6.1 fails with 'testinfra is in an unsupported or invalid wheel'
+# see https://github.com/philpep/testinfra/issues/201
+testinfra==1.6.0
 pytest-xdist
