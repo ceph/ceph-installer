@@ -2,6 +2,13 @@
 changelog
 =========
 
+v1.3.1 (2017-07-14)
+-------------------
+
+- Docs: update mon configure docs regarding monitor_secret.
+
+- Further test improvements.
+
 v1.3.0 (2017-04-11)
 -------------------
 
